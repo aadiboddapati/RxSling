@@ -1,0 +1,6 @@
+${PODS_ROOT}/Target Support Files/Pods-RXSling Live/Pods-RXSling Live-resources.sh
+${PODS_ROOT}/DropDown/DropDown/resources/DropDownCell.xib
+${PODS_CONFIGURATION_BUILD_DIR}/ESPullToRefresh/ESPullToRefresh.bundle
+${PODS_ROOT}/NKVPhonePicker/Sources/Bundle/CountriesViewController.storyboard
+${PODS_ROOT}/NKVPhonePicker/Sources/Bundle/Countries.bundle
+${PODS_ROOT}/PhoneNumberKit/PhoneNumberKit/Resources/PhoneNumberMetadata.json

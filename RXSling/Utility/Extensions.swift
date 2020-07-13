@@ -63,6 +63,8 @@ extension UIColor{
     
     static let rxGreen = UIColor(red:86/255, green: 142/255, blue: 51/255, alpha: 1.0)
     static let rxYellow = UIColor(red:157/255, green: 140/255, blue: 90/255, alpha: 1.0)
+    static let rxThickYellow = UIColor(red:255/255, green: 192/255, blue: 66/255, alpha: 1.0)
+
     static let rxYellowfade = UIColor(red:187/255, green: 170/255, blue: 112/255, alpha: 1.0)
     static let rxGray = UIColor(red:75/255, green: 80/255, blue: 62/255, alpha: 1.0)
     //101,93,93 82%

@@ -38,8 +38,7 @@ class ReportDetailViewController: UIViewController {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var iButton: UIButton!
      var backButton : UIBarButtonItem!
-    var clusterReportBtn : UIBarButtonItem!
-    var teamReportBtn : UIBarButtonItem!
+  
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,9 +60,7 @@ class ReportDetailViewController: UIViewController {
                self.navigationController?.navigationBar.isExclusiveTouch = true
                self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         
-        self.clusterReportBtn = UIBarButtonItem(image: UIImage(named:"Back-22x22"), style: .plain, target: self, action: #selector(clusterReportButtonTapped))
-        self.teamReportBtn = UIBarButtonItem(image: UIImage(named:"Back-22x22"), style: .plain, target: self, action: #selector(teamReportButtonTapped))
-        self.navigationItem.rightBarButtonItems = [clusterReportBtn, teamReportBtn]
+      
 
         
         // Do any additional setup after loading the view.
@@ -83,15 +80,7 @@ class ReportDetailViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @objc func clusterReportButtonTapped(){
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.clusterreportvc) as! ClusterReportViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-        
-    }
-    @objc func teamReportButtonTapped(){
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.teamreportvc) as! TeamReportViewController
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
+   
     override func viewDidAppear(_ animated: Bool) {
              super.viewDidAppear(animated)
              
@@ -164,8 +153,19 @@ class ReportDetailViewController: UIViewController {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
                             if(responseData.statusCode == "106"){
-                                
                                // self.perform(#selector(self.tokenExpiredLogin), with: nil, afterDelay: 1.0)
+                            }else if(responseData.statusCode == "404") {
+                                 DispatchQueue.main.async {
+                                     hideActivityIndicator(View: self.view)
+                                     Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                 }
+                            }else if(responseData.statusCode == "443") {
+                                 DispatchQueue.main.async {
+                                     hideActivityIndicator(View: self.view)
+                                     Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                 }
+                            }else {
+                                
                             }
                         }
                     }

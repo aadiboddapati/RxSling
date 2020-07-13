@@ -190,8 +190,6 @@ class NetworkManager: NSObject {
                 
                 let data:T? = nil
                 completion(data!, response.error)
-                
-                
             }
         }
     }

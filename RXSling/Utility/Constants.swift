@@ -14,8 +14,8 @@ import UIKit
 struct Constants {
     
     struct Api {
-        static let base = "http://demo.rxprism.com/Parrotnote/ParrotnoteService.svc/" // Stagging
-        //"https://sling.rxprism.com/Service/ParrotnoteService.svc/" // Production
+        //static let base = "http://demo.rxprism.com/Parrotnote/ParrotnoteService.svc/" // Stagging
+        static let base = "https://sling.rxprism.com/Service/ParrotnoteService.svc/" // Production
         static let dashboard = base + "LoadSNT"
         static let validateDoctorInfo = base + "ValidatedoctorandRep"
         static let shortenUrl = base + "AddShortenURL"
@@ -33,6 +33,9 @@ struct Constants {
         static let termsAndConditionsUrl = "https://myshowandtell.app/rxsling/terms.html"
         static let reportListUrl = base + "ViewSNTReport"
         static let sntReportDetailUrl = base + "ViewSNTReportDetails"
+        static let teamReport = base + "FirstlevelReport"
+        static let clusterReport = base + "Managerlevelreport"
+        static let userInfo       = base + "GetUserInfo"
         static let logout = "Logout"
     }
     
@@ -50,7 +53,10 @@ struct Constants {
         static let reportvc = "ReportViewController"
         static let reportdetailvc = "ReportDetailViewController"
         static let teamreportvc = "TeamReportViewController"
-        static let clusterreportvc = "ClusterReportViewController"
+        static let segmentvc = "SegmentedViewController"
+        static let teamrepdetailsvc = "TeamRepDetailViewController"
+        static let teamtrendvc          = "TeamTrendViewController"
+        static let teamcustomerinfovc = "TeamCustomerInfoViewController"
     }
     
   
@@ -63,6 +69,9 @@ struct Constants {
         static let restrictShareingSnt = "As per current account plan, you have exceeded the forwarding limit for this content, Please upgrade your account plan."
         static let contentExpired = "Link Expired.You cannot preview this Show & Tell Content."
         static let contentResent = "Link Expired.You cannot resend this Show & Tell Content."
+        static let noTeamReportsFound = "No team reports found"
+        static let noClusterReportsFound = "No cluster reports found"
+        static let poorinternent = "Your internet connection is poor,Unable/Takes very long time to reach server.Please connect to good internet and try again."
 
     }
     

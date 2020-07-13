@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ClusterReportViewController: UIViewController {
+class TeamReportDetailViewController: UIViewController {
     var backButton : UIBarButtonItem!
 
     override func viewDidLoad() {
@@ -17,7 +17,7 @@ class ClusterReportViewController: UIViewController {
         // Do any additional setup after loading the view.
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
               //  scroller.contentSize.height = 1.0
-              self.title = "TEAM REPORT DETAILS"
+              self.title = "CLUSTER INFORMATION"
               self.navigationController?.navigationBar.isHidden = false
               self.navigationItem.setHidesBackButton(true, animated: false)
                      self.navigationController?.navigationBar.topItem?.hidesBackButton = true

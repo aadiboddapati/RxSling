@@ -1488,7 +1488,7 @@
         <!--Report View Controller-->
         <scene sceneID="h75-Up-h4f">
             <objects>
-                <viewController storyboardIdentifier="ReportViewController" id="B4P-Me-lnQ" customClass="ReportViewController" customModule="RXSling_STAGE" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ReportViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="B4P-Me-lnQ" customClass="ReportViewController" customModule="RXSling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9GA-NC-rOM">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1786,7 +1786,7 @@
                                                             </constraints>
                                                         </view>
                                                         <prototypes>
-                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReportTableCell" rowHeight="27" id="4NO-Mj-ZqQ" customClass="ReportTableCell" customModule="RXSling_STAGE">
+                                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ReportTableCell" rowHeight="27" id="4NO-Mj-ZqQ" customClass="ReportTableCell" customModule="RXSling" customModuleProvider="target">
                                                                 <rect key="frame" x="0.0" y="66" width="343" height="27"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="4NO-Mj-ZqQ" id="vHF-La-chG">
@@ -2038,13 +2038,13 @@
         <!--Report Detail View Controller-->
         <scene sceneID="8YD-iN-MZL">
             <objects>
-                <viewController storyboardIdentifier="ReportDetailViewController" id="Goz-Ig-hcv" customClass="ReportDetailViewController" customModule="RXSling_STAGE" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ReportDetailViewController" id="Goz-Ig-hcv" customClass="ReportDetailViewController" customModule="RXSling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7wy-MG-CZO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WU7-bP-Eac">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="667"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iZZ-Xd-FoN">
                                         <rect key="frame" x="10" y="10" width="394" height="110"/>
@@ -2691,7 +2691,7 @@
         <!--Team Rep Detail View Controller-->
         <scene sceneID="faI-s0-cAE">
             <objects>
-                <viewController storyboardIdentifier="TeamRepDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0y2-bA-7ee" customClass="TeamRepDetailViewController" customModule="RXSling_STAGE" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamRepDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="0y2-bA-7ee" customClass="TeamRepDetailViewController" customModule="RXSling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="KdL-gk-aLc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="900"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -5693,7 +5693,7 @@
         <!--Team Report View Controller-->
         <scene sceneID="GEG-3R-tpL">
             <objects>
-                <viewController storyboardIdentifier="TeamReportViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="eTg-Hx-xie" customClass="TeamReportViewController" customModule="RXSling_STAGE" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="TeamReportViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="eTg-Hx-xie" customClass="TeamReportViewController" customModule="RXSling" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1ju-eo-0tq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

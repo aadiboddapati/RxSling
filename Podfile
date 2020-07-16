@@ -14,6 +14,7 @@ def unique_pods
   pod 'SideMenu'
   pod "ESPullToRefresh"
   pod 'KMPlaceholderTextView'
+  pod 'Charts', '~> 3.5'
 
 end
 target 'RXSling Stage' do

@@ -46,6 +46,14 @@ class Utility:NSObject{
         alert.view.tintColor = .rxGreen
         
     }
+   static func attributedImage(image:UIImage) -> NSAttributedString {
+        let fullString = NSMutableAttributedString(string: "")
+        let image1Attachment = NSTextAttachment()
+        image1Attachment.image = image
+        let image1String = NSAttributedString(attachment: image1Attachment)
+        fullString.append(image1String)
+        return fullString
+    }
     
     //Move below method to Global or Utility Class
    static func timeAgoSinceDate(_ apiDate:Double, currentDate:Date, numericDates:Bool) -> String {

@@ -14,8 +14,8 @@ import UIKit
 struct Constants {
     
     struct Api {
-        //static let base = "http://demo.rxprism.com/Parrotnote/ParrotnoteService.svc/" // Stagging
-        static let base = "https://sling.rxprism.com/Service/ParrotnoteService.svc/" // Production
+        static let base = "http://demo.rxprism.com/Parrotnote/ParrotnoteService.svc/" // Stagging
+        //static let base = "https://sling.rxprism.com/Service/ParrotnoteService.svc/" // Production
         static let dashboard = base + "LoadSNT"
         static let validateDoctorInfo = base + "ValidatedoctorandRep"
         static let shortenUrl = base + "AddShortenURL"

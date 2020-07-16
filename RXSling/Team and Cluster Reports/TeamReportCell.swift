@@ -86,12 +86,13 @@ class TeamReportCell: UITableViewCell {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
             successLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
         }
-        moreLbl.attributedText = moreAttributedImage()
+        moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
+        moreLbl.contentMode = .scaleAspectFit
         addBoarders()
 
     }
     
-   func configureTheCellWith(cluster data: ClusterData, indexPath: IndexPath) {
+   func configureTheCellWith(cluster data: ClusterReportData, indexPath: IndexPath) {
         
              emailIdLbl.textColor = .white
              sentLbl.textColor = .white
@@ -104,6 +105,30 @@ class TeamReportCell: UITableViewCell {
              moreLbl.tag = indexPath.row
             
              setupLabelsTapgesture()
+    
+    if let name = data.userData?.firstName, let lastName = data.userData?.lastName {
+        if data.userData!.isShownEmail == false {
+            let fullName = name + " " + lastName
+             emailIdLbl.attributedText = underlinedString(str: fullName)
+        } else {
+            emailIdLbl.attributedText = underlinedString(str: data.managerId ?? "")
+        }
+    } else {
+        emailIdLbl.attributedText = underlinedString(str: data.managerId ?? "")
+    }
+    
+    sentLbl.text =  "\(data.sentCount ?? 0)"
+    viewedLbl.text =  "\(data.viewedCount ?? 0)"
+    
+    if sentLbl.text == "0" ||  viewedLbl.text == "0" {
+        successLbl.text = "0 %"
+    } else {
+        let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
+        successLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
+    }
+    moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
+    moreLbl.contentMode = .scaleAspectFit
+    addBoarders()
     }
     
     
@@ -151,16 +176,7 @@ class TeamReportCell: UITableViewCell {
         let attributeString = NSMutableAttributedString(string: str,  attributes: yourAttributes)
         return attributeString
         
-    }
-    func moreAttributedImage() -> NSAttributedString {
-        let fullString = NSMutableAttributedString(string: "")
-        let image1Attachment = NSTextAttachment()
-        image1Attachment.image = UIImage(named: "moresml")
-        let image1String = NSAttributedString(attachment: image1Attachment)
-        fullString.append(image1String)
-        return fullString
-    }
-    
+    }    
         override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 

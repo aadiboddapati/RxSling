@@ -7,10 +7,16 @@
 //
 
 import UIKit
+import Charts
+
 
 class TeamRepDetailViewController: UIViewController {
     var backButton : UIBarButtonItem!
     
+    
+    @IBOutlet weak var staticRepNameLabel:UILabel!
+    @IBOutlet weak var staticRepEmailLabel:UILabel!
+    @IBOutlet weak var staticRepMobileLabel:UILabel!
     
     @IBOutlet weak var repNameLbl:UILabel!
     @IBOutlet weak var repMobileLbl:UILabel!
@@ -21,18 +27,22 @@ class TeamRepDetailViewController: UIViewController {
     @IBOutlet weak var viewedCountLbl:UILabel!
     @IBOutlet weak var SuccessLbl:UILabel!
     
+    var reportList: [Report]?
     var teamData: TeamData!
-    var clusterData: ClusterData!
+    var clusterData: ClusterReportData!
     var selectedSnt: SNTData?
     var isTeamReport:Bool!
     
+    @IBOutlet var chartView: PieChartView!
+    weak var callToActionDelegate:CallToActionProtocol?
+
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
+        self.view.backgroundColor = .clear //UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
         //  scroller.contentSize.height = 1.0
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.setHidesBackButton(true, animated: false)
@@ -43,8 +53,98 @@ class TeamRepDetailViewController: UIViewController {
         self.navigationController?.navigationBar.isExclusiveTouch = true
         self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         
-        isTeamReport ? self.updateTeamData(data: teamData) : self.updateClusterData(data: clusterData)
+        if !isTeamReport {
+            staticRepNameLabel.text = "Manager Name  -"
+            staticRepEmailLabel.text = "Manager Email  -"
+            staticRepMobileLabel.text = "Manager Mobile No  -"
+        }
+
+         isTeamReport ? self.updateTeamData(data: teamData) : self.updateClusterData(data: clusterData)
+        
+        
+        // chart view
+        self.setup(pieChartView: chartView)
+        
+        chartView.delegate = self
+        chartView.legend.enabled = false
+        self.setDataToChartView()
+        chartView.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
+        
+        
     }
+    
+    func setup(pieChartView chartView: PieChartView) {
+        
+        chartView.usePercentValuesEnabled = true
+        chartView.drawSlicesUnderHoleEnabled = false
+        chartView.holeRadiusPercent = 0.30
+        chartView.transparentCircleRadiusPercent = 0 //0.61
+        chartView.chartDescription?.enabled = false
+        chartView.drawCenterTextEnabled = false
+        chartView.holeColor = .clear
+                
+        chartView.drawHoleEnabled = true
+        chartView.rotationAngle = 0
+        chartView.rotationEnabled = true
+        chartView.highlightPerTapEnabled = true
+        
+        let l = chartView.legend
+        l.horizontalAlignment = .right
+        l.verticalAlignment = .top
+        l.orientation = .vertical
+        l.drawInside = false
+        l.xEntrySpace = 7
+        l.yEntrySpace = 0
+        l.yOffset = 0
+    }
+    
+    func setDataToChartView() {
+        
+        var entries = [PieChartDataEntry]()
+        
+        // check cluster and team count
+        if isTeamReport {
+            if let count = teamData.sentCount, count > 0 {
+                let viewedCount = "\(teamData.viewedCount ?? 0)"
+                let notViewed = "\(teamData.sentCount! - ( teamData.viewedCount ?? 0 ) )"
+                entries.append(PieChartDataEntry(value: Double(Int(viewedCount) ?? 0), label: "Viewed"))
+                entries.append(PieChartDataEntry(value: Double(Int(notViewed) ?? 0), label: "Not Viewed"))
+                
+            }
+        } else {
+            if let count = clusterData.sentCount, count > 0 {
+                let viewedCount = "\(clusterData.viewedCount ?? 0)"
+                let notViewed = "\(clusterData.sentCount! - ( clusterData.viewedCount ?? 0 ) )"
+                entries.append(PieChartDataEntry(value: Double(Int(viewedCount) ?? 0), label: "Viewed"))
+                entries.append(PieChartDataEntry(value: Double(Int(notViewed) ?? 0), label: "Not Viewed"))
+                
+            }
+        }
+        
+        
+        
+        let set = PieChartDataSet(entries: entries, label: "")
+        set.sliceSpace = 2
+        set.colors = [UIColor.rxViewedColor, UIColor.rxThickYellow]
+        set.xValuePosition = .insideSlice
+        set.yValuePosition = .insideSlice
+        
+        let data = PieChartData(dataSet: set)
+        
+        let pFormatter = NumberFormatter()
+        pFormatter.numberStyle = .percent
+        pFormatter.maximumFractionDigits = 1
+        pFormatter.multiplier = 1
+        pFormatter.percentSymbol = " %"
+        data.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
+        data.setValueFont(.systemFont(ofSize: 13, weight: .light))
+        data.setValueTextColor(.white)
+        
+        chartView.data = data
+        chartView.highlightValues(nil)
+    }
+    
+    
     
     func updateTeamData(data:TeamData)  {
         
@@ -65,8 +165,21 @@ class TeamRepDetailViewController: UIViewController {
         
     }
     
-    func updateClusterData(data: ClusterData) {
+    func updateClusterData(data: ClusterReportData) {
         
+        self.repNameLbl.text = ( data.userData?.firstName ?? "" )  + " " +  ( data.userData?.lastName ?? "" )
+        self.repMobileLbl.text = data.userData?.mobileNo ?? ""
+        self.repEmailLbl.text = data.userData?.emailId ?? ""
+        self.contentTitleLbl.text = selectedSnt?.title ?? ""
+        self.contentDescriptionLbl.text = selectedSnt?.desc ?? ""
+        self.sentCountLbl.text = "\(data.sentCount ?? 0)"
+        self.viewedCountLbl.text = "\(data.viewedCount ?? 0)"
+        if sentCountLbl.text == "0" ||  viewedCountLbl.text == "0" {
+            SuccessLbl.text = "0 %"
+        } else {
+            let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
+            SuccessLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
+        }
         
     }
     
@@ -76,17 +189,17 @@ class TeamRepDetailViewController: UIViewController {
     }
     
     @IBAction func callButtonAction(_ sender: UIButton) {
-        
+        callToActionDelegate?.callAction()
     }
     @IBAction func whatsAppButtonAction(_ sender: UIButton) {
-        
+        callToActionDelegate?.whatsappAction()
     }
     
     @IBAction func copyReportButtonAction(_ sender: UIButton) {
-        
+        callToActionDelegate?.copyReportAction()
     }
     @IBAction  func emailButtonAction(_ sender: UIButton) {
-        
+        callToActionDelegate?.emailAction()
     }
     
     /*
@@ -98,5 +211,8 @@ class TeamRepDetailViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
+    
+}
+extension TeamRepDetailViewController:ChartViewDelegate {
     
 }

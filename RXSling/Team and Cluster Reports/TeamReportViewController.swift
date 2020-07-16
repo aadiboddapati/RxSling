@@ -16,6 +16,8 @@ class TeamReportViewController: UIViewController {
     @IBOutlet weak var reportSearchBar: UISearchBar!
     @IBOutlet weak var reportsTable:UITableView!
     
+    @IBOutlet weak var reportInfoLabel:UILabel!
+    
     
     var teamReports:TeamReportModel!
     var clusterReports: ClusterReportModel!
@@ -24,7 +26,7 @@ class TeamReportViewController: UIViewController {
     
     var isTeamReport:Bool!
     var selectedSnt: SNTData?
-    var fixedHeight: CGFloat = 60
+    var fixedHeight: CGFloat = 45
     
     
     override func viewDidLoad() {
@@ -32,7 +34,8 @@ class TeamReportViewController: UIViewController {
         
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
         //  scroller.contentSize.height = 1.0
-        self.title = isTeamReport ? "TEAM INFORMATION" : "CLUSTER INFORMATION"
+        self.title = isTeamReport ? "TEAM INFORMATION" : "MANAGER REPORT"
+        self.reportInfoLabel.text = isTeamReport ? "Your Team Report" : "Your Cluster Report"
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationController?.navigationBar.topItem?.hidesBackButton = true
@@ -53,8 +56,9 @@ class TeamReportViewController: UIViewController {
             originalClusterReports = clusterModel
         }
         contentViewheightConstraint.constant = 300 // calculate based on the array and search view constraints
-        applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.count )!, isSearch: false)
+        applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
         
+        reportsTable.isHidden = true
         
     }
     
@@ -82,8 +86,12 @@ class TeamReportViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         reportsTable.reloadData()
-        
-        
+        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) { (timer) in
+            DispatchQueue.main.async {
+                self.reportsTable.isHidden = false
+                timer.invalidate()
+            }
+        }
     }
     
     
@@ -102,7 +110,7 @@ class TeamReportViewController: UIViewController {
             teamReports = originalTeamReports
             reportsTable.reloadData()
         }
-        applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.count )!, isSearch: false)
+        applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
     }
     func configureSearchBar()  {
         
@@ -149,7 +157,7 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
         if section == 0 {
             return 1
         }
-        return  isTeamReport ? teamReports.data!.count  : clusterReports.data!.count
+        return  isTeamReport ? teamReports.data!.count  : clusterReports.data!.clusterReport!.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -164,9 +172,20 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
         
         if isTeamReport {
             cell.configureTheCellWith(team: teamReports.data![indexPath.row], indexPath: indexPath)
+            if indexPath.row == teamReports.data!.count - 1 {
+                cell.lineLbl.isHidden = true
+            } else {
+                cell.lineLbl.isHidden = false
+            }
         } else {
-            cell.configureTheCellWith(cluster: clusterReports.data![indexPath.row], indexPath: indexPath)
+            cell.configureTheCellWith(cluster: clusterReports.data!.clusterReport![indexPath.row], indexPath: indexPath)
+            if indexPath.row == clusterReports.data!.clusterReport!.count - 1 {
+                cell.lineLbl.isHidden = true
+            } else {
+                cell.lineLbl.isHidden = false
+            }
         }
+        
         
         return cell
     }
@@ -178,14 +197,14 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     // cell delegate methods
     func toggleNameAndEmail(index: Int) {
         
-        if let userData = isTeamReport ? teamReports.data?[index].userData  : clusterReports.data?[index].userData {
+        if let userData = isTeamReport ? teamReports.data?[index].userData  : clusterReports.data?.clusterReport?[index].userData {
             let boolValue = userData.isShownEmail!
             self.teamReports.data?[index].userData?.isShownEmail = !boolValue
             reportsTable.reloadData()
         } else {
             showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
             let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
-            let userEmail = isTeamReport ? teamReports.data?[index].repEmailId ?? "" : clusterReports.data?[index].managerId ?? ""
+            let userEmail = isTeamReport ? teamReports.data?[index].repEmailId ?? "" : clusterReports.data?.clusterReport?[index].managerId ?? ""
             let parameters:[String : String] =
                 ["emailId": userEmail,
                  "mobileNo": ""]
@@ -206,7 +225,8 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
                         self.teamReports.data?[index].userData = userInfo.data
                         self.teamReports.data?[index].userData?.isShownEmail = false
                     } else {
-                        self.clusterReports.data?[index].userData = userInfo.data
+                        self.clusterReports.data?.clusterReport?[index].userData = userInfo.data
+                        self.clusterReports.data?.clusterReport?[index].userData?.isShownEmail = false
                     }
                     
                     DispatchQueue.main.async {
@@ -231,6 +251,18 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
                 self.getUserData(index: index)
             }
         } else {
+            if let _ = clusterReports.data?.clusterReport?[index].userData {
+                DispatchQueue.main.async {
+                    let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.segmentvc) as! SegmentedViewController
+                    vc.clusterData = self.clusterReports.data?.clusterReport?[index]
+                    vc.selectedSnt = self.selectedSnt
+                    vc.isTeamReport = self.isTeamReport
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+            } else {
+                self.getUserData(index: index)
+            }
+            
         }
     }
     
@@ -238,7 +270,7 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     func getUserData(index:Int) {
         showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
         let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
-        let userEmail = isTeamReport ? teamReports.data?[index].repEmailId ?? "" : clusterReports.data?[index].managerId ?? ""
+        let userEmail = isTeamReport ? teamReports.data?[index].repEmailId ?? "" : clusterReports.data?.clusterReport?[index].managerId ?? ""
         let parameters:[String : String] =
             ["emailId": userEmail,
              "mobileNo": ""]
@@ -265,8 +297,16 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
                         self.navigationController?.pushViewController(vc, animated: true)
                     }
                 } else {
-                    self.clusterReports.data?[index].userData = userInfo.data
+                    self.clusterReports.data?.clusterReport?[index].userData = userInfo.data
+                    DispatchQueue.main.async {
+                        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.segmentvc) as! SegmentedViewController
+                        vc.clusterData = self.clusterReports.data?.clusterReport?[index]
+                        vc.selectedSnt = self.selectedSnt
+                        vc.isTeamReport = self.isTeamReport
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }
                 }
+               
             }
             
         })
@@ -297,7 +337,7 @@ extension TeamReportViewController: UISearchBarDelegate {
             teamReports.data = filteredData
             reportsTable.reloadData()
             
-            applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.count )!, isSearch: false)
+            applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
             
             if filteredData?.count == 0 {
                 showNoRecordsFound()
@@ -319,7 +359,7 @@ extension TeamReportViewController: UISearchBarDelegate {
         removeTableBackgroundView()
         reportsTable.reloadData()
         
-        applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.count )!, isSearch: false)
+        applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
         
     }
     

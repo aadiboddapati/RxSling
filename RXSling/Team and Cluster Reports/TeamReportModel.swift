@@ -30,15 +30,20 @@ struct TeamData: Codable {
 struct ClusterReportModel: Codable {
     
     let statusCode: String
-    var data: [ClusterData]?
+    var data: ClusterData?
     let message: String
 }
 
 struct ClusterData: Codable {
-    let managerId: String?
-    let viewedCount:Int?
-    let sentCount: Int?
-    var userData: UserData?
+    let asonDate:Double?
+    var clusterReport:[ClusterReportData]?
+}
+
+struct ClusterReportData: Codable {
+       let managerId: String?
+       let viewedCount:Int?
+       let sentCount: Int?
+       var userData: UserData?
 }
 
 struct UserInfo: Codable {

@@ -23,6 +23,8 @@
 		0777CD5B24B87C0500F64865 /* TeamCustomerInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5924B87C0500F64865 /* TeamCustomerInfoViewController.swift */; };
 		0777CD5D24B87F4600F64865 /* SegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5C24B87F4600F64865 /* SegmentedViewController.swift */; };
 		0777CD5E24B87F4600F64865 /* SegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5C24B87F4600F64865 /* SegmentedViewController.swift */; };
+		0777CD6024BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */; };
+		0777CD6124BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */; };
 		07C9C43D24B327CE006AAF21 /* TeamReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C9C43C24B327CE006AAF21 /* TeamReportViewController.swift */; };
 		07C9C43F24B327E6006AAF21 /* TeamRepDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */; };
 		07E32C3124B360E100A3A07A /* TeamReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E32C3024B360E100A3A07A /* TeamReportCell.swift */; };
@@ -163,6 +165,7 @@
 		0777CD5624B87BE200F64865 /* TeamTrendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamTrendViewController.swift; sourceTree = "<group>"; };
 		0777CD5924B87C0500F64865 /* TeamCustomerInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCustomerInfoViewController.swift; sourceTree = "<group>"; };
 		0777CD5C24B87F4600F64865 /* SegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedViewController.swift; sourceTree = "<group>"; };
+		0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCustomerInfoCell.swift; sourceTree = "<group>"; };
 		07C9C43C24B327CE006AAF21 /* TeamReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportViewController.swift; sourceTree = "<group>"; };
 		07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamRepDetailViewController.swift; sourceTree = "<group>"; };
 		07E32C3024B360E100A3A07A /* TeamReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportCell.swift; sourceTree = "<group>"; };
@@ -290,6 +293,7 @@
 				07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */,
 				0777CD5624B87BE200F64865 /* TeamTrendViewController.swift */,
 				0777CD5924B87C0500F64865 /* TeamCustomerInfoViewController.swift */,
+				0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */,
 			);
 			path = "Team and Cluster Reports";
 			sourceTree = "<group>";
@@ -809,6 +813,7 @@
 			files = (
 				AE5B81A42428BC0F002AED2B /* Global.swift in Sources */,
 				AEF702452446F86200A87810 /* MySideMenuNavigationController.swift in Sources */,
+				0777CD6024BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */,
 				E20080C42486923A008EDE28 /* ReportViewController.swift in Sources */,
 				0777CD5D24B87F4600F64865 /* SegmentedViewController.swift in Sources */,
 				AE5B819F2428B205002AED2B /* LoginViewController.swift in Sources */,
@@ -898,6 +903,7 @@
 			files = (
 				FD4DCE4D24544EEB004EC8A7 /* Global.swift in Sources */,
 				FD4DCE4E24544EEB004EC8A7 /* MySideMenuNavigationController.swift in Sources */,
+				0777CD6124BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */,
 				FD4DCE4F24544EEB004EC8A7 /* LoginViewController.swift in Sources */,
 				0777CD5E24B87F4600F64865 /* SegmentedViewController.swift in Sources */,
 				FD4DCE5024544EEB004EC8A7 /* FAQTitleTableViewCell.swift in Sources */,

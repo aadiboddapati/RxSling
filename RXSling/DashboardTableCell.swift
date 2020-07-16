@@ -101,12 +101,12 @@ class DashboardTableCell: UITableViewCell {
         sntImageTopBlurViewLabel.text = Utility.timeAgoSinceDate(snt.createdDate, currentDate: Date(), numericDates: true)
          let selfReport = UserDefaults.standard.bool(forKey: "USER_SELFREPORT")
      
-        if (snt.showReport == true && selfReport == true){
-         reportButton.isHidden = false
-         } else {
-             reportButton.isHidden = true
-        }
-       // reportButton.isHidden = false
+//        if (snt.showReport == true && selfReport == true){
+//         reportButton.isHidden = false
+//         } else {
+//             reportButton.isHidden = true
+//        }
+        reportButton.isHidden = false
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

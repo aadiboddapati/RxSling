@@ -100,7 +100,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         self.clusterReportBtn.tintColor = .white
         self.teamReportBtn = UIBarButtonItem(image: UIImage(named:"team_icon"), style: .plain, target: self, action:#selector(teamReportButtonTapped))
         self.teamReportBtn.tintColor = .white
-         //self.navigationItem.rightBarButtonItems = [teamReportBtn,clusterReportBtn]
+        self.navigationItem.rightBarButtonItems = [teamReportBtn, clusterReportBtn] //
         
         let searchTextField:UITextField = (reportSearchBar.value(forKey: "searchField") as? UITextField)!
         searchTextField.tintColor = UIColor.white
@@ -283,10 +283,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
             
             for value in 0..<dashboardArray.count{
                 let number = dashboardArray[value].DoctorMobNo!
-                
-                
                 dashboardArray[value].CustomerName = self.contactDict[String(number)]
-                
                 dashboardArray[value].displayByNumber = true
                 
             }
@@ -578,7 +575,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                     if responseData.statusCode == "100" {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            if let count = responseData.data?.count, count > 0 {
+                            if let count = responseData.data?.clusterReport?.count, count > 0 {
                                 // navigate to next screen
                                 let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.teamreportvc) as! TeamReportViewController
                                 vc.isTeamReport = isTeamReport

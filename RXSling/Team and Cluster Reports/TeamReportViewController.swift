@@ -318,9 +318,15 @@ extension TeamReportViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if searchText == "" {
-            teamReports = originalTeamReports
+            if isTeamReport {
+                teamReports = originalTeamReports
+            } else {
+                clusterReports = originalClusterReports
+            }
             removeTableBackgroundView()
             reportsTable.reloadData()
+            applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
+
             return
         }
         
@@ -337,6 +343,26 @@ extension TeamReportViewController: UISearchBarDelegate {
             teamReports.data = filteredData
             reportsTable.reloadData()
             
+            applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: true)
+            
+            if filteredData?.count == 0 {
+                showNoRecordsFound()
+            } else {
+                removeTableBackgroundView()
+            }
+        } else {
+            let filteredData = clusterReports.data?.clusterReport?.filter({ (teamData) -> Bool in
+                if let usrData = teamData.userData {
+                    let fullName = ( usrData.firstName ?? "" ) + " " + ( usrData.lastName ?? "" )
+                    return teamData.managerId!.lowercased().contains(searchText.lowercased()) || fullName.lowercased().contains(searchText.lowercased())
+                    
+                } else {
+                    return teamData.managerId!.lowercased().contains(searchText.lowercased())
+                }
+            })
+            clusterReports.data?.clusterReport = filteredData
+            reportsTable.reloadData()
+            
             applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
             
             if filteredData?.count == 0 {
@@ -344,15 +370,18 @@ extension TeamReportViewController: UISearchBarDelegate {
             } else {
                 removeTableBackgroundView()
             }
-        } else { // cluster report
-            
         }
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         reportSearchBar.resignFirstResponder()
-        teamReports = originalTeamReports
+        
+        if isTeamReport {
+            teamReports = originalTeamReports
+        } else {
+            clusterReports = originalClusterReports
+        }
         
         searchViewheightConstraint.constant = (searchViewheightConstraint.constant == 40 ) ? 0 : 40
         

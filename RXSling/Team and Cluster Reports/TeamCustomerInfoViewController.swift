@@ -20,6 +20,7 @@ class TeamCustomerInfoViewController: UIViewController {
     @IBOutlet weak var customerSearchBar:UISearchBar!
     
     var reportList: [Report]?
+    var originalReportList:[Report]?
     var teamData: TeamData!
     var clusterData: ClusterReportData!
     var selectedSnt: SNTData?
@@ -41,7 +42,7 @@ class TeamCustomerInfoViewController: UIViewController {
         self.navigationItem.backBarButtonItem?.tintColor = GREENCOLOUR
         self.navigationController?.navigationBar.isExclusiveTouch = true
         self.navigationController?.navigationBar.isMultipleTouchEnabled = false
-        customerLbl.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
+        sentTimeLabel.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
         sentTimeLabel.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
 
         configureSearchBar()
@@ -53,6 +54,7 @@ class TeamCustomerInfoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         print(self.view.frame)
         if let _ = reportList {
+            originalReportList = reportList
             removeTableBackgroundView()
             searchButton.isHidden = false
             customerInfoTblView.reloadData()
@@ -80,7 +82,7 @@ class TeamCustomerInfoViewController: UIViewController {
         customerSearchBar.layer.borderColor = UIColor.clear.cgColor
         customerSearchBar.layer.borderWidth = 1
         customerSearchBar.setBackgroundImage(image, for: .any, barMetrics: .default)
-        
+        customerSearchBar.delegate = self
         customerSearchBar.returnKeyType = .default
     }
     @objc func backButtonTapped(){
@@ -186,19 +188,40 @@ extension TeamCustomerInfoViewController:UITableViewDelegate, UITableViewDataSou
 extension TeamCustomerInfoViewController:UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
+        if searchText == "" {
+            reportList = originalReportList
+            removeTableBackgroundView()
+            customerInfoTblView.reloadData()
+            applyHeightConstraint(sizeOfArray: reportList?.count ?? 0, isSearch: true)
+            return
+        }
+        
+        let filteredData = reportList?.filter({ (report) -> Bool in
+            return (report.DoctorMobNo ?? "").lowercased().contains(searchText.lowercased())
+        })
+        
+        reportList = filteredData
+        customerInfoTblView.reloadData()
+        applyHeightConstraint(sizeOfArray: filteredData?.count ?? 0, isSearch: true)
+
+        if filteredData?.count == 0 {
+            showNoRecordsFound()
+        } else {
+            removeTableBackgroundView()
+        }
         
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.text = ""
         searchBar.resignFirstResponder()
-        // teamReports = originalTeamReports
+        reportList = originalReportList
         searchViewheightConstraint.constant = (searchViewheightConstraint.constant == 40 ) ? 0 : 40
         
         removeTableBackgroundView()
         customerInfoTblView.reloadData()
         
-        // applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.count )!, isSearch: false)
+        applyHeightConstraint(sizeOfArray: reportList?.count ?? 0, isSearch: true)
         
     }
 }

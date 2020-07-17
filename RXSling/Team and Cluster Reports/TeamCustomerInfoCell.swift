@@ -12,7 +12,6 @@ class TeamCustomerInfoCell: UITableViewCell {
 
     @IBOutlet weak var customerLbl:UILabel!
     @IBOutlet weak var sentTimeLabel: UILabel!
-    @IBOutlet weak var statusLabel:UILabel!
     @IBOutlet weak var lineLbl:UILabel!
 
     @IBOutlet weak var statusImageView:UIImageView!
@@ -21,20 +20,20 @@ class TeamCustomerInfoCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        customerLbl.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
+        sentTimeLabel.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
         sentTimeLabel.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
     }
     
     func configureCell(report:Report)  {
         
         customerLbl.attributedText = underlinedString(str: report.DoctorMobNo ?? "")
+        sentTimeLabel.textColor = .white
         
         if report.ContentViewed != nil {
             statusImageView.tintColor = .rxenabled
         } else {
             statusImageView.tintColor = .rxGray
         }
-        // statusLabel.attributedText = ""
         if #available(iOS 13.0, *) {
             sentTimeLabel.text = getSentTimeInfo(report: report)
         } else {

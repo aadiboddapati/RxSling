@@ -26,6 +26,7 @@ class TeamTrendViewController: UIViewController {
     
     var tenDaysReport:[String: OneDayReport]!
     var orderedDaysArray = [String]()
+    var isGraphDrawn = false
     
     
     weak var callToActionDelegate:CallToActionProtocol?
@@ -54,10 +55,13 @@ class TeamTrendViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         if let list = reportList {
-            tenDaysReport = getReportsCountWithDates(list: list)
-            self.setUpChartView(chartView: chartView)
-            setDataCount(daysReport: tenDaysReport)
-            chartView.animate(xAxisDuration: 2.5)
+            if !isGraphDrawn {
+                isGraphDrawn = true
+                tenDaysReport = getReportsCountWithDates(list: list)
+                self.setUpChartView(chartView: chartView)
+                setDataCount(daysReport: tenDaysReport)
+                chartView.animate(xAxisDuration: 2.5)
+            }
         } else {
             // No chart data available
         }

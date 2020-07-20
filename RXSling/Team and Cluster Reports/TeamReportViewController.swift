@@ -203,12 +203,18 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     func toggleNameAndEmail(index: Int) {
         
         if let userData = isTeamReport ? teamReports.data?[index].userData  : clusterReports.data?.clusterReport?[index].userData {
-            let boolValue = userData.isShownEmail!
-            if isTeamReport {
-                self.teamReports.data?[index].userData?.isShownEmail = !boolValue
-            }else {
-                self.clusterReports.data?.clusterReport?[index].userData?.isShownEmail = !boolValue
-
+            if let boolValue = userData.isShownEmail {
+                if isTeamReport {
+                    self.teamReports.data?[index].userData?.isShownEmail = !boolValue
+                }else {
+                    self.clusterReports.data?.clusterReport?[index].userData?.isShownEmail = !boolValue
+                }
+            } else {
+                if isTeamReport {
+                    self.teamReports.data?[index].userData?.isShownEmail = false
+                } else {
+                    self.clusterReports.data?.clusterReport?[index].userData?.isShownEmail = false
+                }
             }
             reportsTable.reloadData()
         } else {
@@ -265,6 +271,7 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
                 DispatchQueue.main.async {
                     let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.segmentvc) as! SegmentedViewController
                     vc.clusterData = self.clusterReports.data?.clusterReport?[index]
+                    
                     vc.selectedSnt = self.selectedSnt
                     vc.isTeamReport = self.isTeamReport
                     self.navigationController?.pushViewController(vc, animated: true)

@@ -17,6 +17,7 @@ class TeamRepDetailViewController: UIViewController {
     @IBOutlet weak var staticRepNameLabel:UILabel!
     @IBOutlet weak var staticRepEmailLabel:UILabel!
     @IBOutlet weak var staticRepMobileLabel:UILabel!
+    @IBOutlet weak var staticRepHeadingLabel:UILabel!
     
     @IBOutlet weak var repNameLbl:UILabel!
     @IBOutlet weak var repMobileLbl:UILabel!
@@ -26,6 +27,7 @@ class TeamRepDetailViewController: UIViewController {
     @IBOutlet weak var sentCountLbl:UILabel!
     @IBOutlet weak var viewedCountLbl:UILabel!
     @IBOutlet weak var SuccessLbl:UILabel!
+    @IBOutlet weak var noChartDataLbl:UILabel!
     
     var reportList: [Report]?
     var teamData: TeamData!
@@ -54,6 +56,7 @@ class TeamRepDetailViewController: UIViewController {
         self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         
         if !isTeamReport {
+            staticRepHeadingLabel.text = "Manager Details"
             staticRepNameLabel.text = "Manager Name  -"
             staticRepEmailLabel.text = "Manager Email  -"
             staticRepMobileLabel.text = "Manager Mobile No  -"
@@ -63,12 +66,27 @@ class TeamRepDetailViewController: UIViewController {
         
         
         // chart view
-        self.setup(pieChartView: chartView)
-        
-        chartView.delegate = self
-        chartView.legend.enabled = false
-        self.setDataToChartView()
-        chartView.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
+        chartView.noDataTextColor = .clear
+        if isTeamReport {
+            if let sentCount = teamData.sentCount, sentCount > 0 {
+                noChartDataLbl.isHidden = true
+                self.setup(pieChartView: chartView)
+                      chartView.delegate = self
+                      chartView.legend.enabled = false
+                      self.setDataToChartView()
+                      chartView.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
+            } else { noChartDataLbl.isHidden = false }
+        } else {
+            if let sentCount = clusterData.sentCount, sentCount > 0 {
+                noChartDataLbl.isHidden = true
+                self.setup(pieChartView: chartView)
+                      chartView.delegate = self
+                      chartView.legend.enabled = false
+                      self.setDataToChartView()
+                      chartView.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
+            } else { noChartDataLbl.isHidden = false }
+        }
+      
         
         
     }
@@ -159,7 +177,7 @@ class TeamRepDetailViewController: UIViewController {
             SuccessLbl.text = "0 %"
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-            SuccessLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
+            SuccessLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
         }
         
         
@@ -178,7 +196,7 @@ class TeamRepDetailViewController: UIViewController {
             SuccessLbl.text = "0 %"
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-            SuccessLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
+            SuccessLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
         }
         
     }

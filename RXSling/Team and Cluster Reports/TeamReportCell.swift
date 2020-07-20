@@ -84,7 +84,7 @@ class TeamReportCell: UITableViewCell {
             successLbl.text = "0 %"
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-            successLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
+            successLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
         }
         moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
         moreLbl.contentMode = .scaleAspectFit
@@ -124,7 +124,7 @@ class TeamReportCell: UITableViewCell {
         successLbl.text = "0 %"
     } else {
         let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-        successLbl.text = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
+        successLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
     }
     moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
     moreLbl.contentMode = .scaleAspectFit
@@ -161,11 +161,12 @@ class TeamReportCell: UITableViewCell {
         sentLbl.layer.sublayers?.removeAll()
         viewedLbl.layer.sublayers?.removeAll()
         successLbl.layer.sublayers?.removeAll()
+        moreLbl.layer.sublayers?.removeAll()
         
         sentLbl.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
         sentLbl.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
         viewedLbl.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
-        successLbl.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
+        moreLbl.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
 
     }
 

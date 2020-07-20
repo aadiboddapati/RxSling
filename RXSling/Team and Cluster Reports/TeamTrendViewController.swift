@@ -9,17 +9,11 @@
 import UIKit
 import Charts
 
-public class DateValueFormatter: NSObject, IAxisValueFormatter {
-    private let dateFormatter = DateFormatter()
-    override init() {
-        super.init()
-        dateFormatter.dateFormat = "dd-MMM-yyyy"
-    }
-    
-    public func stringForValue(_ value: Double, axis: AxisBase?) -> String {
-        return dateFormatter.string(from: Date(timeIntervalSince1970: value))
-    }
+struct OneDayReport {
+    var sentCount:Double = 0
+    var viewedCount:Double = 0
 }
+
 class TeamTrendViewController: UIViewController {
     var backButton : UIBarButtonItem!
     
@@ -30,8 +24,9 @@ class TeamTrendViewController: UIViewController {
     var selectedSnt: SNTData?
     var isTeamReport:Bool!
     
-    var sentDataForLastTenDays:[[String:Int]]!
-    var viewedDataForLastTenDays:[[String:Int]]!
+    var tenDaysReport:[String: OneDayReport]!
+    var orderedDaysArray = [String]()
+    
     
     weak var callToActionDelegate:CallToActionProtocol?
         
@@ -47,23 +42,21 @@ class TeamTrendViewController: UIViewController {
         self.navigationController?.navigationBar.isExclusiveTouch = true
         self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         
+        tenDaysReport = [String: OneDayReport]()
         
-        var includeTodayForSentData = true
-        var includeTodayForViewedData = true
-
-        sentDataForLastTenDays = Date.getDates(forLastNDays: 10, includeToday: &includeTodayForSentData)
-        viewedDataForLastTenDays = Date.getDates(forLastNDays: 10, includeToday: &includeTodayForViewedData)
+        var includeTodayForReport = true
+        tenDaysReport = getDates(forLastNDays: 10, includeToday: &includeTodayForReport)
+        
+        chartView.noDataTextColor = .rxThickYellow
         
         
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if let list = reportList {
-            let sentData = fetchSentData(list: list)
-            let viewedData = fetchViewedData(list: list)
-            print(viewedData, sentData)
+            tenDaysReport = getReportsCountWithDates(list: list)
             self.setUpChartView(chartView: chartView)
-            setDataCount(sentData: sentData, viewdData: viewedData)
+            setDataCount(daysReport: tenDaysReport)
             chartView.animate(xAxisDuration: 2.5)
         } else {
             // No chart data available
@@ -71,36 +64,25 @@ class TeamTrendViewController: UIViewController {
         
     }
     
-    func fetchViewedData(list:[Report]) -> [[String:Int]] {
-        for (index,item) in viewedDataForLastTenDays!.enumerated() {
+    func getReportsCountWithDates(list: [Report]) -> [String: OneDayReport] {
+        
+        let mutatingObj = tenDaysReport
+        for (key,_) in mutatingObj! {
             for report in list {
                 let date = Date(timeIntervalSince1970:(Double(report.CreatedDate!) / 1000.0))
                 let formatedDate = Date.getDate(date: date)
-                if item.keys.first == formatedDate {
+                if key == formatedDate {
                     if report.ContentViewed != nil {
-                        viewedDataForLastTenDays[index][formatedDate]  = item[formatedDate]! + ( report.ContentViewed ?? 0)
+                        tenDaysReport[key]?.viewedCount +=  Double ( report.ContentViewed ?? 0 )
                     }
+                    tenDaysReport[key]?.sentCount += 1
                 }
             }
         }
-        return viewedDataForLastTenDays
+        return tenDaysReport
     }
-    
-    func fetchSentData(list:[Report]) -> [[String:Int]] {
-        for (index,item) in sentDataForLastTenDays!.enumerated() {
-            for report in list {
-                let date = Date(timeIntervalSince1970:(Double(report.CreatedDate!) / 1000.0))
-                let formatedDate = Date.getDate(date: date)
-                if item.keys.first == formatedDate {
-                    print(" key \(item.keys.first ?? ""), formatedDate: \(formatedDate)")
-                    sentDataForLastTenDays[index][formatedDate]  = item[formatedDate]! + 1
-                    //sentDataForLastTenDays[index]["createdDate"] = report.CreatedDate!
 
-                }
-            }
-        }
-        return sentDataForLastTenDays
-    }
+    
     
     func setUpChartView(chartView:LineChartView)  {
         
@@ -110,74 +92,108 @@ class TeamTrendViewController: UIViewController {
         chartView.highlightPerDragEnabled = true
         chartView.chartDescription?.enabled = false
         chartView.legend.enabled = true
+        chartView.delegate = self
         
         
         let l = chartView.legend
         l.form = .line
         l.font = UIFont(name: "HelveticaNeue-Light", size: 11)!
         l.textColor = .white
-        l.horizontalAlignment = .left
+        l.horizontalAlignment = .center
         l.verticalAlignment = .bottom
         l.orientation = .horizontal
         l.drawInside = false
         
         let xAxis = chartView.xAxis
         xAxis.labelFont = .systemFont(ofSize: 6)
+        xAxis.labelPosition = .top
+        xAxis.avoidFirstLastClippingEnabled = true
         xAxis.labelTextColor = .white
         xAxis.drawAxisLineEnabled = false
         xAxis.drawGridLinesEnabled = false
+        xAxis.granularityEnabled = true
+        xAxis.granularity = 1
+        xAxis.valueFormatter = IndexAxisValueFormatter(values: orderedDaysArray)
 
-//        xAxis.axisMinimum = Double(sentDataForLastTenDays.first!["createdAt"]!)
-//        xAxis.axisMaximum = Double(sentDataForLastTenDays.last!["createdAt"]!)
-        xAxis.valueFormatter = DateValueFormatter()
         
         let leftAxis = chartView.leftAxis
-        leftAxis.labelTextColor = .white//UIColor(red: 51/255, green: 181/255, blue: 229/255, alpha: 1)
-        leftAxis.axisMaximum = Double( reportList?.count ?? 0 )
+        leftAxis.labelTextColor = .white
+        leftAxis.labelFont = .systemFont(ofSize: 8)
+        leftAxis.labelPosition = .outsideChart
         leftAxis.axisMinimum = 0
-        leftAxis.drawGridLinesEnabled = false
+        leftAxis.axisMaximum = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()!
+        leftAxis.drawGridLinesEnabled = true
+        leftAxis.granularityEnabled = true
+        leftAxis.decimals = 0
+        
         
         chartView.rightAxis.enabled = false
         
     }
     
-    func setDataCount(sentData:[[String:Int]],viewdData:[[String:Int]]) {
+    func setDataCount(daysReport: [String: OneDayReport]) {
         
-        let sent = sentData.map { (dict) -> ChartDataEntry in
-            print(dict["createdAt"]!)
-            return ChartDataEntry(x: Double(dict["createdAt"]!), y: Double(dict.values.first!)) // dict["createdAt"]!
-        }
+        let sent = getSentData(daysReport: daysReport)
+        let viewed = getViewedData(daysReport: daysReport)
         
-        let viewed = viewdData.map { (dict) -> ChartDataEntry in
-            return ChartDataEntry(x: Double(dict["createdAt"]!), y: Double(dict.values.first!))
-        }
         
         let set1 = LineChartDataSet(entries: sent, label: "Sent")
         set1.axisDependency = .left
+        set1.mode = .cubicBezier
         set1.setColor(UIColor.rxThickYellow)
         set1.setCircleColor(.white)
-        set1.lineWidth = 2
-        set1.circleRadius = 2
+        set1.lineWidth = 1
+        set1.circleRadius = 1
         set1.fillColor = UIColor.rxThickYellow
         set1.highlightColor = UIColor.rxThickYellow
         set1.drawCircleHoleEnabled = false
+        set1.valueFont = .systemFont(ofSize: 8)
+
         
         let set2 = LineChartDataSet(entries: viewed, label: "Viewed")
         set2.axisDependency = .left
+        set2.mode = .cubicBezier
         set2.setColor(.rxGreen)
         set2.setCircleColor(.white)
-        set2.lineWidth = 2
-        set2.circleRadius = 2
+        set2.lineWidth = 1
+        set2.circleRadius = 1
         set2.fillColor = .rxGreen
         set2.highlightColor = .rxGreen
         set2.drawCircleHoleEnabled = false
+        set2.valueFont = .systemFont(ofSize: 8)
         
         let data = LineChartData(dataSets: [set1, set2])
         data.setValueTextColor(.clear)
         data.setValueFont(.systemFont(ofSize: 9))
-        
         chartView.data = data
     }
+    
+    func getSentData(daysReport: [String:OneDayReport]) -> [ChartDataEntry] {
+        var array = [ChartDataEntry]()
+        for ( index, value ) in orderedDaysArray.enumerated() {
+            let entry = ChartDataEntry(x: Double(index), y: daysReport[value]?.sentCount ?? Double(0))
+            array.append(entry)
+        }
+        return array
+    }
+    func getViewedData(daysReport: [String:OneDayReport]) -> [ChartDataEntry] {
+        var array = [ChartDataEntry]()
+        for ( index, value ) in orderedDaysArray.enumerated() {
+            let entry = ChartDataEntry(x: Double(index), y: daysReport[value]?.viewedCount ?? Double(0))
+            array.append(entry)
+        }
+        return array
+    }
+    
+//    func getXaxisLabels() -> [String:Any] {
+//        var dict = [String:Any]()
+//        for ( index, value ) in orderedDaysArray.enumerated() {
+//            dict["\(index)"] = value
+//        }
+//        return dict
+//
+//    }
+    
     
     @objc func backButtonTapped(){
         self.navigationItem.leftBarButtonItem = self.backButton
@@ -197,25 +213,11 @@ class TeamTrendViewController: UIViewController {
         callToActionDelegate?.emailAction()
     }
     
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-    
-}
-
-extension Date {
-    static func getDates(forLastNDays nDays: Int, includeToday:inout Bool) -> [[String:Int]] {
+    func getDates(forLastNDays nDays: Int, includeToday:inout Bool) -> [String:OneDayReport] {
         let cal = NSCalendar.current
         // start with today
+        var dict = [String: OneDayReport]()
         var date = cal.startOfDay(for: Date())
-        
-        var arrDates = [[String:Int]]()
         
         for _ in 1 ... nDays {
             // move back in time by one day:
@@ -229,10 +231,23 @@ extension Date {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "dd-MMM-yyyy"
             let dateString = dateFormatter.string(from: date)
-            arrDates.append([dateString : 0, "createdAt": Int(date.timeIntervalSince1970)])
+            orderedDaysArray.append(dateString)
+            dict[dateString] = OneDayReport()
         }
-        return arrDates.reversed()
+        
+        orderedDaysArray = orderedDaysArray.reversed()
+        return dict
     }
+    
+}
+extension TeamTrendViewController:ChartViewDelegate {
+    
+    
+}
+
+
+extension Date {
+
     
     static func getDate(date: Date) -> String {
         let formatter = DateFormatter()

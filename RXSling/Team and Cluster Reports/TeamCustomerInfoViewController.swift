@@ -26,8 +26,7 @@ class TeamCustomerInfoViewController: UIViewController {
     var selectedSnt: SNTData?
     var isTeamReport:Bool!
     
-    var fixedHeight : CGFloat = 200
-    var searchViewheight: CGFloat = 40
+    var searchViewheight: CGFloat = 60
     var minimumTableViewHeight: CGFloat = 50
     
     
@@ -48,6 +47,7 @@ class TeamCustomerInfoViewController: UIViewController {
         configureSearchBar()
         contentViewHeightConstraint.constant = 200
         searchViewheightConstraint.constant = 0
+        
         
         // Do any additional setup after loading the view.
     }
@@ -98,6 +98,8 @@ class TeamCustomerInfoViewController: UIViewController {
         if searchViewheightConstraint.constant == 0 {
             customerSearchBar.resignFirstResponder()
             customerSearchBar.text = ""
+            removeTableBackgroundView()
+            reportList = originalReportList
             customerInfoTblView.reloadData()
         }
         applyHeightConstraint(sizeOfArray: reportList?.count ?? 0, isSearch: (searchViewheightConstraint.constant == 0) ? false : true)
@@ -115,7 +117,7 @@ class TeamCustomerInfoViewController: UIViewController {
                     return
                 }
                 let rowsHeight = CGFloat(sizeOfArray * 40)
-                let reportListViewHeight = rowsHeight + self.minimumTableViewHeight + ( isSearch ? self.searchViewheight : CGFloat(0) )
+                let reportListViewHeight = rowsHeight + self.minimumTableViewHeight + ( isSearch ? self.searchViewheight : CGFloat(0) ) + 40 // (40 customer details label height)
                 
                 if reportListViewHeight >= ( self.view.frame.height - self.searchViewheight ) {
                     self.contentViewHeightConstraint.constant = self.view.frame.height - (  self.searchViewheight )
@@ -131,9 +133,9 @@ class TeamCustomerInfoViewController: UIViewController {
                     return
                 }
                 let rowsHeight = CGFloat(sizeOfArray * 40)
-                let reportListViewHeight = rowsHeight + self.minimumTableViewHeight
+                let reportListViewHeight = rowsHeight + self.minimumTableViewHeight + 40 // (40 customer details height)
                 if reportListViewHeight >= ( self.view.frame.height - self.minimumTableViewHeight ) {
-                    self.contentViewHeightConstraint.constant = self.view.frame.height - self.minimumTableViewHeight
+                    self.contentViewHeightConstraint.constant = self.view.frame.height - self.searchViewheight
                 }else {
                     self.contentViewHeightConstraint.constant = reportListViewHeight
                 }

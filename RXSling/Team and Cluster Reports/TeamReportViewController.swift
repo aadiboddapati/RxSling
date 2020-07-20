@@ -17,7 +17,9 @@ class TeamReportViewController: UIViewController {
     @IBOutlet weak var reportsTable:UITableView!
     
     @IBOutlet weak var reportInfoLabel:UILabel!
-    
+    @IBOutlet weak var asOnDateLabel:UILabel!
+    @IBOutlet weak var asOnDateLabelheightConstraint:NSLayoutConstraint!
+
     
     var teamReports:TeamReportModel!
     var clusterReports: ClusterReportModel!
@@ -26,12 +28,11 @@ class TeamReportViewController: UIViewController {
     
     var isTeamReport:Bool!
     var selectedSnt: SNTData?
-    var fixedHeight: CGFloat = 45
+    var fixedHeight: CGFloat = 55
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
         //  scroller.contentSize.height = 1.0
         self.title = isTeamReport ? "TEAM INFORMATION" : "MANAGER REPORT"
@@ -55,10 +56,18 @@ class TeamReportViewController: UIViewController {
         if let clusterModel = clusterReports {
             originalClusterReports = clusterModel
         }
+        
+        if isTeamReport {
+            asOnDateLabelheightConstraint.constant = 0
+        } else {
+            asOnDateLabelheightConstraint.constant = 20
+            let date = Date(timeIntervalSince1970:(Double((clusterReports.data?.asonDate)!) / 1000.0))
+            asOnDateLabel.text = "as on " + getDate(date: date)
+
+        }
         contentViewheightConstraint.constant = 300 // calculate based on the array and search view constraints
         applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
         
-        reportsTable.isHidden = true
         
     }
     
@@ -69,11 +78,15 @@ class TeamReportViewController: UIViewController {
                 self.contentViewheightConstraint.constant = 300
                 return
             }
-            let rowsHeight = CGFloat(sizeOfArray * 52) + 40
+            let rowsHeight = CGFloat(sizeOfArray * 35) + 35 // (extra row)
             var reportListViewHeight = rowsHeight
             
             if self.searchViewheightConstraint.constant == 40 {
                 reportListViewHeight += 40
+            }
+            
+            if !self.isTeamReport {
+                 reportListViewHeight += 20
             }
             
             if reportListViewHeight + self.fixedHeight >=  self.view.frame.height {
@@ -83,18 +96,10 @@ class TeamReportViewController: UIViewController {
             }
         }
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
+
+    override func viewDidLayoutSubviews() {
         reportsTable.reloadData()
-        Timer.scheduledTimer(withTimeInterval: 0.25, repeats: false) { (timer) in
-            DispatchQueue.main.async {
-                self.reportsTable.isHidden = false
-                timer.invalidate()
-            }
-        }
     }
-    
-    
     @objc func backButtonTapped(){
         self.navigationItem.leftBarButtonItem = self.backButton
         self.navigationController?.popViewController(animated: true)
@@ -191,7 +196,7 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
+        return  35 //UITableView.automaticDimension
     }
     
     // cell delegate methods
@@ -199,7 +204,12 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
         
         if let userData = isTeamReport ? teamReports.data?[index].userData  : clusterReports.data?.clusterReport?[index].userData {
             let boolValue = userData.isShownEmail!
-            self.teamReports.data?[index].userData?.isShownEmail = !boolValue
+            if isTeamReport {
+                self.teamReports.data?[index].userData?.isShownEmail = !boolValue
+            }else {
+                self.clusterReports.data?.clusterReport?[index].userData?.isShownEmail = !boolValue
+
+            }
             reportsTable.reloadData()
         } else {
             showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
@@ -404,6 +414,17 @@ extension TeamReportViewController: UISearchBarDelegate {
     }
     func removeTableBackgroundView() {
         reportsTable.backgroundView = nil
+    }
+    
+    func getDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "h:mm a ',' dd-MMM-yyyy"
+        formatter.amSymbol = "AM"
+        formatter.pmSymbol = "PM"
+
+        let dateString = formatter.string(from: Date())
+        return dateString
     }
     
 }

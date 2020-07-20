@@ -125,6 +125,7 @@ PODS:
   - PromisesObjC (1.2.8)
   - Protobuf (3.11.4)
   - SideMenu (6.4.8)
+  - Toast-Swift (5.0.1)
 
 DEPENDENCIES:
   - Alamofire (~> 5.0)
@@ -140,6 +141,7 @@ DEPENDENCIES:
   - NKVPhonePicker
   - PhoneNumberKit
   - SideMenu
+  - Toast-Swift (~> 5.0)
 
 SPEC REPOS:
   trunk:
@@ -171,6 +173,7 @@ SPEC REPOS:
     - PromisesObjC
     - Protobuf
     - SideMenu
+    - Toast-Swift
 
 SPEC CHECKSUMS:
   Alamofire: 0fe5fd24b4298dc377a6550da7d5f1b30e286fcb
@@ -201,7 +204,8 @@ SPEC CHECKSUMS:
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   SideMenu: 4a891be552d30bb6fa87ad404d62e485f8450c34
+  Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: fb962abb27934d7c45cb0512bc7b70643d1b97d3
+PODFILE CHECKSUM: bbcb59ec2c8f1c3c788c78eb93f27a8b4c8d35e8
 
 COCOAPODS: 1.8.4

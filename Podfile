@@ -15,6 +15,8 @@ def unique_pods
   pod "ESPullToRefresh"
   pod 'KMPlaceholderTextView'
   pod 'Charts', '~> 3.5'
+  pod 'Toast-Swift', '~> 5.0'
+
 
 end
 target 'RXSling Stage' do

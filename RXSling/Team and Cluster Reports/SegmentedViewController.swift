@@ -8,6 +8,8 @@
 
 import UIKit
 import MessageUI
+import Toast_Swift
+
 protocol CallToActionProtocol:NSObjectProtocol {
     func callAction()
     func whatsappAction()
@@ -88,6 +90,12 @@ class SegmentedViewController: UIViewController {
         if isTeamReport {
             showActivityIndicator(View: self.view, Constants.Loader.reportDetails )
             self.callApiToFetchReportInfo()
+        }
+        
+        if #available(iOS 13, *) {
+            segmntCntrl.selectedSegmentTintColor = .rxGreen
+        } else {
+            segmntCntrl.tintColor = .rxGreen
         }
         // Do any additional setup after loading the view.
     }
@@ -233,18 +241,23 @@ class SegmentedViewController: UIViewController {
 }
 
 extension SegmentedViewController: CallToActionProtocol {
+    
     func copyReportAction() {
         if isTeamReport {
             UIPasteboard.general.string = formTheTeamMessageContent()
         } else {
             UIPasteboard.general.string = formTheCluserMessageContent()
         }
+        
+        self.view.makeToast("Content copied to clipboard.", duration: 1.0, position: .bottom)
+
     }
     
     func emailAction() {
         let content = isTeamReport ? formTheTeamMessageContent() : formTheCluserMessageContent()
         let subject = selectedSnt?.title ?? ""
-        openEmailApp(content, subject: subject)
+        let email = isTeamReport ? ( teamData.userData?.emailId ?? "" ) : (clusterData.userData?.emailId ?? "")
+        openEmailApp(content, subject: subject,recipients: [email])
     }
     
     func callAction() {
@@ -261,10 +274,15 @@ extension SegmentedViewController: CallToActionProtocol {
     func formTheTeamMessageContent() -> String {
          
          let repName = ( teamData.userData?.firstName ?? "" )  + " " +  ( teamData.userData?.lastName ?? "" )
+        
+        let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+        let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
+        let loggedInUserName = ( profileModel.data?.userInfo.firstName ?? "" ) + " " + ( profileModel.data?.userInfo.lastName ?? "" )
+        
          let repMobileNumber = teamData.userData?.mobileNo ?? ""
          let repEmail = teamData.userData?.emailId ?? ""
          let contentTitle   = selectedSnt?.title ?? ""
-         let contentDesc = selectedSnt?.desc ?? ""
+         let contentDesc = ( selectedSnt?.desc ?? "" ).trimmingCharacters(in: .newlines)
          let sentCount = "\(teamData.sentCount ?? 0)"
          let viewedCount = "\(teamData.viewedCount ?? 0)"
         
@@ -277,7 +295,7 @@ extension SegmentedViewController: CallToActionProtocol {
         }
         
         return """
-        Hi "\(repName)",
+        Hi \(repName),
 
         Below is the information about your content performance as on \(getTheTimeAndDate()).
 
@@ -295,7 +313,7 @@ extension SegmentedViewController: CallToActionProtocol {
         Success Rate : \(successRate)
 
         Thank you,
-        \(repName)
+        \(loggedInUserName)
         """
       
     }
@@ -303,10 +321,15 @@ extension SegmentedViewController: CallToActionProtocol {
     func formTheCluserMessageContent() -> String {
          
          let managerName = ( clusterData.userData?.firstName ?? "" )  + " " +  ( clusterData.userData?.lastName ?? "" )
+        
+        let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+        let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
+        let loggedInUserName = ( profileModel.data?.userInfo.firstName ?? "" ) + " " + ( profileModel.data?.userInfo.lastName ?? "" )
+        
          let managerMobileNumber = clusterData.userData?.mobileNo ?? ""
          let managerEmail = clusterData.userData?.emailId ?? ""
          let contentTitle   = selectedSnt?.title ?? ""
-         let contentDesc = selectedSnt?.desc ?? ""
+        let contentDesc = ( selectedSnt?.desc ?? "" ).trimmingCharacters(in: .newlines)
          let sentCount = "\(clusterData.sentCount ?? 0)"
          let viewedCount = "\(clusterData.viewedCount ?? 0)"
         
@@ -317,6 +340,11 @@ extension SegmentedViewController: CallToActionProtocol {
             let percentage =  ( Double (clusterData.viewedCount!) / Double ( clusterData.sentCount! ) ) * 100
             successRate = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
         }
+        
+        /*
+        """Hi \(managerName),\n\nBelow is the information about your content performance as on \(getTheTimeAndDate()).\n\nManager Name : \(managerName)\nManager Mobile No : \(managerMobileNumber)\nManager Email : \(managerEmail)\n\nContent Title : \(contentTitle)\nContent Desc : \(contentDesc)\n\nContent Performance as on \(getTheTimeAndDate()).\n\nSent Count : \(sentCount)\nViewed Count : \(viewedCount)\nSuccess Rate : \(successRate)\n\nThank you,\n\(loggedInUserNamae)
+        """
+        */
         
         return """
         Hi \(managerName),
@@ -337,12 +365,13 @@ extension SegmentedViewController: CallToActionProtocol {
         Success Rate : \(successRate)
 
         Thank you,
-        \(managerName)
+        \(loggedInUserName)
         """
       
     }
     
     func getTheTimeAndDate() -> String {
+        
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "h:mm a ',' dd-MMM-yyyy"
@@ -356,7 +385,8 @@ extension SegmentedViewController: CallToActionProtocol {
     
 }
 
-extension SegmentedViewController: MFMailComposeViewControllerDelegate {
+// MARK: Call to actions
+extension SegmentedViewController {
     
     func callButtonAction(mobileNumber: String)  {
         
@@ -391,38 +421,19 @@ extension SegmentedViewController: MFMailComposeViewControllerDelegate {
         }
         
     }
-    /*
-     //MARK: - Open SMS
-     func openSmsApp(_ messageToSend: String){
-     showBarButtonItem()
-     let smsVC = MFMessageComposeViewController()
-     smsVC.messageComposeDelegate = self
-     
-     // Configure the fields of the interface.
-     smsVC.recipients = [(self.userPhoneNumber ?? "")]
-     smsVC.body = messageToSend
-     
-     // Present the view controller modally.
-     if MFMessageComposeViewController.canSendText() {
-     smsVC.navigationBar.barTintColor = .rxGreen
-     smsVC.modalPresentationStyle = .overFullScreen
-     self.present(smsVC, animated: true, completion: nil)
-     } else {
-     print("Can't send messages.")
-     }
-     }
-     */
-    
+  
     //MARK: - Open Email
-    func openEmailApp(_ messageToSend: String, subject:String){
+    func openEmailApp(_ messageToSend: String, subject:String, recipients:[String]){
         showBarButtonItem()
         if MFMailComposeViewController.canSendMail() {
             let mail = MFMailComposeViewController()
             mail.mailComposeDelegate = self
+            mail.delegate = self
             mail.modalPresentationStyle = .fullScreen
-            mail.setToRecipients([])
+            mail.setToRecipients(recipients)
             mail.setSubject(subject)
-            mail.setMessageBody("<b>\(messageToSend)</b>", isHTML: true)
+            mail.setMessageBody("\(messageToSend)", isHTML: false)
+           // mail.modalPresentationStyle = .automatic
             self.present(mail, animated: true, completion: nil)
             
         } else {
@@ -430,48 +441,6 @@ extension SegmentedViewController: MFMailComposeViewControllerDelegate {
             Utility.showAlertWith(message: "Mail not configured", inView: self)
         }
     }
-    
-    // MARK: - MessageComposeViewControllerDelegate
-    
-    func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
-        
-        switch result.rawValue {
-        case MessageComposeResult.cancelled.rawValue:
-            print("Cancelled")
-            dismiss(animated: true, completion: nil)
-        case MessageComposeResult.sent.rawValue:
-            print("Sent")
-            dismiss(animated: true, completion: nil)
-        case MessageComposeResult.failed.rawValue:
-            print("Failed")
-            dismiss(animated: true, completion: nil)
-        default:
-            break
-        }
-        controller.dismiss(animated: true, completion: nil)
-    }
-    
-    // MARK: - MFMailComposeViewControllerDelegate
-    private func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        
-        switch result.rawValue {
-        case MFMailComposeResult.cancelled.rawValue:
-            print("Cancelled")
-            dismiss(animated: true, completion: nil)
-        case MFMailComposeResult.saved.rawValue:
-            print("Saved")
-            dismiss(animated: true, completion: nil)
-        case MFMailComposeResult.sent.rawValue:
-            print("Sent")
-            dismiss(animated: true, completion: nil)
-        case MFMailComposeResult.failed.rawValue:
-            print("Error: \(error?.localizedDescription ?? " can't send mail")")
-        default:
-            break
-        }
-        controller.dismiss(animated: true, completion: nil)
-    }
-    
     
     //MARK: Open url
     func openUrl(_ appURL: URL){
@@ -484,5 +453,13 @@ extension SegmentedViewController: MFMailComposeViewControllerDelegate {
             }
         }
     }
+}
+
+extension SegmentedViewController: MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
+    // MARK: - MFMailComposeViewControllerDelegate
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
 }
 

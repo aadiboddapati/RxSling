@@ -53,7 +53,7 @@ class TeamReportCell: UITableViewCell {
 
     }
     
-    func configureTheCellWith(team data: TeamData, indexPath: IndexPath)  {
+    func configureTheCellWith(team data: inout TeamData, indexPath: IndexPath)  {
              emailIdLbl.textColor = .white
              sentLbl.textColor = .white
              viewedLbl.textColor = .white
@@ -81,10 +81,12 @@ class TeamReportCell: UITableViewCell {
         viewedLbl.text =  "\(data.viewedCount ?? 0)"
         
         if sentLbl.text == "0" ||  viewedLbl.text == "0" {
-            successLbl.text = "0 %"
+            successLbl.text = "0%"
+            data.successRate = Double(0)
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-            successLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
+            successLbl.text = String(format: "%.1f%@", percentage, "%") // ceil(percentage*100)/100
+            data.successRate = percentage
         }
         moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
         moreLbl.contentMode = .scaleAspectFit
@@ -92,7 +94,7 @@ class TeamReportCell: UITableViewCell {
 
     }
     
-   func configureTheCellWith(cluster data: ClusterReportData, indexPath: IndexPath) {
+   func configureTheCellWith(cluster data: inout ClusterReportData, indexPath: IndexPath) {
         
              emailIdLbl.textColor = .white
              sentLbl.textColor = .white
@@ -121,10 +123,12 @@ class TeamReportCell: UITableViewCell {
     viewedLbl.text =  "\(data.viewedCount ?? 0)"
     
     if sentLbl.text == "0" ||  viewedLbl.text == "0" {
-        successLbl.text = "0 %"
+        successLbl.text = "0%"
+        data.successRate = Double(0)
     } else {
         let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-        successLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
+        successLbl.text = String(format: "%.1f%@", percentage, "%") // ceil(percentage*100)/100
+        data.successRate = percentage
     }
     moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
     moreLbl.contentMode = .scaleAspectFit

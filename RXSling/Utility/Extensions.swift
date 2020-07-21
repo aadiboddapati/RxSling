@@ -71,6 +71,8 @@ extension UIColor{
     //101,93,93 82%
     static let rxdisabled = UIColor(red:101/255, green: 93/255, blue: 93/255, alpha: 1.0)
     static let rxenabled = UIColor(red:229/255, green: 184/255, blue: 81/255, alpha: 1.0)
+    static let rxAlert = UIColor(red:199/255, green: 205/255, blue: 194/255, alpha: 1.0)
+
 }
  
 extension String {

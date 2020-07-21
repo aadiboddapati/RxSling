@@ -144,8 +144,8 @@ class TeamTrendViewController: UIViewController {
         set1.mode = .cubicBezier
         set1.setColor(UIColor.rxThickYellow)
         set1.setCircleColor(.white)
-        set1.lineWidth = 1
-        set1.circleRadius = 1
+        set1.lineWidth = 2
+        set1.circleRadius = 2
         set1.fillColor = UIColor.rxThickYellow
         set1.highlightColor = UIColor.rxThickYellow
         set1.drawCircleHoleEnabled = false
@@ -157,8 +157,8 @@ class TeamTrendViewController: UIViewController {
         set2.mode = .cubicBezier
         set2.setColor(.rxGreen)
         set2.setCircleColor(.white)
-        set2.lineWidth = 1
-        set2.circleRadius = 1
+        set2.lineWidth = 2
+        set2.circleRadius = 2
         set2.fillColor = .rxGreen
         set2.highlightColor = .rxGreen
         set2.drawCircleHoleEnabled = false
@@ -203,16 +203,15 @@ class TeamTrendViewController: UIViewController {
     }
     
     @IBAction func callButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.callAction()
+        callToActionDelegate?.callAction(isTrendVC: true)
     }
     @IBAction func whatsappButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.whatsappAction()
-    }
+        callToActionDelegate?.whatsappAction(isTrendVC: true, daysReport: tenDaysReport, orderedDays: orderedDaysArray)    }
     @IBAction func copyReportButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.copyReportAction()
+        callToActionDelegate?.copyReportAction(isTrendVC: true, daysReport: tenDaysReport, orderedDays: orderedDaysArray)
     }
     @IBAction func emailButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.emailAction()
+        callToActionDelegate?.emailAction(isTrendVC: true, daysReport: tenDaysReport, orderedDays: orderedDaysArray)
     }
     
     func getDates(forLastNDays nDays: Int, includeToday:inout Bool) -> [String:OneDayReport] {

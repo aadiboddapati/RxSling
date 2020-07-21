@@ -19,6 +19,9 @@ class TeamReportViewController: UIViewController {
     @IBOutlet weak var reportInfoLabel:UILabel!
     @IBOutlet weak var asOnDateLabel:UILabel!
     @IBOutlet weak var asOnDateLabelheightConstraint:NSLayoutConstraint!
+    
+    @IBOutlet weak var sortButton:UIButton!
+    @IBOutlet weak var searchButton:UIButton!
 
     
     var teamReports:TeamReportModel!
@@ -29,6 +32,10 @@ class TeamReportViewController: UIViewController {
     var isTeamReport:Bool!
     var selectedSnt: SNTData?
     var fixedHeight: CGFloat = 55
+    
+    var defaultSortOption: SortType = .success
+    
+    var titlesArray = ["Success %","Viewed","Sent"]
     
     
     override func viewDidLoad() {
@@ -63,12 +70,22 @@ class TeamReportViewController: UIViewController {
             asOnDateLabelheightConstraint.constant = 20
             let date = Date(timeIntervalSince1970:(Double((clusterReports.data?.asonDate)!) / 1000.0))
             asOnDateLabel.text = "as on " + getDate(date: date)
-
         }
         contentViewheightConstraint.constant = 300 // calculate based on the array and search view constraints
         applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
         
         
+        if isTeamReport {
+            if let count = teamReports.data?.count, count <= 1 {
+                self.searchButton.isHidden = true
+                self.sortButton.isHidden = true
+            }
+        } else {
+            if let count = clusterReports.data?.clusterReport?.count, count <= 1 {
+                self.searchButton.isHidden = true
+                self.sortButton.isHidden = true
+            }
+        }
     }
     
     func applyListViewHeightConstraint(sizeOfArray: Int, isSearch:Bool)  {
@@ -117,6 +134,14 @@ class TeamReportViewController: UIViewController {
         }
         applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
     }
+    @IBAction func sortButtonTapped(_ sender: UIButton) {
+        self.presentPopUp()
+//        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.sortvc) as! SortViewViewController
+//        vc.selectedSortType = defaultSortOption
+//        vc.sortDelegate = self
+//        vc.modalPresentationStyle = .overCurrentContext
+//        self.present(vc, animated: true, completion: nil)
+    }
     func configureSearchBar()  {
         
         let searchTextField:UITextField = (reportSearchBar.value(forKey: "searchField") as? UITextField)!
@@ -151,14 +176,92 @@ class TeamReportViewController: UIViewController {
     
 }
 
+extension TeamReportViewController : SortProtocol {
+    
+    func presentPopUp()  {
+        
+        let alert = UIAlertController(title: Constants.Alert.title, message: "Select the display type", preferredStyle: UIAlertController.Style.alert)
+        let tableviewController = UITableViewController()
+        tableviewController.tableView.delegate = self
+        tableviewController.tableView.dataSource = self
+
+       // tableview.selectio
+        tableviewController.tableView.tag = 11
+        tableviewController.tableView.isScrollEnabled = false
+        
+        tableviewController.preferredContentSize = CGSize(width: 272, height: 120)
+        alert.setValue(tableviewController, forKey: "contentViewController")
+        
+        alert.addAction(UIAlertAction (title: "CANCEL", style: UIAlertAction.Style.default, handler:{ (action) in
+            self.view.endEditing(true)
+        }))
+        alert.addAction(UIAlertAction (title: "APPLY", style: UIAlertAction.Style.default, handler:{ (action) in
+            DispatchQueue.main.async {
+                self.view.endEditing(true)
+                self.passData(sortType: self.defaultSortOption)
+            }
+            
+        }))
+        self.present(alert, animated: true, completion: nil)
+        alert.view.tintColor = .rxGreen
+        
+    }
+    
+    func passData(sortType: SortType) {
+        
+        switch sortType {
+        case .success:
+            if isTeamReport {
+               let data = teamReports.data?.sorted(by: { ($0.successRate ?? Double(0) ) > ($1.successRate ?? Double(0) ) })
+                teamReports.data = data
+                
+            } else {
+                let data = clusterReports.data?.clusterReport?.sorted(by: {
+                    ($0.successRate ?? Double(0) ) > ($1.successRate ?? Double(0) )
+                })
+                clusterReports.data?.clusterReport = data
+            }
+            reportsTable.reloadData()
+        case .viewed:
+            if isTeamReport {
+                let data = teamReports.data?.sorted(by: { ($0.viewedCount ?? 0 ) > ($1.viewedCount ?? 0 ) })
+                teamReports.data = data
+            } else {
+             let data = clusterReports.data?.clusterReport?.sorted(by: {
+                    ($0.viewedCount ?? 0 ) > ($1.viewedCount ?? 0 )
+                })
+                 clusterReports.data?.clusterReport = data
+            }
+            reportsTable.reloadData()
+        case .sent:
+            if isTeamReport {
+                let data  = teamReports.data?.sorted(by: { ($0.sentCount ?? 0 ) > ($1.sentCount ?? 0 ) })
+                teamReports.data = data
+            } else {
+                let data = clusterReports.data?.clusterReport?.sorted(by: {
+                    ($0.sentCount ?? 0 ) > ($1.sentCount ?? 0 )
+                })
+                clusterReports.data?.clusterReport = data
+            }
+            reportsTable.reloadData()
+        }
+    }
+}
+
 extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, TeamReportCellDelegate {
     
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView.tag == 11 {
+            return 1
+        }
         return 2
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView.tag == 11 {
+            return titlesArray.count
+        }
         if section == 0 {
             return 1
         }
@@ -166,6 +269,30 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        if tableView.tag == 11 {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+            cell.textLabel?.text = titlesArray[indexPath.row]
+            cell.selectionStyle = .none
+            cell.accessoryView?.backgroundColor = .clear
+            cell.backgroundColor = .rxAlert
+            cell.contentView.backgroundColor = .rxAlert
+            
+            if defaultSortOption == .success && indexPath.row == 0 {
+                cell.accessoryType = .checkmark
+            } else if defaultSortOption == .viewed && indexPath.row == 1  {
+                cell.accessoryType = .checkmark
+
+            } else if defaultSortOption == .sent && indexPath.row == 2  {
+                cell.accessoryType = .checkmark
+            } else {
+                cell.accessoryView = .none
+            }
+
+            return cell
+        }
+        
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReportCell", for: indexPath) as! TeamReportCell
         cell.selectionStyle = .none
         cell.reportCellDelegate = self
@@ -176,14 +303,14 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
         }
         
         if isTeamReport {
-            cell.configureTheCellWith(team: teamReports.data![indexPath.row], indexPath: indexPath)
+            cell.configureTheCellWith(team: &teamReports.data![indexPath.row], indexPath: indexPath)
             if indexPath.row == teamReports.data!.count - 1 {
                 cell.lineLbl.isHidden = true
             } else {
                 cell.lineLbl.isHidden = false
             }
         } else {
-            cell.configureTheCellWith(cluster: clusterReports.data!.clusterReport![indexPath.row], indexPath: indexPath)
+            cell.configureTheCellWith(cluster: &clusterReports.data!.clusterReport![indexPath.row], indexPath: indexPath)
             if indexPath.row == clusterReports.data!.clusterReport!.count - 1 {
                 cell.lineLbl.isHidden = true
             } else {
@@ -196,7 +323,25 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView.tag == 11 {
+            return 40
+        }
         return  35 //UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.tag == 11 {
+            if indexPath.row == 0 {
+                self.defaultSortOption = .success
+            }
+            if indexPath.row == 1 {
+                self.defaultSortOption = .viewed
+            }
+            if indexPath.row == 2 {
+                self.defaultSortOption = .sent
+            }
+            tableView.reloadData()
+        }
     }
     
     // cell delegate methods

@@ -24,6 +24,7 @@ struct TeamData: Codable {
     let sentCount: Int?
     let sntId: String?
     var userData: UserData?
+    var successRate: Double?
     
 }
 
@@ -44,6 +45,7 @@ struct ClusterReportData: Codable {
        let viewedCount:Int?
        let sentCount: Int?
        var userData: UserData?
+       var successRate: Double?
 }
 
 struct UserInfo: Codable {

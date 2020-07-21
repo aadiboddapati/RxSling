@@ -11,10 +11,10 @@ import MessageUI
 import Toast_Swift
 
 protocol CallToActionProtocol:NSObjectProtocol {
-    func callAction()
-    func whatsappAction()
-    func copyReportAction()
-    func emailAction()
+    func callAction(isTrendVC:Bool)
+    func whatsappAction(isTrendVC:Bool, daysReport:[String:OneDayReport], orderedDays:[String])
+    func copyReportAction(isTrendVC:Bool, daysReport:[String:OneDayReport], orderedDays:[String])
+    func emailAction(isTrendVC:Bool, daysReport:[String:OneDayReport], orderedDays:[String])
 }
 
 class SegmentedViewController: UIViewController {
@@ -242,33 +242,57 @@ class SegmentedViewController: UIViewController {
 
 extension SegmentedViewController: CallToActionProtocol {
     
-    func copyReportAction() {
-        if isTeamReport {
-            UIPasteboard.general.string = formTheTeamMessageContent()
-        } else {
-            UIPasteboard.general.string = formTheCluserMessageContent()
-        }
+    func copyReportAction(isTrendVC:Bool, daysReport:[String:OneDayReport], orderedDays:[String]) {
         
-        self.view.makeToast("Content copied to clipboard.", duration: 1.0, position: .bottom)
+        if isTrendVC {
+            UIPasteboard.general.string = formTrendMessageContent(daysReport, orderedDays: orderedDays)
+            self.view.makeToast("Content copied to clipboard.", duration: 1.0, position: .bottom)
+            
+        } else {
+            if isTeamReport {
+                UIPasteboard.general.string = formTheTeamMessageContent()
+            } else {
+                UIPasteboard.general.string = formTheCluserMessageContent()
+            }
+            self.view.makeToast("Content copied to clipboard.", duration: 1.0, position: .bottom)
+        }
 
     }
     
-    func emailAction() {
-        let content = isTeamReport ? formTheTeamMessageContent() : formTheCluserMessageContent()
-        let subject = selectedSnt?.title ?? ""
-        let email = isTeamReport ? ( teamData.userData?.emailId ?? "" ) : (clusterData.userData?.emailId ?? "")
-        openEmailApp(content, subject: subject,recipients: [email])
+    func emailAction(isTrendVC:Bool, daysReport:[String:OneDayReport], orderedDays:[String]) {
+        
+        if isTrendVC {
+            let content = formTrendMessageContent(daysReport, orderedDays: orderedDays)
+            let subject = selectedSnt?.title ?? ""
+            let email =  teamData.userData?.emailId ?? ""
+            openEmailApp(content, subject: subject,recipients: [email])
+            
+        } else {
+            let content = isTeamReport ? formTheTeamMessageContent() : formTheCluserMessageContent()
+            let subject = selectedSnt?.title ?? ""
+            let email = isTeamReport ? ( teamData.userData?.emailId ?? "" ) : (clusterData.userData?.emailId ?? "")
+            openEmailApp(content, subject: subject,recipients: [email])
+        }
+        
     }
     
-    func callAction() {
+    func callAction(isTrendVC:Bool) {
         let phoneNumber = isTeamReport ? teamData.userData?.mobileNo ?? ""  : clusterData.userData?.mobileNo ?? ""
         callButtonAction(mobileNumber: phoneNumber)
     }
     
-    func whatsappAction() {
-        let content = isTeamReport ? formTheTeamMessageContent() : formTheCluserMessageContent()
-        let phoneNumber = isTeamReport ? teamData.userData?.mobileNo ?? ""  : clusterData.userData?.mobileNo ?? ""
-        openWhatsApp(content, mobileNumber: phoneNumber)
+    func whatsappAction(isTrendVC:Bool, daysReport:[String:OneDayReport], orderedDays:[String]) {
+        
+        if isTrendVC {
+            let content = formTrendMessageContent(daysReport, orderedDays: orderedDays)
+            let phoneNumber = teamData.userData?.mobileNo ?? ""
+            openWhatsApp(content, mobileNumber: phoneNumber)
+        } else {
+            let content = isTeamReport ? formTheTeamMessageContent() : formTheCluserMessageContent()
+            let phoneNumber = isTeamReport ? teamData.userData?.mobileNo ?? ""  : clusterData.userData?.mobileNo ?? ""
+            openWhatsApp(content, mobileNumber: phoneNumber)
+        }
+        
     }
     
     func formTheTeamMessageContent() -> String {
@@ -341,10 +365,6 @@ extension SegmentedViewController: CallToActionProtocol {
             successRate = String(format: "%.2f %@", percentage, "%") // ceil(percentage*100)/100
         }
         
-        /*
-        """Hi \(managerName),\n\nBelow is the information about your content performance as on \(getTheTimeAndDate()).\n\nManager Name : \(managerName)\nManager Mobile No : \(managerMobileNumber)\nManager Email : \(managerEmail)\n\nContent Title : \(contentTitle)\nContent Desc : \(contentDesc)\n\nContent Performance as on \(getTheTimeAndDate()).\n\nSent Count : \(sentCount)\nViewed Count : \(viewedCount)\nSuccess Rate : \(successRate)\n\nThank you,\n\(loggedInUserNamae)
-        """
-        */
         
         return """
         Hi \(managerName),
@@ -368,6 +388,49 @@ extension SegmentedViewController: CallToActionProtocol {
         \(loggedInUserName)
         """
       
+    }
+    
+    func formTrendMessageContent(_ tenDaysData:[String: OneDayReport], orderedDays:[String]) -> String {
+        
+        let repName = ( teamData.userData?.firstName ?? "" )  + " " +  ( teamData.userData?.lastName ?? "" )
+        
+        let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+        let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
+        let loggedInUserName = ( profileModel.data?.userInfo.firstName ?? "" ) + " " + ( profileModel.data?.userInfo.lastName ?? "" )
+        
+         let repMobileNumber = teamData.userData?.mobileNo ?? ""
+         let repEmail = teamData.userData?.emailId ?? ""
+         let contentTitle   = selectedSnt?.title ?? ""
+         let contentDesc = ( selectedSnt?.desc ?? "" ).trimmingCharacters(in: .newlines)
+        
+         var trendArray = [String]()
+         for value  in orderedDays {
+            let sent = String(format: "%.0f", tenDaysData[value]?.sentCount ?? Double(0))
+            let viewed = String(format: "%.0f", tenDaysData[value]?.viewedCount ?? Double(0))
+
+            let formattedString = "\(value)     -- Sent : \(sent) & Viewed : \(viewed)"
+            trendArray.append(formattedString)
+         }
+        
+        return """
+        Hi \(repName),
+
+        Below is the information about your content performance as on \(getTheTimeAndDate()).
+
+        REP Name : \(repName)
+        REP Mobile No : \(repMobileNumber)
+        REP Email : \(repEmail)
+
+        Content Title : \(contentTitle)
+        Content Desc : \(contentDesc)
+
+        Trend from last 10 days from \(getTheTimeAndDate().components(separatedBy: ",").first!),  \(orderedDays.first!) to \(getTheTimeAndDate())
+        
+        \(trendArray.joined(separator: "\n"))
+        
+        Thank you,
+        \(loggedInUserName)
+        """
     }
     
     func getTheTimeAndDate() -> String {

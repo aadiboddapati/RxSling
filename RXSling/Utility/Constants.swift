@@ -57,6 +57,7 @@ struct Constants {
         static let teamrepdetailsvc = "TeamRepDetailViewController"
         static let teamtrendvc          = "TeamTrendViewController"
         static let teamcustomerinfovc = "TeamCustomerInfoViewController"
+        static let sortvc            = "SortViewViewController"
     }
     
   

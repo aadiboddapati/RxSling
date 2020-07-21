@@ -25,6 +25,7 @@
 		0777CD5E24B87F4600F64865 /* SegmentedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5C24B87F4600F64865 /* SegmentedViewController.swift */; };
 		0777CD6024BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */; };
 		0777CD6124BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */; };
+		07AFFF8C24C6B01B009433F3 /* SortViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AFFF8B24C6B01B009433F3 /* SortViewViewController.swift */; };
 		07C9C43D24B327CE006AAF21 /* TeamReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C9C43C24B327CE006AAF21 /* TeamReportViewController.swift */; };
 		07C9C43F24B327E6006AAF21 /* TeamRepDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */; };
 		07E32C3124B360E100A3A07A /* TeamReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E32C3024B360E100A3A07A /* TeamReportCell.swift */; };
@@ -166,6 +167,7 @@
 		0777CD5924B87C0500F64865 /* TeamCustomerInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCustomerInfoViewController.swift; sourceTree = "<group>"; };
 		0777CD5C24B87F4600F64865 /* SegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedViewController.swift; sourceTree = "<group>"; };
 		0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCustomerInfoCell.swift; sourceTree = "<group>"; };
+		07AFFF8B24C6B01B009433F3 /* SortViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortViewViewController.swift; sourceTree = "<group>"; };
 		07C9C43C24B327CE006AAF21 /* TeamReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportViewController.swift; sourceTree = "<group>"; };
 		07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamRepDetailViewController.swift; sourceTree = "<group>"; };
 		07E32C3024B360E100A3A07A /* TeamReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportCell.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				0777CD5624B87BE200F64865 /* TeamTrendViewController.swift */,
 				0777CD5924B87C0500F64865 /* TeamCustomerInfoViewController.swift */,
 				0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */,
+				07AFFF8B24C6B01B009433F3 /* SortViewViewController.swift */,
 			);
 			path = "Team and Cluster Reports";
 			sourceTree = "<group>";
@@ -850,6 +853,7 @@
 				AE5B819A2428A28C002AED2B /* SplashScreenViewController.swift in Sources */,
 				AE54BB8A246AC072009AAF24 /* HelpViewController.swift in Sources */,
 				AEF702442446F86200A87810 /* MenuTableViewController.swift in Sources */,
+				07AFFF8C24C6B01B009433F3 /* SortViewViewController.swift in Sources */,
 				E2FB3C40249FE3C5000A7CAC /* StackViewController.swift in Sources */,
 				AE3E31C724348B0800013400 /* HTTPRequest.swift in Sources */,
 				AEBA313F242885F3004BCADC /* SceneDelegate.swift in Sources */,

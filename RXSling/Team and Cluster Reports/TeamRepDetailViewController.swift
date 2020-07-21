@@ -174,10 +174,10 @@ class TeamRepDetailViewController: UIViewController {
         self.sentCountLbl.text = "\(data.sentCount ?? 0)"
         self.viewedCountLbl.text = "\(data.viewedCount ?? 0)"
         if sentCountLbl.text == "0" ||  viewedCountLbl.text == "0" {
-            SuccessLbl.text = "0 %"
+            SuccessLbl.text = "0%"
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-            SuccessLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
+            SuccessLbl.text = String(format: "%.1f%@", percentage, "%") // ceil(percentage*100)/100
         }
         
         
@@ -193,10 +193,10 @@ class TeamRepDetailViewController: UIViewController {
         self.sentCountLbl.text = "\(data.sentCount ?? 0)"
         self.viewedCountLbl.text = "\(data.viewedCount ?? 0)"
         if sentCountLbl.text == "0" ||  viewedCountLbl.text == "0" {
-            SuccessLbl.text = "0 %"
+            SuccessLbl.text = "0%"
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
-            SuccessLbl.text = String(format: "%.1f %@", percentage, "%") // ceil(percentage*100)/100
+            SuccessLbl.text = String(format: "%.1f%@", percentage, "%") // ceil(percentage*100)/100
         }
         
     }
@@ -207,17 +207,17 @@ class TeamRepDetailViewController: UIViewController {
     }
     
     @IBAction func callButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.callAction()
+        callToActionDelegate?.callAction(isTrendVC: false)
     }
     @IBAction func whatsAppButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.whatsappAction()
+        callToActionDelegate?.whatsappAction(isTrendVC: false, daysReport: [:], orderedDays: [])
     }
     
     @IBAction func copyReportButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.copyReportAction()
+        callToActionDelegate?.copyReportAction(isTrendVC: false, daysReport: [:], orderedDays: [])
     }
     @IBAction  func emailButtonAction(_ sender: UIButton) {
-        callToActionDelegate?.emailAction()
+        callToActionDelegate?.emailAction(isTrendVC: false, daysReport: [:], orderedDays: [])
     }
     
     /*

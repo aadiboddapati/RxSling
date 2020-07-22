@@ -36,7 +36,9 @@ struct Constants {
         static let teamReport = base + "FirstlevelReport"
         static let clusterReport = base + "Managerlevelreport"
         static let userInfo       = base + "GetUserInfo"
+        static let contactList = base + "RetrieveContactList"
         static let logout = "Logout"
+        
     }
     
     struct TableCell{
@@ -57,7 +59,7 @@ struct Constants {
         static let teamrepdetailsvc = "TeamRepDetailViewController"
         static let teamtrendvc          = "TeamTrendViewController"
         static let teamcustomerinfovc = "TeamCustomerInfoViewController"
-        static let sortvc            = "SortViewViewController"
+        static let centralcontactlist            = "SortViewViewController"
     }
     
   

@@ -82,11 +82,11 @@ class TeamReportCell: UITableViewCell {
         
         if sentLbl.text == "0" ||  viewedLbl.text == "0" {
             successLbl.text = "0%"
-            data.successRate = Double(0)
+            //data.successRate = Double(0)
         } else {
             let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
             successLbl.text = String(format: "%.1f%@", percentage, "%") // ceil(percentage*100)/100
-            data.successRate = percentage
+           // data.successRate = percentage
         }
         moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
         moreLbl.contentMode = .scaleAspectFit
@@ -124,11 +124,11 @@ class TeamReportCell: UITableViewCell {
     
     if sentLbl.text == "0" ||  viewedLbl.text == "0" {
         successLbl.text = "0%"
-        data.successRate = Double(0)
+        //data.successRate = Double(0)
     } else {
         let percentage =  ( Double (data.viewedCount!) / Double ( data.sentCount! ) ) * 100
         successLbl.text = String(format: "%.1f%@", percentage, "%") // ceil(percentage*100)/100
-        data.successRate = percentage
+        //data.successRate = percentage
     }
     moreLbl.attributedText = Utility.attributedImage(image: UIImage(named: "moresmll")!)
     moreLbl.contentMode = .scaleAspectFit

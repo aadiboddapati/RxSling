@@ -7,7 +7,15 @@
 //
 
 import UIKit
+protocol SortProtocol: NSObjectProtocol {
+    func passData(sortType: SortType)
+}
 
+enum SortType {
+    case success
+    case viewed
+    case sent
+}
 class TeamReportViewController: UIViewController {
     
     var backButton : UIBarButtonItem!
@@ -57,11 +65,15 @@ class TeamReportViewController: UIViewController {
         reportSearchBar.layer.borderWidth = 0.5
         configureSearchBar()
         
-        if let teamModel = teamReports {
-            originalTeamReports = teamModel
+        // update the cluster success rate to model
+        
+        if let _ = teamReports {
+            updateSuccessRateTeamModel(teamData: &teamReports)
+            originalTeamReports = teamReports
         }
-        if let clusterModel = clusterReports {
-            originalClusterReports = clusterModel
+        if let _ = clusterReports {
+            updateSuccessRateClusterModel(clusterData: &clusterReports)
+            originalClusterReports = clusterReports
         }
         
         if isTeamReport {
@@ -86,6 +98,36 @@ class TeamReportViewController: UIViewController {
                 self.sortButton.isHidden = true
             }
         }
+        
+        passData(sortType: defaultSortOption)
+
+    }
+    
+    func updateSuccessRateTeamModel(teamData:inout TeamReportModel)  {
+        if var _ = teamData.data {
+            for (index, item) in teamData.data!.enumerated() {
+                if item.sentCount == 0 || item.viewedCount == 0 {
+                    teamData.data?[index].successRate = Double(0)
+                } else {
+                    let percentage =  ( Double (item.viewedCount!) / Double ( item.sentCount! ) ) * 100
+                    teamData.data?[index].successRate = percentage
+                }
+            }
+        }
+    }
+    
+    func updateSuccessRateClusterModel(clusterData: inout ClusterReportModel)  {
+        if let data = clusterData.data?.clusterReport {
+            for (index, item) in data.enumerated() {
+                if item.sentCount == 0 || item.viewedCount == 0 {
+                    clusterData.data?.clusterReport?[index].successRate = Double(0)
+                } else {
+                    let percentage =  ( Double (item.viewedCount!) / Double ( item.sentCount! ) ) * 100
+                    clusterData.data?.clusterReport?[index].successRate = percentage
+                }
+            }
+        }
+
     }
     
     func applyListViewHeightConstraint(sizeOfArray: Int, isSearch:Bool)  {
@@ -117,6 +159,7 @@ class TeamReportViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         reportsTable.reloadData()
     }
+    
     @objc func backButtonTapped(){
         self.navigationItem.leftBarButtonItem = self.backButton
         self.navigationController?.popViewController(animated: true)
@@ -136,11 +179,6 @@ class TeamReportViewController: UIViewController {
     }
     @IBAction func sortButtonTapped(_ sender: UIButton) {
         self.presentPopUp()
-//        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.sortvc) as! SortViewViewController
-//        vc.selectedSortType = defaultSortOption
-//        vc.sortDelegate = self
-//        vc.modalPresentationStyle = .overCurrentContext
-//        self.present(vc, animated: true, completion: nil)
     }
     func configureSearchBar()  {
         
@@ -180,7 +218,7 @@ extension TeamReportViewController : SortProtocol {
     
     func presentPopUp()  {
         
-        let alert = UIAlertController(title: Constants.Alert.title, message: "Select the display type", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: "Select the display type", message: "", preferredStyle: UIAlertController.Style.alert)
         let tableviewController = UITableViewController()
         tableviewController.tableView.delegate = self
         tableviewController.tableView.dataSource = self
@@ -488,7 +526,7 @@ extension TeamReportViewController: UISearchBarDelegate {
             removeTableBackgroundView()
             reportsTable.reloadData()
             applyListViewHeightConstraint(sizeOfArray: isTeamReport ? ( teamReports.data?.count )! : ( clusterReports.data?.clusterReport?.count )!, isSearch: false)
-
+            passData(sortType: defaultSortOption)
             return
         }
         
@@ -512,6 +550,8 @@ extension TeamReportViewController: UISearchBarDelegate {
             } else {
                 removeTableBackgroundView()
             }
+            passData(sortType: defaultSortOption)
+
         } else {
             let filteredData = clusterReports.data?.clusterReport?.filter({ (teamData) -> Bool in
                 if let usrData = teamData.userData {
@@ -532,6 +572,7 @@ extension TeamReportViewController: UISearchBarDelegate {
             } else {
                 removeTableBackgroundView()
             }
+            passData(sortType: defaultSortOption)
         }
     }
     

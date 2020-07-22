@@ -218,7 +218,7 @@ extension TeamReportViewController : SortProtocol {
     
     func presentPopUp()  {
         
-        let alert = UIAlertController(title: "Select the display type", message: "", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: Constants.Alert.screentype, message: "", preferredStyle: UIAlertController.Style.alert)
         let tableviewController = UITableViewController()
         tableviewController.tableView.delegate = self
         tableviewController.tableView.dataSource = self
@@ -230,7 +230,8 @@ extension TeamReportViewController : SortProtocol {
         tableviewController.preferredContentSize = CGSize(width: 272, height: 120)
         alert.setValue(tableviewController, forKey: "contentViewController")
         
-        alert.addAction(UIAlertAction (title: "CANCEL", style: UIAlertAction.Style.default, handler:{ (action) in
+        alert.addAction(UIAlertAction (title:
+            , style: UIAlertAction.Style.default, handler:{ (action) in
             self.view.endEditing(true)
         }))
         alert.addAction(UIAlertAction (title: "APPLY", style: UIAlertAction.Style.default, handler:{ (action) in

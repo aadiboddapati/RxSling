@@ -229,34 +229,50 @@ class ShareSntViewController: UIViewController {
     
     
     //MARK: - Button methods
-    @IBAction func selectPhoneNumberPressed(_ sender: UIButton){
+    @IBAction func selectPhoneNumberPressed(_ sender: UIButton) {
         
         if (self.snt?.canSendSnt())!{
             noButtonPressed(noButton)
-            
             if(!isDocInfoShown){
+                // check for availability to share
+                //let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+                let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+                let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
                 
-                let contactStore = CNContactStore()
-                contactsAuthorization(for: contactStore) { (athorisedBool) in
-                    if(athorisedBool){
-                        
-                        DispatchQueue.main.async {
-                            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
-                 
-                           self.perform(#selector(self.getContactsFromPhoneBook), with: nil, afterDelay: 1.0)
-                        }
-                        
-                    }else{
-                        //Show alert to enable
-                        //contact import in app settings
-                        print("NOT Athorised")
-                        Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
-                            if(yesTapped){
-                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                if let boolValue = profileModel.data?.settings?.isCentralizedContact, boolValue == true {
+                    callApiToFetchConntactsList()
+                    /*
+                      if let contactsRefreshtime = USERDEFAULTS.value(forKey: "ContactsRefreshTime") as? Date {
+                          let definedRefreshTime = profileModel.data?.settings?.isContactListRefreshHrs
+                      } else {
+                          DispatchQueue.main.async {
+                              showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating)
+                          }
+                      }
+                     */
+                    
+                    
+                } else {
+                    
+                    let contactStore = CNContactStore()
+                    contactsAuthorization(for: contactStore) { (athorisedBool) in
+                        if(athorisedBool){
+                            DispatchQueue.main.async {
+                                showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
+                                self.perform(#selector(self.getContactsFromPhoneBook), with: nil, afterDelay: 1.0)
+                            }
+                        }else{
+                            print("NOT Athorised")
+                            Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
+                                if(yesTapped){
+                                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                                }
                             }
                         }
                     }
                 }
+                
+                
             }else{
                 
                 //Call validate api
@@ -277,7 +293,7 @@ class ShareSntViewController: UIViewController {
             }
         }else{
             self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.restrictShareingSnt, actionTitles: ["Ok"], actions:[{action1 in
-            }, nil])
+                }, nil])
         }
     }
     
@@ -397,7 +413,7 @@ class ShareSntViewController: UIViewController {
             return
         }
         
-        //Longer url + “999” + ”&k=AccessKey”        
+        //Longer url + “999” + ”&k=AccessKey”
         let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.playsntvc) as! PlaySntViewController
         vc.loadUrl = String("\(shortenUrl.longURL)999&k=\(snt.accessKey)")
         self.navigationController?.pushViewController(vc, animated: true)
@@ -529,13 +545,9 @@ extension ShareSntViewController: CNContactPickerDelegate{
             doctorNameLabel.text = userName
             
             if(phoneNumberCustomDefaultRegion.numberString.contains("+")){
-                
                 doctorMobileLabel.text = phoneNumberCustomDefaultRegion.numberString
-                
-            }else{
-                
+            } else {
                 doctorMobileLabel.text = "+" + String(phoneNumberCustomDefaultRegion.countryCode) + phoneNumberCustomDefaultRegion.numberString
-                
             }
             
             
@@ -625,6 +637,53 @@ extension ShareSntViewController: CNContactPickerDelegate{
 }
 
 extension ShareSntViewController{
+    
+    //MARK: - Central Contact List Api
+    
+    @objc func callApiToFetchConntactsList() {
+        //Api
+        let api = Constants.Api.contactList
+        
+        //Token as header
+        let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
+        
+        //Parameters
+        let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+        let parameters:  [String : Any] =
+            ["repEmailId": userEmail, "tagInclude": [["":""]],"tagExclude": [["":""]]]
+        
+        
+        _ = HTTPRequest.sharedInstance.newRequest(url: api, method: "POST", params: parameters, header: header) { (response, error) in
+            
+            if error != nil
+            {
+                DispatchQueue.main.async {
+                    hideActivityIndicator(View: self.view)
+                    self.popupAlert(title: Constants.Alert.title, message: error?.description, actionTitles: ["Ok"], actions:[{action in},nil])
+                }
+            }
+            else{
+                
+                let jsonData = try! JSONSerialization.data(withJSONObject: response!, options: [])
+                let responseData = try! JSONDecoder().decode(CentralContactList.self, from: jsonData)
+                
+                if(responseData.statusCode == "100") {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                    }
+                }else {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                        if(responseData.statusCode == "106"){
+                            self.perform(#selector(self.tokenExpiredLogin), with: nil, afterDelay: 1.0)
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
     
     //MARK: - Call validate Api
     @objc func callApiToValidateDoctorInfo(){

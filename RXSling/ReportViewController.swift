@@ -100,7 +100,20 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         self.clusterReportBtn.tintColor = .white
         self.teamReportBtn = UIBarButtonItem(image: UIImage(named:"team_icon"), style: .plain, target: self, action:#selector(teamReportButtonTapped))
         self.teamReportBtn.tintColor = .white
-        self.navigationItem.rightBarButtonItems = [teamReportBtn, clusterReportBtn] //
+        
+        let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+        let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
+        
+        if (profileModel.data?.userInfo.clusterReport)! && (profileModel.data?.userInfo.teamReport)! {
+            self.navigationItem.rightBarButtonItems = [teamReportBtn, clusterReportBtn]
+        } else if (profileModel.data?.userInfo.clusterReport)!   {
+            self.navigationItem.rightBarButtonItems = [clusterReportBtn]
+        } else if (profileModel.data?.userInfo.teamReport)! {
+            self.navigationItem.rightBarButtonItems = [teamReportBtn]
+        } else {
+            self.navigationItem.rightBarButtonItems = nil
+        }
+
         
         let searchTextField:UITextField = (reportSearchBar.value(forKey: "searchField") as? UITextField)!
         searchTextField.tintColor = UIColor.white

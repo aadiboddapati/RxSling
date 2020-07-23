@@ -230,7 +230,7 @@ extension TeamReportViewController : SortProtocol {
         tableviewController.preferredContentSize = CGSize(width: 272, height: 120)
         alert.setValue(tableviewController, forKey: "contentViewController")
         
-        alert.addAction(UIAlertAction (title:
+        alert.addAction(UIAlertAction (title:"CANCEL"
             , style: UIAlertAction.Style.default, handler:{ (action) in
             self.view.endEditing(true)
         }))

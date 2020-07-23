@@ -97,6 +97,8 @@ class ShareSntViewController: UIViewController {
     
     var addWelcomeMessageBool:Bool = false
     
+    var centralContactList: CentralContactList?
+    
     //MARK: - View controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -226,6 +228,20 @@ class ShareSntViewController: UIViewController {
         cardFourHeightConstraint.constant = 140
     }
     
+    func getHours(from date: Date) -> Int {
+        return Calendar.current.dateComponents([.hour], from: date, to: Date()).hour ?? 0
+    }
+    
+    func presentContactsListVC()  {
+        
+        showBarButtonItem()
+        let nav = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.conntactslistnav) as! UINavigationController
+        let vc = nav.viewControllers.first as! CentralContactListTVC
+        vc.centralContactList = self.centralContactList
+        vc.centralContactDelegate = self
+        self.present(nav, animated: true, completion: nil)
+    }
+    
     
     
     //MARK: - Button methods
@@ -240,18 +256,30 @@ class ShareSntViewController: UIViewController {
                 let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
                 
                 if let boolValue = profileModel.data?.settings?.isCentralizedContact, boolValue == true {
-                    callApiToFetchConntactsList()
-                    /*
-                      if let contactsRefreshtime = USERDEFAULTS.value(forKey: "ContactsRefreshTime") as? Date {
-                          let definedRefreshTime = profileModel.data?.settings?.isContactListRefreshHrs
-                      } else {
-                          DispatchQueue.main.async {
-                              showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating)
-                          }
-                      }
-                     */
                     
-                    
+                    if let contactsRefreshtime = USERDEFAULTS.value(forKey: "ContactsRefreshTime") as? Date {
+                        let definedHours = profileModel.data?.settings?.isContactListRefreshHrs ?? 0
+                        let savedHours = getHours(from: contactsRefreshtime)
+                        if savedHours >= definedHours {
+                            DispatchQueue.main.async {
+                                showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
+                            }
+                            callApiToFetchConntactsList()
+                        } else {
+                            // show offline data
+                            let jsonData = USERDEFAULTS.value(forKey: "ContactsListData") as! Data
+                            let responseData = try! JSONDecoder().decode(CentralContactList.self, from: jsonData)
+                            self.centralContactList = responseData
+                            
+                            presentContactsListVC()
+                            
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating)
+                        }
+                        callApiToFetchConntactsList()
+                    }
                 } else {
                     
                     let contactStore = CNContactStore()
@@ -497,7 +525,7 @@ class ShareSntViewController: UIViewController {
     
 }
 
-extension ShareSntViewController: CNContactPickerDelegate{
+extension ShareSntViewController: CNContactPickerDelegate,CenntralContactListProtocol{
     
     //MARK:- Contacts import picker
     @objc func getContactsFromPhoneBook(){
@@ -556,6 +584,10 @@ extension ShareSntViewController: CNContactPickerDelegate{
             print("Generic parser error")
         }
         
+    }
+    
+    func didSelectCentralContact(contact: ContactList) {
+        print(contact)
     }
     
     
@@ -650,7 +682,7 @@ extension ShareSntViewController{
         //Parameters
         let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
         let parameters:  [String : Any] =
-            ["repEmailId": userEmail, "tagInclude": [["":""]],"tagExclude": [["":""]]]
+            ["repEmailId": userEmail, "tagInclude": [],"tagExclude": []]
         
         
         _ = HTTPRequest.sharedInstance.newRequest(url: api, method: "POST", params: parameters, header: header) { (response, error) in
@@ -670,6 +702,15 @@ extension ShareSntViewController{
                 if(responseData.statusCode == "100") {
                     DispatchQueue.main.async {
                         hideActivityIndicator(View: self.view)
+                        USERDEFAULTS.set(Date(), forKey: "ContactsRefreshTime")
+                        USERDEFAULTS.set(jsonData, forKey: "ContactsListData")
+                        self.centralContactList = responseData
+                        
+                        // navigate
+                        DispatchQueue.main.async {
+                            self.presentContactsListVC()
+                        }
+                        
                     }
                 }else {
                     DispatchQueue.main.async {

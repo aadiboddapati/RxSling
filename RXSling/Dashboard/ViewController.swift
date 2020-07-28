@@ -22,6 +22,8 @@ class ViewController: UIViewController {
     
     var customerDict = [String: String]()
     
+    var versionManager = VersionMannager.sharedInstance
+    
     var dashboardArray = [SNTData](){
         
         didSet{
@@ -34,9 +36,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(logout),
+        NotificationCenter.default.addObserver(self, selector: #selector(logout(notification:)),
                                                name: NSNotification.Name(rawValue: "logout_Tapped"),
                                                object: nil)
+        
+        // Version Checking
+        versionManager.checkForVersionUpdate()
+        
         setupNavigationBar()
         dashboardTbl.estimatedRowHeight = 310
         dashboardTbl.isHidden = true

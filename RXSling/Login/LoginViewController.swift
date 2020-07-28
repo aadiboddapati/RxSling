@@ -16,6 +16,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var pinTextfield: TextField!
     @IBOutlet weak var eyeBtn: UIButton!
     @IBOutlet weak var slingImage: UIImageView!
+    
+    var versionManager = VersionMannager.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +57,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
            super.viewWillAppear(animated)
            self.navigationController?.navigationBar.isHidden = true
+        // Version Checking
+        versionManager.checkForVersionUpdate()
        }
 
     override func viewWillDisappear(_ animated: Bool) {

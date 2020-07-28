@@ -251,7 +251,24 @@ class ShareSntViewController: UIViewController {
             noButtonPressed(noButton)
             if(!isDocInfoShown){
                 // check for availability to share
-                //let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+                let contactStore = CNContactStore()
+                contactsAuthorization(for: contactStore) { (athorisedBool) in
+                    if(athorisedBool){
+                        DispatchQueue.main.async {
+                            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
+                            self.perform(#selector(self.getContactsFromPhoneBook), with: nil, afterDelay: 1.0)
+                        }
+                    }else{
+                        print("NOT Athorised")
+                        Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
+                            if(yesTapped){
+                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                            }
+                        }
+                    }
+                }
+                
+                /*
                 let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
                 let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
                 
@@ -299,7 +316,7 @@ class ShareSntViewController: UIViewController {
                         }
                     }
                 }
-                
+                */
                 
             }else{
                 

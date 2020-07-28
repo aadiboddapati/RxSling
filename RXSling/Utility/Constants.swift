@@ -76,6 +76,11 @@ struct Constants {
         static let noTeamReportsFound = "No team reports found"
         static let noClusterReportsFound = "No cluster reports found"
         static let poorinternent = "Your internet connection is poor,Unable/Takes very long time to reach server.Please connect to good internet and try again."
+        
+        static let versioncheckmsg  = "This app is currently out of service or under scheduled maintenance. Please try after some time."
+        static let forceupdatemsg = "Important new update is available for the app. Please update the app to latest version to continue."
+        static let graceperiodovermsg = "This App version expired. Now you must update the App to latest version to continue."
+        static let graceperiodmsg = "New update is available for the app. Please click on 'update' to update the app now or click on 'later' to update within %d days of time."
 
     }
     

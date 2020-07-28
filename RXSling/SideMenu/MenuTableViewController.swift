@@ -184,7 +184,6 @@ class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate
         //--- Version Label ----
         var appVersion: String = ""
         if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"]{
-            
             appVersion = String("Version: \(version)")
         }
         

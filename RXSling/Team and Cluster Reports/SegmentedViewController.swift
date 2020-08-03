@@ -75,7 +75,15 @@ class SegmentedViewController: UIViewController {
             segmntCntrl.isHidden = true
         }
         
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            containerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 80).isActive = true
+            containerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -80).isActive = true
+            
+            segmntCntrl.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 80).isActive = true
+            segmntCntrl.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -80).isActive = true            
+        }
+        
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationController?.navigationBar.topItem?.hidesBackButton = true

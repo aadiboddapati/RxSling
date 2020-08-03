@@ -44,7 +44,7 @@ class TeamRepDetailViewController: UIViewController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.view.backgroundColor = .clear //UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
+        self.view.backgroundColor = .clear 
         //  scroller.contentSize.height = 1.0
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.setHidesBackButton(true, animated: false)

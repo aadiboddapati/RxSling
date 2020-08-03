@@ -24,6 +24,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
         self.navigationController?.navigationBar.isHidden = true
         
+   //     NotificationCenter.default.addObserver(self, selector: #selector(checkForVersionUpdate(notification:)), name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
+
+        
         if UIDevice.current.userInterfaceIdiom == .pad {
                    slingImage.frame = CGRect(x: (self.view.frame.width - slingImage.frame.size.width*2)/2, y: self.view.frame.width/7, width: slingImage.frame.size.width*2, height: slingImage.frame.size.height*2)
                          }
@@ -57,12 +60,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
            super.viewWillAppear(animated)
            self.navigationController?.navigationBar.isHidden = true
-        // Version Checking
-        versionManager.checkForVersionUpdate()
+           // Version Checking
+//            if let _ = versionManager.versionMannagedObj {
+//                versionManager.checkForVersionUpdate()
+//            }
        }
+    
+//       @objc func checkForVersionUpdate(notification: NSNotification) {
+//           versionManager.checkForVersionUpdate()
+//       }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
     }
 

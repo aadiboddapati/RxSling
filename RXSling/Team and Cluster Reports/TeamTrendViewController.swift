@@ -141,7 +141,7 @@ class TeamTrendViewController: UIViewController {
         
         let set1 = LineChartDataSet(entries: sent, label: "Sent")
         set1.axisDependency = .left
-        set1.mode = .cubicBezier
+        set1.mode = .linear
         set1.setColor(UIColor.rxThickYellow)
         set1.setCircleColor(.white)
         set1.lineWidth = 2
@@ -154,7 +154,7 @@ class TeamTrendViewController: UIViewController {
         
         let set2 = LineChartDataSet(entries: viewed, label: "Viewed")
         set2.axisDependency = .left
-        set2.mode = .cubicBezier
+        set2.mode = .linear
         set2.setColor(.rxGreen)
         set2.setCircleColor(.white)
         set2.lineWidth = 2

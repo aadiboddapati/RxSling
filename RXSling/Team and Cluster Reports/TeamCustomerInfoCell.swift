@@ -12,6 +12,8 @@ class TeamCustomerInfoCell: UITableViewCell {
 
     @IBOutlet weak var customerLbl:UILabel!
     @IBOutlet weak var sentTimeLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
+
     @IBOutlet weak var lineLbl:UILabel!
 
     @IBOutlet weak var statusImageView:UIImageView!
@@ -21,7 +23,7 @@ class TeamCustomerInfoCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         sentTimeLabel.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
-        sentTimeLabel.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
+        statusImageView.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
     }
     
     func configureCell(report:Report)  {

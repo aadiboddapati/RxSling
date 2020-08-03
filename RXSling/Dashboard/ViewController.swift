@@ -39,10 +39,8 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(logout(notification:)),
                                                name: NSNotification.Name(rawValue: "logout_Tapped"),
                                                object: nil)
-        
-        // Version Checking
-        versionManager.checkForVersionUpdate()
-        
+      //  NotificationCenter.default.addObserver(self, selector: #selector(checkForVersionUpdate(notification:)), name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
+    
         setupNavigationBar()
         dashboardTbl.estimatedRowHeight = 310
         dashboardTbl.isHidden = true
@@ -60,6 +58,12 @@ class ViewController: UIViewController {
         
         self.callPhoneBook()
     }
+    
+
+//    @objc func checkForVersionUpdate(notification: NSNotification) {
+//        // Version Checking
+//        versionManager.checkForVersionUpdate()
+//    }
     
     func getUserInfo(){
         
@@ -136,6 +140,7 @@ class ViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         
         super.viewDidLayoutSubviews()
+        
         self.navigationController?.navigationBar.isHidden = false
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)

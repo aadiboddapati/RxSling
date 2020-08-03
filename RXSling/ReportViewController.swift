@@ -269,7 +269,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         
         super.viewDidLayoutSubviews()
         self.navigationController?.navigationBar.isHidden = false
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
         self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.isTranslucent = true

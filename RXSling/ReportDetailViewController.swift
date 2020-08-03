@@ -43,9 +43,13 @@ class ReportDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
     //    scroller.contentSize.height = 700
+        
+        
+        
+        
         scroller.contentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height + 60)
         scroller.contentSize.height = self.view.frame.size.height + 60
-            self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
+            self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
         //  scroller.contentSize.height = 1.0
         contentTitlelbl.text = sntTitle
         contentDesclbl.text = sntDesc
@@ -60,7 +64,10 @@ class ReportDetailViewController: UIViewController {
                self.navigationController?.navigationBar.isExclusiveTouch = true
                self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         
-      
+      if UIDevice.current.userInterfaceIdiom == .pad {
+          scroller.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 80).isActive = true
+          scroller.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -80).isActive = true
+      }
 
         
         // Do any additional setup after loading the view.

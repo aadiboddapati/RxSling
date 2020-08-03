@@ -2582,7 +2582,7 @@
         <scene sceneID="tA1-je-Ihl">
             <objects>
                 <viewController storyboardIdentifier="StackViewController" id="7ms-Zy-q6v" customClass="StackViewController" customModule="RXSling_STAGE" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="sTv-H4-HCF">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="sTv-H4-HCF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2601,7 +2601,7 @@
                                     <constraint firstAttribute="height" constant="56" id="vdm-Yt-wCi"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vBI-4o-EvY">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vBI-4o-EvY">
                                 <rect key="frame" x="151.5" y="312.5" width="72" height="42"/>
                                 <color key="backgroundColor" red="0.3921568627" green="0.5568627451" blue="0.27450980390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>
@@ -3834,6 +3834,7 @@
                         <outlet property="searchButton" destination="1eY-yB-yN4" id="dYy-sa-6Wk"/>
                         <outlet property="searchViewheightConstraint" destination="WHl-Ph-QD8" id="bce-Jm-vZe"/>
                         <outlet property="sentTimeLabel" destination="IfA-lo-9Tx" id="zQC-iZ-dU4"/>
+                        <outlet property="statusLabel" destination="bEl-4K-Uj5" id="lQv-DT-lmZ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e9N-GS-nMb" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -6160,6 +6161,7 @@
                     <connections>
                         <outlet property="asOnDateLabel" destination="ghz-kr-xih" id="IZf-HP-1D3"/>
                         <outlet property="asOnDateLabelheightConstraint" destination="zdd-68-ine" id="eeV-BK-wQx"/>
+                        <outlet property="contentView" destination="yQO-1o-wWE" id="bbe-lU-9RT"/>
                         <outlet property="contentViewheightConstraint" destination="nNB-V3-MmL" id="a9g-up-ajW"/>
                         <outlet property="reportInfoLabel" destination="GV0-4z-GO5" id="1al-k8-LGt"/>
                         <outlet property="reportSearchBar" destination="VCE-dE-ucl" id="55v-M0-OsG"/>

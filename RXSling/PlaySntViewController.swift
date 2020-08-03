@@ -40,11 +40,11 @@ class PlaySntViewController: UIViewController {
                       self.navigationController?.navigationBar.isExclusiveTouch = true
                       self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         
-//        if UIDevice.current.userInterfaceIdiom == .pad {
-//        
-//            webview.customUserAgent = "iOS11_IPAD-MOBILE_SAFARI"
-//
-//               }
+        if UIDevice.current.userInterfaceIdiom == .pad {
+        
+            webview.customUserAgent = "iOS11_IPAD-MOBILE_SAFARI"
+
+               }
         
        showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell)
         

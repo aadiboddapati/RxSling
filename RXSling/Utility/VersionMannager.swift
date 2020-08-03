@@ -9,34 +9,54 @@
 import Foundation
 import UIKit
 
-struct VersionMannagedObject {
-    let isVersionCheckEnabled:Bool = true
-    let isForAllVersionLock:Bool = false
+struct VersionMannagedObject: Codable {
     
-    let isForRollback:Bool = false
-    let rollbackVersion:Double = 16
+    let isVersionCheckEnabled:Bool
+    let isForAllVersionLock:Bool
     
-    let isForForceUpdate:Bool = false
-    let forceUpdateVersion:Double = 4
+    let isForRollback:Bool
+    let rollbackVersion:String
     
-    let isForNewUpdate:Bool = true
-    let newUpdateVersion:Double = 5
-    let gracePeriod:Int = 3
+    let isForForceUpdate:Bool
+    let forceUpdateVersion:String
     
-    let isForAppLock:Bool = false
-    let appLockVersion:Double = 18
+    let isForNewUpdate:Bool
+    let newUpdateVersion:String
+    let gracePeriod:Int
+    
+    let isForAppLock:Bool
+    let appLockVersion:String
 }
 
 class VersionMannager {
     static let sharedInstance = VersionMannager()
     private init() {}
-    let versionMannagedObj = VersionMannagedObject()
+    var versionMannagedObj: VersionMannagedObject!
     
+    
+    func fetchS3Data()  {
+        
+        let url = URL(string: "https://rxslingmobile.s3.ap-south-1.amazonaws.com/SlingApp/Staging/update_ios.json")
+        let task = URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    let responseData = try! JSONDecoder().decode(VersionMannagedObject.self, from: data!)
+                      self.versionMannagedObj = responseData
+                    //  NotificationCenter.default.post(name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
+                      self.checkForVersionUpdate()
+                }
+            }
+            
+        })
+
+        task.resume()
+    }
     
     func checkForVersionUpdate() {
       //  validateVersionUpdate()
 
-        if versionMannagedObj.isVersionCheckEnabled {
+        if versionMannagedObj.isVersionCheckEnabled  {
             if let savedDate = USERDEFAULTS.value(forKey: "VersionCheckingDate") as? Date {
                 let day = compareTwoDates(today: Date(), olderDate: savedDate)
                 if day != .orderedSame {
@@ -132,7 +152,7 @@ class VersionMannager {
         }
     }
     
-    private func fetchVersionCompareResult (version: Double) -> ComparisonResult {
+    private func fetchVersionCompareResult (version: String) -> ComparisonResult {
         let bundleVersion =  fetchAppVersionNumber()
         let remoteVersion = "\(version)"
         return bundleVersion.compare(remoteVersion, options: .numeric)

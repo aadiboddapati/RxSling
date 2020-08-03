@@ -31,7 +31,7 @@ class TeamReportViewController: UIViewController {
     @IBOutlet weak var sortButton:UIButton!
     @IBOutlet weak var searchButton:UIButton!
 
-    
+    @IBOutlet weak var contentView: UIView!
     var teamReports:TeamReportModel!
     var clusterReports: ClusterReportModel!
     var originalTeamReports:TeamReportModel!
@@ -48,7 +48,7 @@ class TeamReportViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "reportBackImage.png")!)
+        self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
         //  scroller.contentSize.height = 1.0
         self.title = isTeamReport ? "TEAM INFORMATION" : "MANAGER REPORT"
         self.reportInfoLabel.text = isTeamReport ? "Your Team Report" : "Your Cluster Report"
@@ -60,6 +60,11 @@ class TeamReportViewController: UIViewController {
         self.navigationItem.backBarButtonItem?.tintColor = GREENCOLOUR
         self.navigationController?.navigationBar.isExclusiveTouch = true
         self.navigationController?.navigationBar.isMultipleTouchEnabled = false
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            contentView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 80).isActive = true
+            contentView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -80).isActive = true
+        }
         
         reportSearchBar.delegate = self
         reportSearchBar.layer.borderWidth = 0.5

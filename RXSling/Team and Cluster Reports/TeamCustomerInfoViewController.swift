@@ -13,6 +13,7 @@ class TeamCustomerInfoViewController: UIViewController {
     
     @IBOutlet weak var customerLbl: UILabel!
     @IBOutlet weak var sentTimeLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var customerInfoTblView:UITableView!
     @IBOutlet weak var contentViewHeightConstraint:NSLayoutConstraint!
@@ -42,7 +43,7 @@ class TeamCustomerInfoViewController: UIViewController {
         self.navigationController?.navigationBar.isExclusiveTouch = true
         self.navigationController?.navigationBar.isMultipleTouchEnabled = false
         sentTimeLabel.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
-        sentTimeLabel.layer.addBorder(edge: .right, color: GREENCOLOUR, thickness: 2)
+        statusLabel.layer.addBorder(edge: .left, color: GREENCOLOUR, thickness: 2)
 
         configureSearchBar()
         contentViewHeightConstraint.constant = 200
@@ -51,6 +52,10 @@ class TeamCustomerInfoViewController: UIViewController {
         
         // Do any additional setup after loading the view.
     }
+    
+//    override func viewDidLayoutSubviews() {
+//        customerInfoTblView.reloadData()
+//    }
     override func viewWillAppear(_ animated: Bool) {
         print(self.view.frame)
         if let _ = reportList {

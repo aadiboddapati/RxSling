@@ -139,6 +139,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
                                 UserDefaults.standard.set(true, forKey: "ISLOGIN")
                                 USERDEFAULTS.set((data.token), forKey: "TOKEN")
+                                USERDEFAULTS.set((data.orgId), forKey: "orgId")
                                 USERDEFAULTS.set((data.userInfo.emailID), forKey: "USER_EMAIL")
                                 USERDEFAULTS.set((data.userInfo.mobileNo), forKey: "USER_MOBILE")
                                 USERDEFAULTS.set((data.userInfo.profilePicURL), forKey: "USER_PROFILE_PIC")

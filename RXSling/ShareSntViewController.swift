@@ -939,6 +939,7 @@ extension ShareSntViewController{
         let userMobile = ("\(USERDEFAULTS.value(forKey: "USER_MOBILE")!)")
         let userProfilePic = ("\(USERDEFAULTS.value(forKey: "USER_PROFILE_PIC") ?? "")")
         let displayIButton = ("\(USERDEFAULTS.value(forKey: "USER_DISPLAY_IB_BUTTON")!)")
+        let orgId = "\(USERDEFAULTS.value(forKey: "orgId") ?? "")"
         
         
         var doctorAccountId: String = ""
@@ -984,7 +985,8 @@ extension ShareSntViewController{
                         "mediaOverlayHide": snt.mediaOverlayHide,
                         "title": snt.title,
                         "description":snt.desc,
-                        "imageUrl" :snt.thumbnailURL
+                        "imageUrl" :snt.thumbnailURL,
+                        "orgId": data.orgId ?? ""
                         ]
                     }else{
                         parameters =
@@ -1001,7 +1003,8 @@ extension ShareSntViewController{
                          "sntId": sntId,
                          "approvalNumber": snt.approvalNo,
                          "isDoctorAvailable": isDoctorAvailable,
-                         "lang": snt.selectedLanguage.languageCode]
+                         "lang": snt.selectedLanguage.languageCode,
+                         "orgId": orgId ]
                     }
                 }
             }

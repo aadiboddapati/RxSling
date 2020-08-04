@@ -21,6 +21,7 @@ struct DataModel: Codable {
     let displayIbutton, isAutoConsent: Bool
     let settings: Settings?
     let token: String
+    let orgId:String?
     var userInfo: ProfileUserInfo
 }
 

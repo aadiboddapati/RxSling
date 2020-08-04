@@ -91,64 +91,79 @@ class VersionMannager {
     }
     
     private func handleRollBack() {
-        switch fetchVersionCompareResult(version: versionMannagedObj.rollbackVersion) {
-        case .orderedAscending:
-            print("orderedAscending")
-        case .orderedSame:
-            print("orderedSame")
-        case .orderedDescending:
-            self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
+        
+        DispatchQueue.main.async {
+            switch self.fetchVersionCompareResult(version: self.versionMannagedObj.rollbackVersion) {
+            case .orderedAscending:
+                print("orderedAscending")
+            case .orderedSame:
+                print("orderedSame")
+            case .orderedDescending:
+                self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
+            }
+
         }
     }
     
     private func handleForceUpdate() {
         
-        switch fetchVersionCompareResult(version: versionMannagedObj.rollbackVersion) {
-        case .orderedAscending:
-            self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
-        case .orderedSame:
-            print("orderedSame")
-        case .orderedDescending:
-            print("orderedDescending")
+        DispatchQueue.main.async {
+            
+            switch self.fetchVersionCompareResult(version: self.versionMannagedObj.forceUpdateVersion) {
+            case .orderedAscending:
+                self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
+            case .orderedSame:
+                print("orderedSame")
+            case .orderedDescending:
+                print("orderedDescending")
+            }
         }
+        
+        
     }
     
     private func handleNewUpdate() {
         
-        switch fetchVersionCompareResult(version: versionMannagedObj.newUpdateVersion) {
-        case .orderedAscending:
-            if let days = USERDEFAULTS.value(forKey: "ExpiredGracePeriodDays") as? Int {
-                if days == 0 {
-                    // force update
-                    self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
+        DispatchQueue.main.async {
+
+            switch self.fetchVersionCompareResult(version: self.versionMannagedObj.newUpdateVersion) {
+            case .orderedAscending:
+                if let days = USERDEFAULTS.value(forKey: "ExpiredGracePeriodDays") as? Int {
+                    if days == 0 {
+                        // force update
+                        self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
+                    } else {
+                        USERDEFAULTS.set(days - 1, forKey: "ExpiredGracePeriodDays")
+                        let alertMsg = String(format: Constants.Alert.graceperiodmsg, days)
+                        self.presentAlert(message: alertMsg, isTwoButtons: true, buttonTitles: ["Later","Update"], isForceUpdate: false)
+                    }
                 } else {
-                    USERDEFAULTS.set(days - 1, forKey: "ExpiredGracePeriodDays")
-                    let alertMsg = String(format: Constants.Alert.graceperiodmsg, days)
+                    USERDEFAULTS.set(self.versionMannagedObj.gracePeriod - 1, forKey: "ExpiredGracePeriodDays")
+                    let alertMsg = String(format: Constants.Alert.graceperiodmsg, self.versionMannagedObj.gracePeriod)
                     self.presentAlert(message: alertMsg, isTwoButtons: true, buttonTitles: ["Later","Update"], isForceUpdate: false)
                 }
-            } else {
-                USERDEFAULTS.set(versionMannagedObj.gracePeriod - 1, forKey: "ExpiredGracePeriodDays")
-                let alertMsg = String(format: Constants.Alert.graceperiodmsg, versionMannagedObj.gracePeriod)
-                self.presentAlert(message: alertMsg, isTwoButtons: true, buttonTitles: ["Later","Update"], isForceUpdate: false)
+            case .orderedSame:
+                print("orderedSame")
+            case .orderedDescending:
+                print("orderedDescending")
+                
             }
-        case .orderedSame:
-            print("orderedSame")
-        case .orderedDescending:
-            print("orderedDescending")
-            
         }
+        
     }
     
     private func handleAppLock() {
         
-        switch fetchVersionCompareResult(version: versionMannagedObj.appLockVersion) {
-        case .orderedAscending:
-            self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
-        case .orderedSame:
-            print("orderedSame")
-        case .orderedDescending:
-            print("orderedDescending")
-            
+        DispatchQueue.main.async {
+            switch self.fetchVersionCompareResult(version: self.versionMannagedObj.appLockVersion) {
+            case .orderedAscending:
+                self.presentAlert(message: Constants.Alert.forceupdatemsg, isTwoButtons: false, buttonTitles: ["Update"], isForceUpdate: true)
+            case .orderedSame:
+                print("orderedSame")
+            case .orderedDescending:
+                print("orderedDescending")
+                
+            }
         }
     }
     

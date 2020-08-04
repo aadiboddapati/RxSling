@@ -525,9 +525,12 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
         let sntId = URL(string: snt.sntURL)!.lastPathComponent
         
-        let parameters:[String : String] =
+        var parameters:[String : String] =
             ["repEmailId": userEmail,
              "sntId": sntId]
+        if !isTeamReport {
+            parameters["orgId"] = "\(USERDEFAULTS.value(forKey: "orgId") ?? "")"
+        }
         
         _ = HTTPRequest.sharedInstance.request(url: api, method: "POST", params: parameters, header: header, completion: { (response, error) in
             if error != nil

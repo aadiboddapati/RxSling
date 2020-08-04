@@ -123,7 +123,18 @@ class TeamTrendViewController: UIViewController {
         leftAxis.labelFont = .systemFont(ofSize: 8)
         leftAxis.labelPosition = .outsideChart
         leftAxis.axisMinimum = 0
-        leftAxis.axisMaximum = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()!
+        
+        let maxSentCount = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()!
+        let maxViewedCount = ( tenDaysReport.values.map{$0.viewedCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.viewedCount}.max()!
+        
+        if maxSentCount >= maxViewedCount {
+            leftAxis.axisMaximum = maxSentCount
+        } else {
+            leftAxis.axisMaximum = maxViewedCount
+        }
+        
+       // leftAxis.axisMaximum = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()! + 4
+        
         leftAxis.drawGridLinesEnabled = true
         leftAxis.granularityEnabled = true
         leftAxis.decimals = 0

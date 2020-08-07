@@ -24,6 +24,14 @@ class TeamTrendViewController: UIViewController {
     var selectedSnt: SNTData?
     var isTeamReport:Bool!
     
+    @IBOutlet weak var callBTN:UIButton!
+    @IBOutlet weak var whatsAppBTN:UIButton!
+    @IBOutlet weak var copyReportBTN:UIButton!
+    @IBOutlet weak var emailBTN:UIButton!
+    
+    @IBOutlet weak var StaticCallToActionLabel:UILabel!
+    @IBOutlet weak var StaticPerformaceTrendLabel:UILabel!
+    
     var tenDaysReport:[String: OneDayReport]!
     var orderedDaysArray = [String]()
     var isGraphDrawn = false
@@ -63,6 +71,14 @@ class TeamTrendViewController: UIViewController {
                 setDataCount(daysReport: tenDaysReport)
                 chartView.animate(xAxisDuration: 2.5)
         }
+        
+        StaticPerformaceTrendLabel.text = "Performance Trend".localizedString()
+        StaticCallToActionLabel.text = "Call to Actions".localizedString()
+
+        callBTN.setTitle("Call".localizedString(), for: .normal)
+        whatsAppBTN.setTitle("WhatsApp".localizedString(), for: .normal)
+        copyReportBTN.setTitle("Copy Report".localizedString(), for: .normal)
+        emailBTN.setTitle("Email".localizedString(), for: .normal)
         
     }
     
@@ -124,17 +140,16 @@ class TeamTrendViewController: UIViewController {
         leftAxis.labelPosition = .outsideChart
         leftAxis.axisMinimum = 0
         
-        let maxSentCount = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()!
-        let maxViewedCount = ( tenDaysReport.values.map{$0.viewedCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.viewedCount}.max()!
-        
-        if maxSentCount >= maxViewedCount {
-            leftAxis.axisMaximum = maxSentCount
-        } else {
-            leftAxis.axisMaximum = maxViewedCount
-        }
-        
-       // leftAxis.axisMaximum = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()! + 4
-        
+         let maxSentCount = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()!
+         let maxViewedCount = ( tenDaysReport.values.map{$0.viewedCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.viewedCount}.max()!
+         
+         if maxSentCount >= maxViewedCount {
+             leftAxis.axisMaximum = maxSentCount
+         } else {
+             leftAxis.axisMaximum = maxViewedCount
+         }
+         
+        // leftAxis.axisMaximum = ( tenDaysReport.values.map{$0.sentCount}.max() == 0 ) ? Double(1) : tenDaysReport.values.map{$0.sentCount}.max()! + 4
         leftAxis.drawGridLinesEnabled = true
         leftAxis.granularityEnabled = true
         leftAxis.decimals = 0
@@ -150,7 +165,7 @@ class TeamTrendViewController: UIViewController {
         let viewed = getViewedData(daysReport: daysReport)
         
         
-        let set1 = LineChartDataSet(entries: sent, label: "Sent")
+        let set1 = LineChartDataSet(entries: sent, label: "Sent".localizedString())
         set1.axisDependency = .left
         set1.mode = .linear
         set1.setColor(UIColor.rxThickYellow)
@@ -163,7 +178,7 @@ class TeamTrendViewController: UIViewController {
         set1.valueFont = .systemFont(ofSize: 8)
 
         
-        let set2 = LineChartDataSet(entries: viewed, label: "Viewed")
+        let set2 = LineChartDataSet(entries: viewed, label: "Viewed".localizedString())
         set2.axisDependency = .left
         set2.mode = .linear
         set2.setColor(.rxGreen)

@@ -76,6 +76,8 @@
 		AEF702452446F86200A87810 /* MySideMenuNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEF702432446F86200A87810 /* MySideMenuNavigationController.swift */; };
 		DF700B5E2D8311D393C31479 /* libPods-RXSlingTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E24A3B3E6B16170CBA02D636 /* libPods-RXSlingTests.a */; };
 		E20080C42486923A008EDE28 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20080C32486923A008EDE28 /* ReportViewController.swift */; };
+		E21D960824D8408A00842CBE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E21D960B24D8408A00842CBE /* Localizable.strings */; };
+		E21D960924D8408A00842CBE /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E21D960B24D8408A00842CBE /* Localizable.strings */; };
 		E23F5A4A247FC1D50067B780 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E23F5A49247FC1D40067B780 /* GoogleService-Info.plist */; };
 		E2684FC02489868C007C7C7B /* ReportTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2684FBF2489868A007C7C7B /* ReportTableCell.swift */; };
 		E2684FC224898FC5007C7C7B /* ReportDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2684FC124898FC5007C7C7B /* ReportDetailViewController.swift */; };
@@ -236,6 +238,10 @@
 		AEF702432446F86200A87810 /* MySideMenuNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MySideMenuNavigationController.swift; sourceTree = "<group>"; };
 		B18BCB06EFD30365FF3725A2 /* Pods-RXSling-RXSlingUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXSling-RXSlingUITests.debug.xcconfig"; path = "Target Support Files/Pods-RXSling-RXSlingUITests/Pods-RXSling-RXSlingUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		E20080C32486923A008EDE28 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
+		E21D960A24D8408A00842CBE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E21D960C24D840AB00842CBE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
+		E21D960D24D840B100842CBE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		E21D960E24D840B500842CBE /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E23F5A49247FC1D40067B780 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E24A3B3E6B16170CBA02D636 /* libPods-RXSlingTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RXSlingTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2684FBF2489868A007C7C7B /* ReportTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableCell.swift; sourceTree = "<group>"; };
@@ -380,6 +386,7 @@
 			isa = PBXGroup;
 			children = (
 				E23F5A49247FC1D40067B780 /* GoogleService-Info.plist */,
+				E21D960B24D8408A00842CBE /* Localizable.strings */,
 				AEBA313C242885F3004BCADC /* AppDelegate.swift */,
 				AEBA313E242885F3004BCADC /* SceneDelegate.swift */,
 				FDF74BD8245AD5AA0045EE5D /* ShareViewController.swift */,
@@ -599,6 +606,7 @@
 			knownRegions = (
 				en,
 				Base,
+				es,
 			);
 			mainGroup = AEBA3130242885F3004BCADC;
 			productRefGroup = AEBA313A242885F3004BCADC /* Products */;
@@ -623,6 +631,7 @@
 				AEBA3146242885F5004BCADC /* Assets.xcassets in Resources */,
 				AE54BB87246AC03C009AAF24 /* RXSling_Dev_Profile.mobileprovision in Resources */,
 				AEBA3144242885F3004BCADC /* Main.storyboard in Resources */,
+				E21D960824D8408A00842CBE /* Localizable.strings in Resources */,
 				AE090BE0245DF5BC007D3C79 /* RXSling copy-Info.plist in Resources */,
 				AEAE866B244F14A900C2B2E1 /* termsandconditions.html in Resources */,
 			);
@@ -649,6 +658,7 @@
 				FD4DCE6B24544EEB004EC8A7 /* LaunchScreen.storyboard in Resources */,
 				AE54BB88246AC03C009AAF24 /* RXSling_Dev_Profile.mobileprovision in Resources */,
 				FD4DCE6D24544EEB004EC8A7 /* Assets.xcassets in Resources */,
+				E21D960924D8408A00842CBE /* Localizable.strings in Resources */,
 				FD4DCE6E24544EEB004EC8A7 /* Main.storyboard in Resources */,
 				FD4DCE6F24544EEB004EC8A7 /* termsandconditions.html in Resources */,
 				0704D5B624ADBBBF00138910 /* GoogleService-Info.plist in Resources */,
@@ -991,6 +1001,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AEBA3143242885F3004BCADC /* Base */,
+				E21D960C24D840AB00842CBE /* es */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -999,8 +1010,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				AEBA3148242885F5004BCADC /* Base */,
+				E21D960D24D840B100842CBE /* es */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E21D960B24D8408A00842CBE /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E21D960A24D8408A00842CBE /* en */,
+				E21D960E24D840B500842CBE /* es */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -1010,6 +1031,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1070,6 +1092,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

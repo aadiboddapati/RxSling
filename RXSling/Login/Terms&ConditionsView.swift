@@ -15,7 +15,7 @@ class Terms_ConditionsView: UIViewController,WKNavigationDelegate {
     @IBOutlet weak var slingImage: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "TERMS AND CONDITIONS"
+        self.navigationItem.title = "TERMS AND CONDITIONS".localizedString()
         self.navigationController?.navigationBar.tintColor = GREENCOLOUR
         self.navigationItem.rightBarButtonItem?.tintColor = GREENCOLOUR
         self.navigationItem.backBarButtonItem?.tintColor = GREENCOLOUR

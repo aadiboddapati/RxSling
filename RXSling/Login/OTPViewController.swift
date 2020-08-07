@@ -18,6 +18,7 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var submitBtn: UIButton!
     @IBOutlet weak var resendOTPBtn: UIButton!
     @IBOutlet weak var slingImage: UIImageView!
+    @IBOutlet weak var otpReceivedLabel: UILabel!
     var mobileNumber:String?
     var verificationID:String?
     var baseUrl,email :String?
@@ -35,12 +36,13 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         DispatchQueue.main.async {
-            showToast(message: "Enter OTP received", view: self.view)
+            showToast(message: "Enter OTP received".localizedString(), view: self.view)
         }
         print("Email from OTP VC \(self.emailId ?? "")")
-        self.resendOTPBtn.setTitle("Resend OTP", for: .normal)
-        self.cancelBtn.setTitle("CANCEL", for: .normal)
-        self.submitBtn.setTitle("SUBMIT", for: .normal)
+        self.resendOTPBtn.setTitle("Resend OTP".localizedString(), for: .normal)
+        self.cancelBtn.setTitle("CANCEL".localizedString(), for: .normal)
+        self.submitBtn.setTitle("SUBMIT".localizedString(), for: .normal)
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -60,7 +62,7 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
         doneToolbar.barStyle = .default
 
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done".localizedString(), style: .done, target: self, action: #selector(self.doneButtonAction))
         let items = [flexSpace, done]
         doneToolbar.items = items
         doneToolbar.sizeToFit()
@@ -76,26 +78,26 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
     }
     func otpValidate(){
         if((self.otpTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count)! > 0){
-            showActivityIndicator(View: self.view, "Validating OTP, Please wait.")
+            showActivityIndicator(View: self.view, "Validating OTP, Please wait.".localizedString())
             let credential = PhoneAuthProvider.provider().credential(
                 withVerificationID: verificationID!,
                 verificationCode: self.otpTextField.text!)
             Auth.auth().signInAndRetrieveData(with: credential) { (authResult, error) in
                 if error != nil {
-                    self.popupAlert(title: "RXSling", message: "Incorrect OTP", actionTitles: ["Ok"], actions:[{action1 in},nil])
+                    self.popupAlert(title: "RXSling", message: "Incorrect OTP".localizedString(), actionTitles: ["Ok"], actions:[{action1 in},nil])
                     print("\(String(describing: error?.localizedDescription))")
                     // ...
                 }else{
 
                     if(self.baseUrl == Constants.Api.getUserPhoneNumberUrl){
-                        self.popupAlert(title: "RXSling", message: "Your mobile number has been successfully verified. Please proceed to change password.", actionTitles: ["Ok"], actions:[{action1 in
+                        self.popupAlert(title: "RXSling", message: "Your mobile number has been successfully verified. Please proceed to change password.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "changePassword") as! changePasswordViewController
                             vc.email = self.email
                             self.navigationController?.pushViewController(vc, animated: true)
                             },nil])
 
                     }else{
-                        self.popupAlert(title: "RXSling", message: "Your mobile number has been successfully verified. Please proceed with your registration.", actionTitles: ["Ok"], actions:[{action1 in
+                        self.popupAlert(title: "RXSling", message: "Your mobile number has been successfully verified. Please proceed with your registration.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                             let vc = self.storyboard?.instantiateViewController(withIdentifier: "RegistrationView") as! RegistrationViewController
                             vc.mobileNumber = authResult?.user.phoneNumber
                             vc.emailId = self.emailId
@@ -110,7 +112,7 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
                 // ...
             }
         }else{
-            self.popupAlert(title: "RXSling", message: "Incorrect OTP", actionTitles: ["Ok"], actions:[{action1 in},nil])
+            self.popupAlert(title: "RXSling", message: "Incorrect OTP".localizedString(), actionTitles: ["Ok"], actions:[{action1 in},nil])
         }
     }
     @IBAction func eyeButtonClicked(_ sender: Any) {
@@ -125,14 +127,14 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
        // self.popupAlert(title: LanguageManager.sharedInstance.LocalizedLanguage(key: "my_show_and_tell"), message: "A", actionTitles: [LanguageManager.sharedInstance.LocalizedLanguage(key: "no"),LanguageManager.sharedInstance.LocalizedLanguage(key: "yes")], actions:[{action1 in},{action2 in
                 DispatchQueue.main.async {
                     self.view.endEditing(true)
-                    showActivityIndicator(View: self.view, "Resending OTP")
+                    showActivityIndicator(View: self.view, "Resending OTP".localizedString())
                 }
                 PhoneAuthProvider.provider().verifyPhoneNumber(self.mobileNumber!, uiDelegate: nil) { (verificationID, error) in
                     if error != nil {
                         DispatchQueue.main.async {
                              hideActivityIndicator(View: self.view)
                         }
-                        self.popupAlert(title: "RXSling", message: "\(error!.localizedDescription)", actionTitles: ["Ok","Yes"], actions:[{action1 in},{action2 in
+                        self.popupAlert(title: "RXSling", message: "\(error!.localizedDescription)", actionTitles: ["Ok","Yes".localizedString()], actions:[{action1 in},{action2 in
                             },nil])
                     }else{
                         DispatchQueue.main.async {
@@ -151,12 +153,12 @@ class OTPViewController: UIViewController,UITextFieldDelegate {
     @IBAction func cancelBtnTapped(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
         if(self.baseUrl == Constants.Api.getUserPhoneNumberUrl){
-            self.popupAlert(title: "RXSling", message: "Do you want to cancel the forgot password process?", actionTitles: ["No","Yes"], actions:[{action1 in},{action2 in
+            self.popupAlert(title: "RXSling", message: "Do you want to cancel the forgot password process?".localizedString(), actionTitles: ["No","Yes".localizedString()], actions:[{action1 in},{action2 in
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
                 self.navigationController?.pushViewController(vc, animated: true)
                 },nil])
         }else{
-            self.popupAlert(title: "RXSling", message: "Do you want to cancel the registration process?", actionTitles: ["No","Yes"], actions:[{action1 in},{action2 in
+            self.popupAlert(title: "RXSling", message: "Do you want to cancel the registration process?".localizedString(), actionTitles: ["No","Yes".localizedString()], actions:[{action1 in},{action2 in
                 let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
                 self.navigationController?.pushViewController(vc, animated: true)
                 },nil])

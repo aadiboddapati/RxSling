@@ -42,11 +42,11 @@ class TeamReportCell: UITableViewCell {
         successLbl.textColor = UIColor.rxThickYellow
         moreLbl.textColor = UIColor.rxThickYellow
         
-        emailIdLbl.text = "Email ID"
-        moreLbl.text = "More"
-        viewedLbl.text = "Viewed"
-        successLbl.text = "Success %"
-        sentLbl.text = "Sent"
+        emailIdLbl.text = "Email ID".localizedString()
+        moreLbl.text = "More".localizedString()
+        viewedLbl.text = "Viewed".localizedString()
+        successLbl.text = "Success %".localizedString()
+        sentLbl.text = "Sent".localizedString()
         
         addBoarders()
 

@@ -17,7 +17,7 @@ class ForgotPinViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var proceedBtn: UIButton!
     @IBOutlet weak var cancelBtn: UIButton!
     @IBOutlet weak var slingImage: UIImageView!
-    
+    @IBOutlet weak var forgotPassNavLabel: UILabel!
     override func viewDidLoad() {
             super.viewDidLoad()
             self.mailIDTextField.delegate = self
@@ -28,10 +28,11 @@ class ForgotPinViewController: UIViewController, UITextFieldDelegate {
         
         override func viewWillAppear(_ animated: Bool) {
             super.viewWillAppear(animated)
-            self.mailIDTextField.placeHolderText = "Enter Email ID"
-            self.descriptionText.text = "PLEASE ENTER YOUR REGISTERED EMAIL ID. WE WILL SEND THE OTP TO YOUR ASSOCIATED MOBILE NUMBER."
-            self.cancelBtn.setTitle("CANCEL", for: .normal)
-            self.proceedBtn.setTitle("PROCEED", for: .normal)
+            forgotPassNavLabel.text = "FORGOT PASSWORD".localizedString()
+            self.mailIDTextField.placeHolderText = "Enter Email ID".localizedString()
+            self.descriptionText.text = "PLEASE ENTER YOUR REGISTERED EMAIL ID. WE WILL SEND THE OTP TO YOUR ASSOCIATED MOBILE NUMBER.".localizedString()
+            self.cancelBtn.setTitle("CANCEL".localizedString(), for: .normal)
+            self.proceedBtn.setTitle("PROCEED".localizedString(), for: .normal)
         }
         override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
             self.view.endEditing(true)
@@ -52,7 +53,7 @@ class ForgotPinViewController: UIViewController, UITextFieldDelegate {
                     DispatchQueue.main.async {
                          hideActivityIndicator(View: self.view)
                     }
-                    self.popupAlert(title: "RXSling", message: "\(error!.localizedDescription)", actionTitles: ["NO","YES"], actions:[{action1 in},{action2 in
+                    self.popupAlert(title: "RXSling", message: "\(error!.localizedDescription)", actionTitles: ["NO","YES".localizedString()], actions:[{action1 in},{action2 in
                         },nil])
                 }else{
                     DispatchQueue.main.async {
@@ -89,16 +90,16 @@ extension ForgotPinViewController{
     
     func callForgotApi(){
         if(mailIDTextField.text?.count == 0 || mailIDTextField.text == "" || !isValidEmail(testStr: mailIDTextField.text!)){
-            self.popupAlert(title: "RXSling", message: "Enter a valid email ID.", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Enter a valid email ID.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                 }else{
                 let networkConnection = try! Reachability.init()?.isConnectedToNetwork
                 if (!networkConnection!)
                 {
-                    self.popupAlert(title: "RXSling", message: "Please check your internet connection.", actionTitles: ["Ok"], actions:[{action1 in
+                    self.popupAlert(title: "RXSling", message: "Please check your internet connection.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                         }, nil])
                 }else{
                     DispatchQueue.main.async {
-                        showActivityIndicator(View: self.view, "Processing. Please wait...")
+                        showActivityIndicator(View: self.view, "Processing. Please wait...".localizedString())
                     }
                     let emailID = mailIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
                     print("forgot:\(mailIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines))")
@@ -108,7 +109,7 @@ extension ForgotPinViewController{
                             DispatchQueue.main.async {
                                 UserDefaults.standard.set(false, forKey: "ISLOGIN")
                                  hideActivityIndicator(View: self.view)
-                                self.popupAlert(title: "RXSling", message: "Please check your internet connection.", actionTitles: ["Ok"], actions:[{action in},nil])
+                                self.popupAlert(title: "RXSling", message: "Please check your internet connection.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                             }
                         }
                         else{
@@ -130,12 +131,12 @@ extension ForgotPinViewController{
                                 DispatchQueue.main.async {
                                      hideActivityIndicator(View: self.view)
                                 }
-                                self.popupAlert(title: "RXSling", message: "User doesn't exists.", actionTitles: ["Ok"], actions:[{action in},nil])
+                                self.popupAlert(title: "RXSling", message: "User doesn't exists.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                             }else{
                                 DispatchQueue.main.async {
                                      hideActivityIndicator(View: self.view)
                                 }
-                                self.popupAlert(title: "RXSling", message: "Unable to proceed due to network error. Please try after some time.", actionTitles: ["Ok"], actions:[{action in},nil])
+                                self.popupAlert(title: "RXSling", message: "Unable to proceed due to network error. Please try after some time.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                             }
                         }
                     }

@@ -24,7 +24,7 @@ class PlaySntViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "PREVIEW"
+        self.title = "PREVIEW".localizedString()
         
         errorLabel.isHidden = true
         retryButton.isHidden = true
@@ -46,7 +46,7 @@ class PlaySntViewController: UIViewController {
 
                }
         
-       showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell)
+        showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell.localizedString())
         
         checkInternet()
 
@@ -90,7 +90,7 @@ class PlaySntViewController: UIViewController {
 
                 self.showWebViewError(true)
                 
-                Utility.showAlertWith(message: Constants.Alert.internetNotFound, inView: self)
+                Utility.showAlertWith(message: Constants.Alert.internetNotFound.localizedString(), inView: self)
 
                 
             }
@@ -104,7 +104,7 @@ class PlaySntViewController: UIViewController {
         print("Retry pressed")
         self.showWebViewError(false)
 
-        showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell)
+        showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell.localizedString())
         checkInternet()
     }
     

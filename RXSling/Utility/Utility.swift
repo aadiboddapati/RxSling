@@ -57,7 +57,71 @@ class Utility:NSObject{
     
     //Move below method to Global or Utility Class
    static func timeAgoSinceDate(_ apiDate:Double, currentDate:Date, numericDates:Bool) -> String {
-        
+        if ("\(USERDEFAULTS.value(forKey: "AppLanguage")!)" == "Spanish") {
+
+            let fromDate = Date(timeIntervalSince1970:(apiDate / 1000.0))
+            
+            let calendar = Calendar.current
+            let now = currentDate
+            let earliest = (now as NSDate).earlierDate(fromDate)
+            let latest = (earliest == now) ? fromDate : now
+            let components:DateComponents = (calendar as NSCalendar).components([NSCalendar.Unit.minute , NSCalendar.Unit.hour , NSCalendar.Unit.day , NSCalendar.Unit.weekOfYear , NSCalendar.Unit.month , NSCalendar.Unit.year , NSCalendar.Unit.second], from: earliest, to: latest, options: NSCalendar.Options())
+            
+            if (components.year! >= 2) {
+                return "\(components.year!) hace años que"
+            } else if (components.year! >= 1){
+                if (numericDates){
+                    return "hace 1 año"
+                } else {
+                    return "El año pasado"
+                }
+            } else if (components.month! >= 2) {
+                return "\(components.month!) Hace meses"
+            } else if (components.month! >= 1){
+                if (numericDates){
+                    return "Hace 1 mes"
+                } else {
+                    return "El mes pasado"
+                }
+            } else if (components.weekOfYear! >= 2) {
+                return "\(components.weekOfYear!) hace semanas"
+            } else if (components.weekOfYear! >= 1){
+                if (numericDates){
+                    return "Hace 1 semana"
+                } else {
+                    return "La semana"
+                }
+            } else if (components.day! >= 2) {
+                return "\(components.day!) hace días"
+            } else if (components.day! >= 1){
+                if (numericDates){
+                    return "Hace 1 día"
+                } else {
+                    return "Ayer"
+                }
+            } else if (components.hour! >= 2) {
+                return "\(components.hour!) horas atras"
+            } else if (components.hour! >= 1){
+                if (numericDates){
+                    return "1 hora antes"
+                } else {
+                    return "Hace una hora"
+                }
+            } else if (components.minute! >= 2) {
+                return "\(components.minute!) hace minutos"
+            } else if (components.minute! >= 1){
+                if (numericDates){
+                    return "Hace 1 minuto"
+                } else {
+                    return "Hace un minuto"
+                }
+            } else if (components.second! >= 3) {
+                return "\(components.second!) hace segundos"
+            } else {
+                return "Justo ahora"
+            }
+        }  else {
+ 
         let fromDate = Date(timeIntervalSince1970:(apiDate / 1000.0))
         
         let calendar = Calendar.current
@@ -119,8 +183,8 @@ class Utility:NSObject{
         } else {
             return "Just now"
         }
+        }
     }
-    
     
     static func setBlurViewOn(_ view:UIView){
           

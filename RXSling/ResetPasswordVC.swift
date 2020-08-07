@@ -25,19 +25,19 @@ class ResetPasswordVC: UIViewController,UITextFieldDelegate {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         self.navigationController?.navigationBar.isHidden = false
-        self.navigationItem.title = "RESET PASSWORD"
+        self.navigationItem.title = "RESET PASSWORD".localizedString()
         self.oldPasswordTextField.delegate = self
         self.newPasswordTextField.delegate = self
         self.reEnterPasswordTextField.delegate = self
         
-        self.oldPswdLabel.text = "Old Password"
-        self.newPswdLabel.text = "New Password"
-        self.confirmPswdLabel.text = "Confirm Password"
-        self.oldPasswordTextField.placeHolderText = "Enter Old Password"
-        self.newPasswordTextField.placeHolderText = "Enter New Password"
-        self.reEnterPasswordTextField.placeHolderText = "Confirm New Password"
-        self.cancelBtn.setTitle("CANCEL", for: .normal)
-        self.resetBtn.setTitle("RESET", for: .normal)
+        self.oldPswdLabel.text = "Old Password".localizedString()
+        self.newPswdLabel.text = "New Password".localizedString()
+        self.confirmPswdLabel.text = "Confirm Password".localizedString()
+        self.oldPasswordTextField.placeHolderText = "Enter Old Password".localizedString()
+        self.newPasswordTextField.placeHolderText = "Enter New Password".localizedString()
+        self.reEnterPasswordTextField.placeHolderText = "Confirm New Password".localizedString()
+        self.cancelBtn.setTitle("CANCEL".localizedString(), for: .normal)
+        self.resetBtn.setTitle("RESET".localizedString(), for: .normal)
         
     }
     override func viewDidLayoutSubviews() {
@@ -61,35 +61,35 @@ class ResetPasswordVC: UIViewController,UITextFieldDelegate {
 
     @IBAction func resetButtonTapped(_ sender: Any) {
         if(oldPasswordTextField.text == ""){
-            self.popupAlert(title: "RXSling", message: "Enter a valid old password", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Enter a valid old password".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             return
         }else{
             if ((oldPasswordTextField.text?.count)! <= 7){
-                self.popupAlert(title: "RXSling", message: "Password cannot be less then 8 characters.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "RXSling", message: "Password cannot be less then 8 characters.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                 return
             }
         }
 
         if(!isValidPassword(testStr: self.newPasswordTextField.text!)){
-            self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             return
         }
         
         if(reEnterPasswordTextField.text! != newPasswordTextField.text){
-            self.popupAlert(title: "RXSling", message: "Passwords did not match.", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Passwords did not match.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
         }else if (oldPasswordTextField.text! == newPasswordTextField.text){
-            self.popupAlert(title: "RXSling", message: "New password cannot be same as the old password.", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "New password cannot be same as the old password.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             return
         }else{
             self.view.endEditing(true)
             let networkConnection = try! Reachability.init()?.isConnectedToNetwork
             if (!networkConnection!)
             {
-                self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action1 in
+                self.popupAlert(title: "RXSling", message: "Please check your internet connection".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                     }, nil])
             }else{
                 DispatchQueue.main.async {
-                    showActivityIndicator(View: self.view, "Resetting your password. Please wait...")
+                    showActivityIndicator(View: self.view, "Resetting your password. Please wait...".localizedString())
                 }
                 var email = ""
                 if let loginData = UserDefaults.standard.object(forKey: "LOGIN_DATA") as? Data {
@@ -108,7 +108,7 @@ class ResetPasswordVC: UIViewController,UITextFieldDelegate {
                     {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message: "Please check your internet connection".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                     }
                     else{
@@ -117,7 +117,7 @@ class ResetPasswordVC: UIViewController,UITextFieldDelegate {
                             DispatchQueue.main.async {
                                 print(response!)
                                 hideActivityIndicator(View: self.view)
-                                self.popupAlert(title: "RXSling", message: "Password has been reset successfully.", actionTitles: ["Ok"], actions:[{action in
+                                self.popupAlert(title: "RXSling", message: "Password has been reset successfully.".localizedString(), actionTitles: ["Ok"], actions:[{action in
                                     self.navigationController?.popViewController(animated: true)
                                     },nil])
                             }
@@ -125,12 +125,12 @@ class ResetPasswordVC: UIViewController,UITextFieldDelegate {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
                             }
-                            self.popupAlert(title: "RXSling", message:"Old password is not matching. Please enter the correct old password.", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message:"Old password is not matching. Please enter the correct old password.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }else{
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
                             }
-                            self.popupAlert(title: "RXSling", message:"Unable to proceed due to network error. Please try after some time.", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message:"Unable to proceed due to network error. Please try after some time.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                     }
                 }

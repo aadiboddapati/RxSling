@@ -105,11 +105,11 @@ class RegistrationViewController: UIViewController,UIGestureRecognizerDelegate {
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = true
         let underlineAttribute = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
-        let underlineAttributedString = NSAttributedString(string: "BY TAPPING 'SIGN UP', I AGREE TO THE  TERMS AND CONDITIONS.", attributes: underlineAttribute)
+        let underlineAttributedString = NSAttributedString(string: "BY TAPPING 'SIGN UP', I AGREE TO THE  TERMS AND CONDITIONS.".localizedString(), attributes: underlineAttribute)
         termsLabel.attributedText = underlineAttributedString
         //self.navigationTitle.text = "SIGN UP"
-        self.signUpBtn.setTitle("SIGN UP", for: .normal)
-        self.cancelBtn.setTitle("CANCEL", for: .normal)
+        self.signUpBtn.setTitle("SIGN UP".localizedString(), for: .normal)
+        self.cancelBtn.setTitle("CANCEL".localizedString(), for: .normal)
     }
     
     @IBAction func pinEyeBtnTapped(_ sender: Any) {
@@ -131,7 +131,7 @@ class RegistrationViewController: UIViewController,UIGestureRecognizerDelegate {
     }
     
     @IBAction func cancelButtonTapped(_ sender: Any) {
-        self.popupAlert(title: "RXSling", message: "Do you want to cancel the registration process?", actionTitles: ["No","Yes"], actions:[{action1 in},{action2 in
+        self.popupAlert(title: "RXSling", message: "Do you want to cancel the registration process?".localizedString(), actionTitles: ["No","Yes".localizedString()], actions:[{action1 in},{action2 in
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
             self.navigationController?.pushViewController(vc, animated: true)
             },nil])
@@ -141,27 +141,27 @@ class RegistrationViewController: UIViewController,UIGestureRecognizerDelegate {
         let networkConnection = try! Reachability.init()?.isConnectedToNetwork
         if (!networkConnection!)
         {
-            self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action1 in
+            self.popupAlert(title: "RXSling", message: "Please check your internet connection".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                 }, nil])
         }else{
             if(self.firstNameTextfield.text?.count == 0 || self.firstNameTextfield.text!.trimmingCharacters(in: .whitespaces).count == 0){
-                self.popupAlert(title: "Error", message: "Enter your first name", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Enter your first name".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if(self.lastNameTextfield.text?.count == 0 || self.lastNameTextfield.text!.trimmingCharacters(in: .whitespaces).count == 0){
-                self.popupAlert(title: "Error", message: "Enter your last name", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Enter your last name".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if(self.emailLabel.text?.count == 0 || self.emailLabel.text == "" || !isValidEmail(testStr: emailLabel.text!)){
-                self.popupAlert(title: "Error", message: "Enter a valid mail id", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Enter a valid mail id".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if self.genderLabel.text == "Gender"{
-                self.popupAlert(title: "Error", message: "Select the gender.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Select the gender.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if(self.pinTextfield.text?.count == 0 || self.pinTextfield.text == ""){
-                self.popupAlert(title: "Error", message: "Please enter the Password.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Please enter the Password.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if(!isValidPassword(testStr: self.pinTextfield.text ?? "")){
-                self.popupAlert(title: "Error", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if(self.confirmPinTextfield.text?.count == 0 || self.confirmPinTextfield.text == ""){
-                self.popupAlert(title: "Error", message: "Please enter the Password.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Please enter the Password.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if((self.confirmPinTextfield.text?.count)! <= 7 || self.confirmPinTextfield.text == ""){
-                self.popupAlert(title: "Error", message: "Password cannot be less then 8 characters.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "Error", message: "Password cannot be less then 8 characters.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if(pinTextfield.text! != confirmPinTextfield.text){
-                self.popupAlert(title: "RXSling", message: "Passwords did not match.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "RXSling", message: "Passwords did not match.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else{
                 DispatchQueue.main.async {
                     showActivityIndicator(View: self.view, "Registering user please wait.")

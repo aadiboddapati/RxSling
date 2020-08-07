@@ -72,6 +72,20 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
     @IBOutlet weak var reportTbl:UITableView!
     @IBOutlet weak var reportListView:UIView!
     @IBOutlet weak var listView:UIView!
+    
+    @IBOutlet weak var noReportLabel: UILabel!
+    @IBOutlet weak var sentLabel: UILabel!
+    @IBOutlet weak var viewedLabel: UILabel!
+    @IBOutlet weak var notViewedLabel: UILabel!
+    @IBOutlet weak var successLabel: UILabel!
+    @IBOutlet weak var reportListLabel: UILabel!
+    @IBOutlet weak var customerLabel: UILabel!
+    @IBOutlet weak var sentTimeLabel: UILabel!
+    @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var moreLabel: UILabel!
+    @IBOutlet weak var contentReportDashBoardLabel: UILabel!
+    
+    
     var clusterReportBtn : UIBarButtonItem!
     var teamReportBtn : UIBarButtonItem!
     override func viewDidLoad() {
@@ -81,7 +95,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         self.reportListViewHeightConstrain.constant = 300
         
         DispatchQueue.main.async {
-            showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
+            showActivityIndicator(View: self.view, Constants.Loader.reportDetails.localizedString())
         }
         
         scroller.contentSize.height = 1.0
@@ -156,7 +170,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
     //MARK: - Show snt details on UI
          func displaySntDataOnUI(){
              guard let snt = snt else {return}
-          createdBylbl.text = "Created by:"
+            createdBylbl.text = "Created by:".localizedString()
           createdBywhite.text = String(" \(snt.createdBy)")
       }
     func callPhoneBook(){
@@ -174,7 +188,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.title = "REPORTS"
+        self.title = "REPORTS".localizedString()
         
         self.navigationController?.navigationBar.topItem?.hidesBackButton = false
         
@@ -187,9 +201,20 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.title = "REPORTS"
+        self.title = "REPORTS".localizedString()
         self.navigationController?.navigationBar.isHidden = false
-        
+       
+        noReplbl.text = "No reports found".localizedString()
+        contentReportDashBoardLabel.text = "Content Reports Dashboard".localizedString()
+        sentLabel.text = "Sent".localizedString()
+        viewedLabel.text = "Viewed".localizedString()
+        notViewedLabel.text = "Not Viewed".localizedString()
+        successLabel.text = "Success Rate".localizedString()
+        reportListLabel.text = "Report List".localizedString()
+        customerLabel.text = "Customer".localizedString()
+        sentTimeLabel.text = "Sent Time".localizedString()
+        statusLabel.text = "Status".localizedString()
+        moreLabel.text = "More".localizedString()
     }
     
     func applyListViewHeightConstraint(sizeOfArray: Int, isSearch:Bool)  {
@@ -279,7 +304,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         
         
         
-        self.title = "REPORTS"
+        self.title = "REPORTS".localizedString()
         self.navigationController?.navigationBar.isHidden = false
     }
         
@@ -374,7 +399,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                 
             }else{
                 
-                Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
+                Utility.showAlertWithHandler(message: Constants.Alert.openSettings.localizedString(), alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
                     if(yesTapped){
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                     }
@@ -489,19 +514,19 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                             
                             self.reportTbl.frame.origin.y = CGFloat(100)
                             //  self.reportListView.frame.size.height = CGFloat(150)
-                            self.noReplbl.centerYAnchor.constraint(equalTo: self.reportListView.centerYAnchor).isActive = true
+                       //     self.noReplbl.centerYAnchor.constraint(equalTo: self.reportListView.centerYAnchor).isActive = true
                         } else if(responseData.statusCode == "106"){
                             print(responseData.message)
                             self.perform(#selector(self.tokenExpiredLogin), with: nil, afterDelay: 1.0)
                         }else if(responseData.statusCode == "404") {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
-                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                             }
                         }else if(responseData.statusCode == "443") {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
-                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                             }
                         }else {
                             
@@ -515,7 +540,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
     func getTeamOrClusterReportDetails(isTeamReport: Bool)  {
         
         guard let snt = snt else {return}
-        showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
+        showActivityIndicator(View: self.view, Constants.Loader.reportDetails.localizedString())
         let api = isTeamReport ? Constants.Api.teamReport : Constants.Api.clusterReport
         //Token as header
         let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
@@ -529,9 +554,8 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
             ["repEmailId": userEmail,
              "sntId": sntId]
         if !isTeamReport {
-            parameters["orgId"] = "\(USERDEFAULTS.value(forKey: "orgId") ?? "")"
-        }
-        
+                   parameters["orgId"] = "\(USERDEFAULTS.value(forKey: "orgId") ?? "")"
+               }
         _ = HTTPRequest.sharedInstance.request(url: api, method: "POST", params: parameters, header: header, completion: { (response, error) in
             if error != nil
             {
@@ -556,7 +580,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                                 vc.isTeamReport = isTeamReport
                                 self.navigationController?.pushViewController(vc, animated: true)
                             } else {
-                                self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noTeamReportsFound, actionTitles: ["Ok"], actions:[{action in},nil])
+                                self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noTeamReportsFound.localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                             }
                         }
                     } else if(responseData.statusCode == "106") {
@@ -569,17 +593,17 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                         print(responseData.message)
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noTeamReportsFound, actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noTeamReportsFound.localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                     }else if(responseData.statusCode == "404") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                         }
                     }else if(responseData.statusCode == "443") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                         }
                     }
                     else {
@@ -599,13 +623,13 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                                 vc.clusterReports = responseData
                                 self.navigationController?.pushViewController(vc, animated: true)
                             } else {
-                                self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noClusterReportsFound, actionTitles: ["Ok"], actions:[{action in},nil])
+                                self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noClusterReportsFound.localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                             }
                         }
                     } else if(responseData.statusCode == "101") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noClusterReportsFound, actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noClusterReportsFound.localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                     } else if(responseData.statusCode == "106") {
                         DispatchQueue.main.async {
@@ -616,18 +640,18 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
                         print(responseData.message)
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noClusterReportsFound, actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.noClusterReportsFound.localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                         
                     }else if(responseData.statusCode == "404") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                         }
                     }else if(responseData.statusCode == "443") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                         }
                     }else {
                         // handle other scenarios
@@ -830,10 +854,14 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
         reportSearchBar.text! = ""
         if (contactDict.count > 0) {
             
-            let message = "Select the display type"
+            
+            let message = "Select the display type".localizedString()
+            let titleString = "By Contact names".localizedString()
+            let numbertitleString = "By Contact numbers".localizedString()
+            let cancelString = "Cancel".localizedString()
             
             let alert = UIAlertController(title: Constants.Alert.title, message: message, preferredStyle: UIAlertController.Style.alert)
-            alert.addAction(UIAlertAction (title: "By Contact names", style: UIAlertAction.Style.default, handler:{ (action) in
+            alert.addAction(UIAlertAction (title: titleString, style: UIAlertAction.Style.default, handler:{ (action) in
                 
                 self.tablebyNumber = false
                 
@@ -848,7 +876,7 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
                 self.noReplbl.isHidden = true
                 
             }))
-            alert.addAction(UIAlertAction (title: "By Contact numbers", style: UIAlertAction.Style.default, handler: { (action) in
+            alert.addAction(UIAlertAction (title: numbertitleString, style: UIAlertAction.Style.default, handler: { (action) in
                 for value in 0..<self.dashboardArray.count {
                     
                     self.dashboardArray[value].displayByNumber = true
@@ -860,7 +888,7 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
                 self.reportTbl.reloadData()
                 
             }))
-            alert.addAction(UIAlertAction (title: "Cancel", style: UIAlertAction.Style.default, handler:{ (action) in
+            alert.addAction(UIAlertAction (title: cancelString, style: UIAlertAction.Style.default, handler:{ (action) in
                 self.view.endEditing(true)
             }))
             
@@ -895,7 +923,9 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
         
         DispatchQueue.main.async {
             //  guard let phonenumber = number else {return}
-            showToast(message: "There is no contact available for this Number '\(number)' ", view: self.view)
+                let toastMessage = "There is no contact available for this Number".localizedString()
+                let showToastMessage = toastMessage + "'\(number)' "
+                showToast(message: showToastMessage, view: self.view)
         }
         isToggleClicked = false
         
@@ -906,7 +936,7 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
     func didTapInfo(reportsnt: Report) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.reportdetailvc) as! ReportDetailViewController
         
-        showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
+        showActivityIndicator(View: self.view, Constants.Loader.reportDetails.localizedString())
         callApiToFetchDetailReportInfo(token: reportsnt.DoctorToken!)
     }
     
@@ -963,12 +993,12 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
                         else if(responseData.statusCode == "404") {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
-                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                             }
                         }else if(responseData.statusCode == "443") {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
-                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                             }
                         }else {
                             
@@ -1009,7 +1039,7 @@ extension ReportViewController{
     //MARK: - Token expired login
     @objc func tokenExpiredLogin(){
         
-        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
             
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
             self.navigationController?.pushViewController(vc, animated: false)
@@ -1023,7 +1053,7 @@ extension ReportViewController{
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
             
             //Call logout Api
-            showActivityIndicator(View: self.view, Constants.Loader.loggingOut)
+            showActivityIndicator(View: self.view, Constants.Loader.loggingOut.localizedString())
             
             self.perform(#selector(self.callLogOutApi), with: nil, afterDelay: 2.0)
         }

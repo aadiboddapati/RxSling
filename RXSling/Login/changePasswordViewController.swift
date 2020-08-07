@@ -29,16 +29,18 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
         self.passwordTextField.delegate = self
         self.confirmNewPswd.delegate = self
         // Do any additional setup after loading the view.
-        self.changeBtn.setTitle("CHANGE", for: .normal)
+        self.changeBtn.setTitle("CHANGE".localizedString(), for: .normal)
         self.cancelBtn.setTitle("CANCEL", for: .normal)
         //self.emailField.placeHolderText = "enter_password"
-        self.passwordTextField.placeHolderText = "Enter New Password"
-        self.confirmNewPswd.placeHolderText = "Confirm New Password"
+        self.passwordTextField.placeHolderText = "Enter New Password".localizedString()
+        self.confirmNewPswd.placeHolderText = "Confirm New Password".localizedString()
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         //addDoneButtonOnKeyboard(textField: passwordTextField)
     }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
     }
@@ -47,7 +49,7 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
         doneToolbar.barStyle = .default
 
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done".localizedString(), style: .done, target: self, action: #selector(self.doneButtonAction))
         let items = [flexSpace, done]
         doneToolbar.items = items
         doneToolbar.sizeToFit()
@@ -59,10 +61,10 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
     @objc func doneButtonAction(){
         self.view.endEditing(true)
         if(!isValidPassword(testStr: self.passwordTextField.text!)){
-            self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             return
         }else if (confirmNewPswd.text! !=  passwordTextField.text!){
-            self.popupAlert(title: "RXSling", message: "Passwords did not match.", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Passwords did not match.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
         }else{
             self.changeTapped()
         }
@@ -72,7 +74,7 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
         hideBarBUttomItem()
     }
     @IBAction func cancelButtonTapped(_ sender: Any) {
-        self.popupAlert(title: "RXSling", message: "Do you want to cancel the forgot password process?", actionTitles: ["NO","YES"], actions:[{action1 in},{action2 in
+        self.popupAlert(title: "RXSling", message: "Do you want to cancel the forgot password process?".localizedString(), actionTitles: ["NO","YES".localizedString()], actions:[{action1 in},{action2 in
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
             self.navigationController?.pushViewController(vc, animated: true)
             },nil])
@@ -97,10 +99,10 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
 
     @IBAction func submitButtonTapped(_ sender: Any) {
         if(!isValidPassword(testStr: self.passwordTextField.text!)){
-            self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             return
         }else if (confirmNewPswd.text! !=  passwordTextField.text!){
-            self.popupAlert(title: "RXSling", message: "Passwords did not match.", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Passwords did not match.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
         }else{
             self.changeTapped()
         }
@@ -108,7 +110,7 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
     }
     func changeTapped(){
         DispatchQueue.main.async {
-            showActivityIndicator(View: self.view, "Changing password. Please wait...")
+            showActivityIndicator(View: self.view, "Changing password. Please wait...".localizedString())
         }
 
         _=HTTPRequest.sharedInstance.request(url: Constants.Api.forgotPasswordUrl, method: "POST", params: ["emailId":self.email!.trimmingCharacters(in: .whitespacesAndNewlines),"pin":"\(passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines))"], header: "", completion: { (response, error) in
@@ -125,7 +127,7 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
                 }
                 if(resultData["statusCode"] as! String == "100")
                 {
-                    self.popupAlert(title: "RXSling", message: "Your password has been changed successfully. Tap LOGIN to continue.", actionTitles: ["LOGIN"], actions:[{action in
+                    self.popupAlert(title: "RXSling", message: "Your password has been changed successfully. Tap LOGIN to continue.".localizedString(), actionTitles: ["LOGIN"], actions:[{action in
                         let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
                         self.navigationController?.pushViewController(vc, animated: true)
                         },nil])
@@ -142,9 +144,9 @@ class changePasswordViewController: UIViewController, UITextFieldDelegate {
         } else {
             textField.resignFirstResponder()
             if(!isValidPassword(testStr: self.passwordTextField.text!)){
-                self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters, should contain at least one capital letter, one small letter, one number and a special character(@$!%?&#^).".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else if (confirmNewPswd.text! !=  passwordTextField.text!){
-                self.popupAlert(title: "RXSling", message: "Passwords did not match.", actionTitles: ["Ok"], actions:[{action in},nil])
+                self.popupAlert(title: "RXSling", message: "Passwords did not match.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
             }else{
                 self.changeTapped()
             }

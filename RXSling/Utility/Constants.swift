@@ -77,7 +77,7 @@ struct Constants {
         static let noClusterReportsFound = "No cluster reports found"
         static let poorinternent = "Your internet connection is poor,Unable/Takes very long time to reach server.Please connect to good internet and try again."
         static let screentype = "Select the display type"
-        
+        static let languageType = "Select the App language"
         static let versioncheckmsg  = "This app is currently out of service or under scheduled maintenance. Please try after some time."
         static let forceupdatemsg = "Important new update is available for the app. Please update the app to latest version to continue."
         static let graceperiodovermsg = "This App version expired. Now you must update the App to latest version to continue."
@@ -96,7 +96,7 @@ struct Constants {
         static let processing = "Processing. Please wait."
         static let removeCustomer = "Are you sure you want to remove this customer?"
         static let reportDetails = "Fetching report details. Please wait."
-        
+        static let chooseLanguage = "Please Choose the Language of App."
 
     }
     

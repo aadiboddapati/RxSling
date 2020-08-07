@@ -48,7 +48,7 @@ class FaqViewController: UIViewController,UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = false
-        self.navigationItem.title = "FAQ's"
+        self.navigationItem.title = "FAQ's".localizedString()
 
         faqTableView.tableFooterView = UIView()
         self.tableViewTopConstrain.constant = 0
@@ -94,7 +94,7 @@ class FaqViewController: UIViewController,UIGestureRecognizerDelegate {
             self.getFAQList()
         }
         //faqTableView.backgroundView = image1
-        self.cancelBtn.setTitle("CANCEL", for: .normal)
+        self.cancelBtn.setTitle("CANCEL".localizedString(), for: .normal)
         
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationController?.navigationBar.topItem?.hidesBackButton = true
@@ -116,7 +116,7 @@ class FaqViewController: UIViewController,UIGestureRecognizerDelegate {
         super.viewDidLayoutSubviews()
 
         self.navigationController?.navigationBar.isHidden = false
-        self.navigationItem.title = "FAQ's"
+        self.navigationItem.title = "FAQ's".localizedString()
         self.faqTableView.estimatedRowHeight = 100
         searchButton.layer.cornerRadius = searchButton.frame.width/2
        
@@ -156,7 +156,7 @@ class FaqViewController: UIViewController,UIGestureRecognizerDelegate {
         doneToolbar.barStyle = .default
 
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done".localizedString(), style: .done, target: self, action: #selector(self.doneButtonAction))
         let items = [flexSpace, done]
         doneToolbar.items = items
         doneToolbar.sizeToFit()
@@ -188,12 +188,12 @@ class FaqViewController: UIViewController,UIGestureRecognizerDelegate {
                 self.tableViewData = faqData[0].data
                 self.loadTableView()
             }else{
-                self.popupAlert(title: "RXSling", message: "Please check your internet connection.", actionTitles: ["Ok"], actions:[{action1 in
+                self.popupAlert(title: "RXSling", message: "Please check your internet connection.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                     }, nil])
             }
         }else{
             DispatchQueue.main.async {
-                showActivityIndicator(View: self.view, "Loading FAQ's. Please wait...")
+                showActivityIndicator(View: self.view, "Loading FAQ's. Please wait...".localizedString())
             }
             var request = URLRequest(url: URL(string:  Constants.Api.faqsUrl)!)
             request.httpMethod = "GET"

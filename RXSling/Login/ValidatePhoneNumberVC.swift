@@ -18,6 +18,8 @@ class ValidatePhoneNumberVC: UIViewController {
    @IBOutlet weak var validateBtn: UIButton!
    @IBOutlet weak var cancelBtn: UIButton!
    @IBOutlet weak var slingImage: UIImageView!
+   @IBOutlet weak var preRegisterNumberLabel: UILabel!
+    @IBOutlet weak var signUpLabel: UILabel!
    let phoneNumberKit = PhoneNumberKit()
 
    var countryCode:String?
@@ -40,7 +42,7 @@ class ValidatePhoneNumberVC: UIViewController {
            NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.5),
            NSAttributedString.Key.font : UIFont.systemFont(ofSize: 14) // Note the !
        ]
-       let attributedPlaceholder = NSMutableAttributedString(string: "Enter mobile number.", attributes: attributes)
+    let attributedPlaceholder = NSMutableAttributedString(string: "Enter mobile number.".localizedString(), attributes: attributes)
        //self.phoneNumberTextField.attributedPlaceholder = attributedPlaceholder
        self.phoneNumberTextField.tintColor = UIColor.white
 
@@ -60,8 +62,10 @@ class ValidatePhoneNumberVC: UIViewController {
    }
    override func viewWillAppear(_ animated: Bool) {
        super.viewWillAppear(animated)
-       self.validateBtn.setTitle("SEND OTP", for: .normal)
-       self.cancelBtn.setTitle("CANCEL", for: .normal)
+    signUpLabel.text = "SIGN UP".localizedString()
+    self.validateBtn.setTitle("SEND OTP".localizedString(), for: .normal)
+       self.cancelBtn.setTitle("CANCEL".localizedString(), for: .normal)
+     preRegisterNumberLabel.text = "PLEASE ENTER THE PRE-REGISTERED  PHONE NUMBER".localizedString()
    }
    override func viewDidDisappear(_ animated: Bool) {
 
@@ -90,7 +94,7 @@ class ValidatePhoneNumberVC: UIViewController {
        //validateBtn.isUserInteractionEnabled = false
        if((self.phoneNumberTextField.text?.count)! > 2){
            DispatchQueue.main.async {
-               showActivityIndicator(View: self.view, "Sending OTP, Please wait.")
+            showActivityIndicator(View: self.view, "Sending OTP, Please wait.".localizedString())
            }
 
            if(self.verifyPhoneNumber(self.phoneNumberTextField.phoneNumber!)){
@@ -103,12 +107,12 @@ class ValidatePhoneNumberVC: UIViewController {
                    self.validateBtn.isUserInteractionEnabled = true
                    hideActivityIndicator(View: self.view)
                }
-               self.popupAlert(title: "RXSling", message: "Enter valid mobile number.", actionTitles: ["Ok"], actions:[{action1 in},nil])
+            self.popupAlert(title: "RXSling", message: "Enter valid mobile number.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in},nil])
            }
 
        }else{
            validateBtn.isUserInteractionEnabled = true
-           self.popupAlert(title: "RXSling", message: "Enter valid mobile number.", actionTitles: ["Ok"], actions:[{action1 in},nil])
+           self.popupAlert(title: "RXSling", message: "Enter valid mobile number.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in},nil])
        }
    }
    @IBAction func sendOtpBUttonTApped(_ sender: Any) {
@@ -117,7 +121,7 @@ class ValidatePhoneNumberVC: UIViewController {
 
    @IBAction func cancelTapped(_ sender: Any) {
        hideBarBUttomItem()
-       self.popupAlert(title: "RXSling", message: "Do you want to cancel the registration process?", actionTitles: ["No","YES"], actions:[{action1 in},{action2 in
+       self.popupAlert(title: "RXSling", message: "Do you want to cancel the registration process?".localizedString(), actionTitles: ["No","YES".localizedString()], actions:[{action1 in},{action2 in
            self.navigationController?.popViewController(animated: true)
            },nil])
    }
@@ -137,11 +141,11 @@ class ValidatePhoneNumberVC: UIViewController {
        if (!networkConnection!)
        {
            self.validateBtn.isUserInteractionEnabled = true
-           self.popupAlert(title: "RXSling", message: "Please check your internet connection.", actionTitles: ["Ok"], actions:[{action1 in
+           self.popupAlert(title: "RXSling", message: "Please check your internet connection.".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                }, nil])
        }else{
            DispatchQueue.main.async {
-               showActivityIndicator(View: self.view, "Validating mobile number. Please wait...")
+               showActivityIndicator(View: self.view, "Validating mobile number. Please wait...".localizedString())
            }
 
            print("+" + "\(phoneNumberTextField.phoneNumber!)")
@@ -151,7 +155,7 @@ class ValidatePhoneNumberVC: UIViewController {
                    DispatchQueue.main.async {
                        hideActivityIndicator(View: self.view)
                        self.validateBtn.isUserInteractionEnabled = true
-                       self.popupAlert(title: "RXSling", message: "Please check your internet connection.", actionTitles: ["Ok"], actions:[{action in},nil])
+                       self.popupAlert(title: "RXSling", message: "Please check your internet connection.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                    }
                }else{
                     print(response!)
@@ -165,7 +169,7 @@ class ValidatePhoneNumberVC: UIViewController {
                         let data = response!["data"] as! [String:Any]
                         if((data["emailId"]) == nil){
                             
-                            self.popupAlert(title: "RXSling", message: "Mobile no already exists.", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message: "Mobile no already exists.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }else{
                             email = data["emailId"] as! String
                             
@@ -175,9 +179,9 @@ class ValidatePhoneNumberVC: UIViewController {
                                 self.generateOtp(email: email)
                             }
                     }else if(response!["statusCode"] as! String == "101"){
-                        self.popupAlert(title: "RXSling", message: "This mobile number is already registered.", actionTitles: ["Ok"], actions:[{action in},nil])
+                        self.popupAlert(title: "RXSling", message: "This mobile number is already registered.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                     }else{
-                        self.popupAlert(title: "RXSling", message: "Please enter a valid pre-registered mobile number.", actionTitles: ["Ok"], actions: [{action in},nil])
+                        self.popupAlert(title: "RXSling", message: "Please enter a valid pre-registered mobile number.".localizedString(), actionTitles: ["Ok"], actions: [{action in},nil])
                         
                 }
                }
@@ -196,7 +200,7 @@ class ValidatePhoneNumberVC: UIViewController {
     func generateOtp(email:String)
    {
        DispatchQueue.main.async {
-           showActivityIndicator(View: self.view, "Sending OTP, please wait.")
+        showActivityIndicator(View: self.view, "Sending OTP, please wait.".localizedString())
        }
        PhoneAuthProvider.provider().verifyPhoneNumber("+" + "\(phoneNumberTextField.phoneNumber!)", uiDelegate: nil) { (verificationID, error) in
            if error != nil {
@@ -204,7 +208,7 @@ class ValidatePhoneNumberVC: UIViewController {
                    self.validateBtn.isUserInteractionEnabled = true
                    hideActivityIndicator(View: self.view)
                }
-               self.popupAlert(title: "RXSling", message: "\(error!.localizedDescription)", actionTitles: ["No","YES"], actions:[{action1 in},{action2 in
+            self.popupAlert(title: "RXSling", message: "\(error!.localizedDescription)", actionTitles: ["No","YES".localizedString()], actions:[{action1 in},{action2 in
                    },nil])
            }else{
                DispatchQueue.main.async {
@@ -244,7 +248,7 @@ class ValidatePhoneNumberVC: UIViewController {
        doneToolbar.barStyle = .default
 
        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-       let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+    let done: UIBarButtonItem = UIBarButtonItem(title: "Done".localizedString(), style: .done, target: self, action: #selector(self.doneButtonAction))
        let items = [flexSpace, done]
        doneToolbar.items = items
        doneToolbar.sizeToFit()

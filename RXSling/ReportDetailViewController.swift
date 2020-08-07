@@ -38,6 +38,25 @@ class ReportDetailViewController: UIViewController {
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var iButton: UIButton!
      var backButton : UIBarButtonItem!
+    
+    
+    @IBOutlet weak var contentTitleLabel:UILabel!
+    @IBOutlet weak var contentDescLabel:UILabel!
+    @IBOutlet weak var customerNameLabel:UILabel!
+    @IBOutlet weak var customerNoLabel:UILabel!
+    @IBOutlet weak var sentTimeLabel:UILabel!
+    @IBOutlet weak var viewedTimeLabel:UILabel!
+    @IBOutlet weak var viewedStatusLabel:UILabel!
+    @IBOutlet weak var contactStatusLabel:UILabel!
+    @IBOutlet weak var expiryDateLabel:UILabel!
+    @IBOutlet weak var contentInfoLabel:UILabel!
+    @IBOutlet weak var reportDetialLabel:UILabel!
+    @IBOutlet weak var callToActionLabel:UILabel!
+    
+    @IBOutlet weak var previewButton: UIButton!
+    @IBOutlet weak var resendButton: UIButton!
+    @IBOutlet weak var callButton: UIButton!
+    
   
     
     override func viewDidLoad() {
@@ -53,7 +72,7 @@ class ReportDetailViewController: UIViewController {
         //  scroller.contentSize.height = 1.0
         contentTitlelbl.text = sntTitle
         contentDesclbl.text = sntDesc
-        self.title = "REPORT DETAILS"
+        self.title = "REPORT DETAILS".localizedString()
                     self.navigationController?.navigationBar.isHidden = false
         
         self.navigationItem.setHidesBackButton(true, animated: false)
@@ -97,10 +116,28 @@ class ReportDetailViewController: UIViewController {
           //   self.perform(#selector(callApiToFetchReportInfo), with: nil, afterDelay: 1.0)
          }
     override func viewWillAppear(_ animated: Bool) {
-          super.viewWillAppear(animated)
-          deleteButton.isEnabled = false
-          deleteButton.isUserInteractionEnabled = false
+        super.viewWillAppear(animated)
+        deleteButton.isEnabled = false
+        deleteButton.isUserInteractionEnabled = false
         deleteButton.alpha = 0.5
+        
+        contentTitleLabel.text = "Content Title".localizedString()
+        contentDescLabel.text = "Content Desc".localizedString()
+        customerNameLabel.text = "Customer Name".localizedString()
+        customerNoLabel.text = "Customer No".localizedString()
+        sentTimeLabel.text = "Sent Time".localizedString()
+        viewedTimeLabel.text = "Viewed Time".localizedString()
+        viewedStatusLabel.text = "Viewed Status".localizedString()
+        contactStatusLabel.text = "Contact Status".localizedString()
+        expiryDateLabel.text = "Expiry Date".localizedString()
+        contentInfoLabel.text = "Content Information".localizedString()
+        reportDetialLabel.text = "Report Details".localizedString()
+        callToActionLabel.text = "Call To Actions".localizedString()
+        
+        previewButton.setTitle("Preview".localizedString(), for: .normal)
+        resendButton.setTitle("Resend".localizedString(), for: .normal)
+        deleteButton.setTitle("Delete Link".localizedString(), for: .normal)
+        callButton.setTitle("Call".localizedString(), for: .normal)
       }
     
     @objc func callApiToFetchReportInfo(){
@@ -164,12 +201,12 @@ class ReportDetailViewController: UIViewController {
                             }else if(responseData.statusCode == "404") {
                                  DispatchQueue.main.async {
                                      hideActivityIndicator(View: self.view)
-                                     Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                    Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                                  }
                             }else if(responseData.statusCode == "443") {
                                  DispatchQueue.main.async {
                                      hideActivityIndicator(View: self.view)
-                                     Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                    Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                                  }
                             }else {
                                 
@@ -183,7 +220,7 @@ class ReportDetailViewController: UIViewController {
     @IBAction func shareButtonPressed(_ sender: UIButton){
             print("Share tapped")
         if(expiredBool == true) {
-             self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.contentResent, actionTitles: ["Ok"], actions:[{action1 in
+            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.contentResent.localizedString(), actionTitles: ["Ok"], actions:[{action1 in
               }, nil])
         } else {
             let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.sharevc) as! ShareViewController
@@ -199,7 +236,7 @@ class ReportDetailViewController: UIViewController {
       @IBAction func previewButtonPressed(_ sender: UIButton){
         
         if(expiredBool == true) {
-             self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.contentExpired, actionTitles: ["Ok"], actions:[{action1 in
+            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.contentExpired.localizedString(), actionTitles: ["Ok"], actions:[{action1 in
               }, nil])
         } else {
         
@@ -394,7 +431,7 @@ class ReportDetailViewController: UIViewController {
                        //Show alert to enable
                        //contact import in app settings
                        print("NOT Athorised")
-                       Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
+                    Utility.showAlertWithHandler(message: Constants.Alert.openSettings.localizedString(), alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
                            if(yesTapped){
                                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                            }
@@ -442,8 +479,11 @@ class ReportDetailViewController: UIViewController {
                     print("Avaialbel")
                 } else {
                     DispatchQueue.main.async {
+                        
                         guard let toastString = self.doctorMobileNo else {return}
-                                                showToast(message: "There is no contact available for this Number '\(toastString)' ", view: self.view)
+                        let toastMessage = "There is no contact available for this Number".localizedString()
+                        let showToastMessage = toastMessage + "'\(toastString)' "
+                        showToast(message: showToastMessage, view: self.view)
                                             }
                 }
                } else {

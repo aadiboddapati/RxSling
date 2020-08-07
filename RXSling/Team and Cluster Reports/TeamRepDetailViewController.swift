@@ -29,6 +29,21 @@ class TeamRepDetailViewController: UIViewController {
     @IBOutlet weak var SuccessLbl:UILabel!
     @IBOutlet weak var noChartDataLbl:UILabel!
     
+    @IBOutlet weak var staticContentTitleLabel:UILabel!
+    @IBOutlet weak var staticContentDescLabel:UILabel!
+    @IBOutlet weak var staticSentCountLabel:UILabel!
+    @IBOutlet weak var staticViewedCountLabel:UILabel!
+    @IBOutlet weak var staticSuccessPercLabel:UILabel!
+    @IBOutlet weak var staticContentInfoLabel:UILabel!
+    @IBOutlet weak var staticPerformanceViewLabel:UILabel!
+    @IBOutlet weak var staticCallToActionLabel:UILabel!
+    @IBOutlet weak var staticViewedLabel:UILabel!
+    @IBOutlet weak var staticNotViewedLabel:UILabel!
+    @IBOutlet weak var callBtn:UIButton!
+    @IBOutlet weak var whatsAppBtn:UIButton!
+    @IBOutlet weak var copyReportBtn:UIButton!
+    @IBOutlet weak var emailBtn:UIButton!
+    
     var reportList: [Report]?
     var teamData: TeamData!
     var clusterData: ClusterReportData!
@@ -86,10 +101,35 @@ class TeamRepDetailViewController: UIViewController {
                       chartView.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
             } else { noChartDataLbl.isHidden = false }
         }
-      
-        
-        
+
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+           
+       staticRepNameLabel.text = "REP Name".localizedString()
+       staticRepMobileLabel.text = "REP Mobile No".localizedString()
+       staticRepEmailLabel.text = "REP Email".localizedString()
+       staticRepHeadingLabel.text = "Rep Details".localizedString()
+
+       staticContentTitleLabel.text = "Content Title  -".localizedString()
+       staticContentDescLabel.text = "Content Desc  -".localizedString()
+       staticSentCountLabel.text = "Sent Count  -".localizedString()
+       staticViewedCountLabel.text = "Viewed Count  -".localizedString()
+       staticSuccessPercLabel.text = "Success %  -".localizedString()
+       staticContentInfoLabel.text = "Content Information".localizedString()
+       staticPerformanceViewLabel.text = "Performance View".localizedString()
+       staticCallToActionLabel.text = "Call to Actions".localizedString()
+        
+           noChartDataLbl.text = "No chart data available".localizedString()
+           staticViewedLabel.text = "Viewed".localizedString()
+           staticNotViewedLabel.text = "Not Viewed".localizedString()
+           
+     
+           callBtn.setTitle("Call".localizedString(), for: .normal)
+           whatsAppBtn.setTitle("WhatsApp".localizedString(), for: .normal)
+           copyReportBtn.setTitle("Copy Report".localizedString(), for: .normal)
+           emailBtn.setTitle("Email".localizedString(), for: .normal)
+       }
     
     func setup(pieChartView chartView: PieChartView) {
         
@@ -125,16 +165,16 @@ class TeamRepDetailViewController: UIViewController {
             if let count = teamData.sentCount, count > 0 {
                 let viewedCount = "\(teamData.viewedCount ?? 0)"
                 let notViewed = "\(teamData.sentCount! - ( teamData.viewedCount ?? 0 ) )"
-                entries.append(PieChartDataEntry(value: Double(Int(viewedCount) ?? 0), label: "Viewed"))
-                entries.append(PieChartDataEntry(value: Double(Int(notViewed) ?? 0), label: "Not Viewed"))
+                entries.append(PieChartDataEntry(value: Double(Int(viewedCount) ?? 0), label: "Viewed".localizedString()))
+                entries.append(PieChartDataEntry(value: Double(Int(notViewed) ?? 0), label: "Not Viewed".localizedString()))
                 
             }
         } else {
             if let count = clusterData.sentCount, count > 0 {
                 let viewedCount = "\(clusterData.viewedCount ?? 0)"
                 let notViewed = "\(clusterData.sentCount! - ( clusterData.viewedCount ?? 0 ) )"
-                entries.append(PieChartDataEntry(value: Double(Int(viewedCount) ?? 0), label: "Viewed"))
-                entries.append(PieChartDataEntry(value: Double(Int(notViewed) ?? 0), label: "Not Viewed"))
+                entries.append(PieChartDataEntry(value: Double(Int(viewedCount) ?? 0), label: "Viewed".localizedString()))
+                entries.append(PieChartDataEntry(value: Double(Int(notViewed) ?? 0), label: "Not Viewed".localizedString()))
                 
             }
         }

@@ -39,7 +39,9 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(logout(notification:)),
                                                name: NSNotification.Name(rawValue: "logout_Tapped"),
                                                object: nil)
-      //  NotificationCenter.default.addObserver(self, selector: #selector(checkForVersionUpdate(notification:)), name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
+       NotificationCenter.default.addObserver(self, selector: #selector(languageChanged),
+             name: NSNotification.Name(rawValue: "language_Changed"),
+             object: nil)
     
         setupNavigationBar()
         dashboardTbl.estimatedRowHeight = 310
@@ -112,7 +114,7 @@ class ViewController: UIViewController {
                             hideActivityIndicator(View: self.view)
                         }
                         DispatchQueue.main.async {
-                            Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+                            Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
                                 
                                 self.tokenExpiredLogout()
                             }
@@ -120,12 +122,12 @@ class ViewController: UIViewController {
                     }else if(responseData.statusCode == "404") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                         }
                     }else if(responseData.statusCode == "443") {
                         DispatchQueue.main.async {
                             hideActivityIndicator(View: self.view)
-                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                            Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                         }
                     } else {
                         self.loadSntApiCall()
@@ -167,18 +169,18 @@ class ViewController: UIViewController {
             print(minutes)
             if minutes >= 5 {
                 DispatchQueue.main.async {
-                    showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell)
+                    showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell.localizedString())
                     self.getUserInfo()
                 }
             } else {
                 DispatchQueue.main.async {
-                    showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell)
+                    showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell.localizedString())
                     self.loadSntApiCall()
                 }
             }
         } else {
             DispatchQueue.main.async {
-                showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell)
+                showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell.localizedString())
                 self.loadSntApiCall()
             }
         }
@@ -253,7 +255,7 @@ class ViewController: UIViewController {
                 
             }else{
                 
-                Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
+                Utility.showAlertWithHandler(message: Constants.Alert.openSettings.localizedString(), alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
                     if(yesTapped){
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                     }
@@ -535,7 +537,7 @@ class ViewController: UIViewController {
     //MARK: - Setup Navigation Bar
     func setupNavigationBar(){
         
-        self.title = "HOME"
+        self.title = "HOME".localizedString()
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(self, action: #selector(menuPressed), image: #imageLiteral(resourceName: "Menu"))
         
@@ -613,7 +615,7 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource, DashboardCe
     func didTapShare(snt: SNTData) {
         
         if snt.instructionMsg != nil && snt.instructionMsg != ""{
-            self.popupAlert(title: "Instruction", message: snt.instructionMsg, actionTitles: ["Cancel","Proceed"], actions: [{action1 in},{action2 in
+            self.popupAlert(title: "Instruction".localizedString(), message: snt.instructionMsg, actionTitles: ["Cancel".localizedString(),"Proceed".localizedString()], actions: [{action1 in},{action2 in
                 self.openSharePage(snt: snt)
                 }])
         }else{
@@ -656,7 +658,7 @@ extension ViewController{
                     return
                 }
                 if(data.statusCode == "106"){
-                    Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
+                    Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
                         self!.tokenExpiredLogout()
                     }
                 }else{
@@ -699,12 +701,24 @@ extension ViewController{
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
             
             //Call logout Api
-            showActivityIndicator(View: self.view, Constants.Loader.loggingOut)
+            showActivityIndicator(View: self.view, Constants.Loader.loggingOut.localizedString())
             
             self.perform(#selector(self.callLogOutApi), with: nil, afterDelay: 2.0)
         }
         
     }
+    
+    @objc private func languageChanged(notification: NSNotification){
+             
+             DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+                 //USERDEFAULTS.value(forKey: "AppLanguage")
+               
+                  self.title = "HOME".localizedString()
+                self.dashboardTbl.reloadData()
+              }
+           
+             }
+  
     
     @objc func callLogOutApi(){
         
@@ -719,7 +733,23 @@ extension ViewController{
     }
 }
 
+extension String {
 
+func localizedString() -> String {
+    if USERDEFAULTS.value(forKey: "AppLanguage") == nil {
+        USERDEFAULTS.set("English", forKey: "AppLanguage")
+    }
+  if ("\(USERDEFAULTS.value(forKey: "AppLanguage")!)" == "Spanish") {
+        let path = Bundle.main.path(forResource: "es", ofType: "lproj")
+        let bundle = Bundle(path: path!)!
+        return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+    } else {
+        let path = Bundle.main.path(forResource: "en", ofType: "lproj")
+        let bundle = Bundle(path: path!)!
+        return NSLocalizedString(self, tableName: nil, bundle: bundle, value: "", comment: "")
+    }
+}
+}
 
 
 extension Data {

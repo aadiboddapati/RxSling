@@ -67,7 +67,7 @@ class SegmentedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = isTeamReport ? "REP DETAILED REPORT" : "MANAGER DETAILED REPORT"
+        self.title = isTeamReport ? "REP DETAILED REPORT".localizedString() : "MANAGER DETAILED REPORT".localizedString()
         
         if !isTeamReport {
             segmentedViewTopConstrait.constant = 0
@@ -96,7 +96,7 @@ class SegmentedViewController: UIViewController {
         updateView()
         
         if isTeamReport {
-            showActivityIndicator(View: self.view, Constants.Loader.reportDetails )
+            showActivityIndicator(View: self.view, Constants.Loader.reportDetails.localizedString())
             self.callApiToFetchReportInfo()
         }
         
@@ -105,6 +105,9 @@ class SegmentedViewController: UIViewController {
         } else {
             segmntCntrl.tintColor = .rxGreen
         }
+        segmntCntrl.setTitle("Rep Info".localizedString(), forSegmentAt: 0)
+        segmntCntrl.setTitle("Trend".localizedString(), forSegmentAt: 1)
+        segmntCntrl.setTitle("Customer Info".localizedString(), forSegmentAt: 2)
         // Do any additional setup after loading the view.
     }
     
@@ -211,12 +214,12 @@ class SegmentedViewController: UIViewController {
                         }else if(responseData.statusCode == "404") {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
-                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                             }
                         }else if(responseData.statusCode == "443") {
                             DispatchQueue.main.async {
                                 hideActivityIndicator(View: self.view)
-                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent, alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
+                                Utility.showAlertWithHandler(message: Constants.Alert.poorinternent.localizedString(), alertButtons: 1, buttonTitle: "OK", inView: self) { (boolValur) in }
                             }
                         }else {
                             
@@ -229,7 +232,7 @@ class SegmentedViewController: UIViewController {
     
     @objc func tokenExpiredLogin(){
         
-        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
             self.navigationController?.pushViewController(vc, animated: false)
         }
@@ -254,7 +257,7 @@ extension SegmentedViewController: CallToActionProtocol {
         
         if isTrendVC {
             UIPasteboard.general.string = formTrendMessageContent(daysReport, orderedDays: orderedDays)
-            self.view.makeToast("Content copied to clipboard.", duration: 1.0, position: .bottom)
+            self.view.makeToast("Content copied to clipboard.".localizedString(), duration: 1.0, position: .bottom)
             
         } else {
             if isTeamReport {
@@ -262,7 +265,7 @@ extension SegmentedViewController: CallToActionProtocol {
             } else {
                 UIPasteboard.general.string = formTheCluserMessageContent()
             }
-            self.view.makeToast("Content copied to clipboard.", duration: 1.0, position: .bottom)
+            self.view.makeToast("Content copied to clipboard.".localizedString(), duration: 1.0, position: .bottom)
         }
 
     }
@@ -509,7 +512,7 @@ extension SegmentedViewController {
             
         } else {
             print("Cannot send mail")
-            Utility.showAlertWith(message: "Mail not configured", inView: self)
+            Utility.showAlertWith(message: "Mail not configured".localizedString(), inView: self)
         }
     }
     

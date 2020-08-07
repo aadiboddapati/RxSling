@@ -14,6 +14,7 @@ class ShareViewController: UIViewController {
     @IBOutlet weak var backgroundCardView:UIView!
     @IBOutlet weak var optionsTable:UITableView!
     @IBOutlet weak var cancelButton:UIButton!
+    @IBOutlet weak var optionLabel:UILabel!
 
     var snt: SNTData?
     var shortenUrlData: ShortenData?
@@ -53,6 +54,10 @@ class ShareViewController: UIViewController {
         }
 
       
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        optionLabel.text = "Select an option to share".localizedString()
+        cancelButton.setTitle("Cancel".localizedString(), for: .normal)
     }
     
     
@@ -182,7 +187,7 @@ extension ShareViewController: MFMailComposeViewControllerDelegate, MFMessageCom
             
           } else {
               print("Cannot send mail")
-            Utility.showAlertWith(message: "Mail not configured", inView: self)
+            Utility.showAlertWith(message: "Mail not configured".localizedString(), inView: self)
           }
     }
     

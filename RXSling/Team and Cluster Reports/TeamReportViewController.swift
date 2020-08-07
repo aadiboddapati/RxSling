@@ -43,15 +43,15 @@ class TeamReportViewController: UIViewController {
     
     var defaultSortOption: SortType = .success
     
-    var titlesArray = ["Success %","Viewed","Sent"]
+    var titlesArray = ["Success %".localizedString(),"Viewed".localizedString(),"Sent".localizedString()]
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
         //  scroller.contentSize.height = 1.0
-        self.title = isTeamReport ? "TEAM INFORMATION" : "MANAGER REPORT"
-        self.reportInfoLabel.text = isTeamReport ? "Your Team Report" : "Your Cluster Report"
+        self.title = isTeamReport ? "TEAM INFORMATION".localizedString() : "MANAGER REPORT".localizedString()
+        self.reportInfoLabel.text = isTeamReport ? "Your Team Report".localizedString() : "Your Cluster Report".localizedString()
         self.navigationController?.navigationBar.isHidden = false
         self.navigationItem.setHidesBackButton(true, animated: false)
         self.navigationController?.navigationBar.topItem?.hidesBackButton = true
@@ -223,7 +223,7 @@ extension TeamReportViewController : SortProtocol {
     
     func presentPopUp()  {
         
-        let alert = UIAlertController(title: Constants.Alert.screentype, message: "", preferredStyle: UIAlertController.Style.alert)
+        let alert = UIAlertController(title: Constants.Alert.screentype.localizedString(), message: "", preferredStyle: UIAlertController.Style.alert)
         let tableviewController = UITableViewController()
         tableviewController.tableView.delegate = self
         tableviewController.tableView.dataSource = self
@@ -235,11 +235,11 @@ extension TeamReportViewController : SortProtocol {
         tableviewController.preferredContentSize = CGSize(width: 272, height: 120)
         alert.setValue(tableviewController, forKey: "contentViewController")
         
-        alert.addAction(UIAlertAction (title:"CANCEL"
+        alert.addAction(UIAlertAction (title:"CANCEL".localizedString()
             , style: UIAlertAction.Style.default, handler:{ (action) in
             self.view.endEditing(true)
         }))
-        alert.addAction(UIAlertAction (title: "APPLY", style: UIAlertAction.Style.default, handler:{ (action) in
+        alert.addAction(UIAlertAction (title: "APPLY".localizedString(), style: UIAlertAction.Style.default, handler:{ (action) in
             DispatchQueue.main.async {
                 self.view.endEditing(true)
                 self.passData(sortType: self.defaultSortOption)
@@ -407,7 +407,7 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
             }
             reportsTable.reloadData()
         } else {
-            showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
+            showActivityIndicator(View: self.view, Constants.Loader.reportDetails.localizedString())
             let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
             let userEmail = isTeamReport ? teamReports.data?[index].repEmailId ?? "" : clusterReports.data?.clusterReport?[index].managerId ?? ""
             let parameters:[String : String] =
@@ -474,7 +474,7 @@ extension TeamReportViewController: UITableViewDelegate, UITableViewDataSource, 
     
     
     func getUserData(index:Int) {
-        showActivityIndicator(View: self.view, Constants.Loader.reportDetails)
+        showActivityIndicator(View: self.view, Constants.Loader.reportDetails.localizedString())
         let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
         let userEmail = isTeamReport ? teamReports.data?[index].repEmailId ?? "" : clusterReports.data?.clusterReport?[index].managerId ?? ""
         let parameters:[String : String] =

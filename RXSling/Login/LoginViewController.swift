@@ -16,12 +16,21 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var pinTextfield: TextField!
     @IBOutlet weak var eyeBtn: UIButton!
     @IBOutlet weak var slingImage: UIImageView!
+    @IBOutlet weak var loginButton: UIButton!
+    @IBOutlet weak var forgotButton: UIButton!
+    @IBOutlet weak var signupButton: UIButton!
+    @IBOutlet weak var staticHomeLabel: UILabel!
+    
+    var languageArray = ["English","Spanish"]
+    
+    var defaultSortOption: LanguageType = .English
+      var currentSortOption: LanguageType = .English
     
     var versionManager = VersionMannager.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        USERDEFAULTS.setValue("English", forKey: "AppLanguage")
         self.navigationController?.navigationBar.isHidden = true
         
    //     NotificationCenter.default.addObserver(self, selector: #selector(checkForVersionUpdate(notification:)), name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
@@ -60,6 +69,16 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
            super.viewWillAppear(animated)
            self.navigationController?.navigationBar.isHidden = true
+        staticHomeLabel.text = "LOGIN".localizedString()
+               
+               self.loginButton.setTitle("LOGIN".localizedString(), for: .normal)
+               self.forgotButton.setTitle("FORGOT PASSWORD".localizedString(), for: .normal)
+               self.signupButton.setTitle("SIGN UP".localizedString(), for: .normal)
+               self.userIdTextfield.placeholder = "Enter Email ID".localizedString()
+               self.pinTextfield.placeholder = "Enter Password".localizedString()
+               self.userIdTextfield.placeHolderText = "Enter Email ID".localizedString()
+               self.pinTextfield.placeHolderText = "Enter Password".localizedString()
+        
            // Version Checking
 //            if let _ = versionManager.versionMannagedObj {
 //                versionManager.checkForVersionUpdate()
@@ -88,7 +107,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
     func login(){
         if(userIdTextfield.text?.count == 0 || userIdTextfield.text == "" || !isValidEmail(testStr: userIdTextfield.text!)){
-            self.popupAlert(title: "RXSling", message: "Enter a valid email ID.", actionTitles: ["Ok"], actions:[{action in},nil])
+            self.popupAlert(title: "RXSling", message: "Enter a valid email ID.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
         }
         else if((pinTextfield.text?.count)! <= 7 || pinTextfield.text == ""){
             self.popupAlert(title: "RXSling", message: "Password cannot be less than 8 characters.", actionTitles: ["Ok"], actions:[{action in},nil])
@@ -99,12 +118,12 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             let networkConnection = try! Reachability.init()?.isConnectedToNetwork
             if (!networkConnection!)
             {
-                self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action1 in
+                self.popupAlert(title: "RXSling", message: "Please check your internet connection".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                     }, nil])
             }else{
 
                 DispatchQueue.main.async {
-                    showActivityIndicator(View: self.view, "Logging in. Please wait...")
+                    showActivityIndicator(View: self.view, "Logging in. Please wait...".localizedString())
 
                 }
                 let pushId = UserDefaults.standard.string(forKey: "PUSH_ID")
@@ -119,7 +138,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         DispatchQueue.main.async {
                             UserDefaults.standard.set(false, forKey: "ISLOGIN")
                             hideActivityIndicator(View: self.view)
-                            self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message: "Please check your internet connection".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                     }
                     else{
@@ -139,24 +158,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
 
                                 UserDefaults.standard.set(true, forKey: "ISLOGIN")
                                 USERDEFAULTS.set((data.token), forKey: "TOKEN")
-                                USERDEFAULTS.set((data.orgId), forKey: "orgId")
                                 USERDEFAULTS.set((data.userInfo.emailID), forKey: "USER_EMAIL")
                                 USERDEFAULTS.set((data.userInfo.mobileNo), forKey: "USER_MOBILE")
                                 USERDEFAULTS.set((data.userInfo.profilePicURL), forKey: "USER_PROFILE_PIC")
                                 USERDEFAULTS.set((data.displayIbutton), forKey: "USER_DISPLAY_IB_BUTTON")
                                 USERDEFAULTS.set((data.userInfo.selfReport), forKey: "USER_SELFREPORT")
-                                
+                                USERDEFAULTS.set((data.orgId), forKey: "orgId")
+
                                 USERDEFAULTS.set(jsonData, forKey: "LOGIN_DATA")
                                 hideActivityIndicator(View: self.view)
                                 self.showHomeScreen()
                             }
 
                         }else if(response.statusCode == "101"){
-                            self.popupAlert(title: "RXSling", message: "Invalid credentials.", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message: "Invalid credentials.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }else if(response.statusCode == "102" || response.statusCode == "104"){
-                            self.popupAlert(title: "RXSling", message: "User doesn't exists.", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message: "User doesn't exists.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }else{
-                            self.popupAlert(title: "RXSling", message: "User exists but not registered. Please register and then login.", actionTitles: ["Ok"], actions:[{action in},nil])
+                            self.popupAlert(title: "RXSling", message: "User exists but not registered. Please register and then login.".localizedString(), actionTitles: ["Ok"], actions:[{action in},nil])
                         }
                     }
                 }
@@ -223,6 +242,98 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         self.view.endEditing(true)
 
     }
+    
+    @IBAction func settingsButtonTapped(_ sender: Any) {
+        if ("\(USERDEFAULTS.value(forKey: "AppLanguage")!)" == "Spanish") {
+            defaultSortOption = .Spanish  } else {
+            defaultSortOption = .English
+        }
+        currentSortOption = defaultSortOption
+        let alert = UIAlertController(title: Constants.Alert.languageType.localizedString(), message: "", preferredStyle: UIAlertController.Style.alert)
+                 
+        
+               let tableviewController = UITableViewController()
+                      tableviewController.tableView.delegate = self
+                      tableviewController.tableView.dataSource = self
+                      
+                       tableviewController.preferredContentSize = CGSize(width: 252, height: 80)
+                       tableviewController.tableView.backgroundColor = .rxAlert
+                       alert.setValue(tableviewController, forKey: "contentViewController")
+                        
+               alert.addAction(UIAlertAction (title: "CANCEL".localizedString(), style: UIAlertAction.Style.default, handler: { (action) in
+                self.defaultSortOption = self.currentSortOption
+                            self.view.endEditing(true)
+                        }))
+                   
+               alert.addAction(UIAlertAction (title: "APPLY".localizedString(), style: UIAlertAction.Style.default, handler:{ (action) in
+                if self.defaultSortOption == .English {
+                                    USERDEFAULTS.setValue("English", forKey: "AppLanguage")
+                               } else {
+                                    USERDEFAULTS.setValue("Spanish", forKey: "AppLanguage")
+                               }
+                self.staticHomeLabel.text = "LOGIN".localizedString()
+                self.loginButton.setTitle("LOGIN".localizedString(), for: .normal)
+                self.forgotButton.setTitle("FORGOT PASSWORD".localizedString(), for: .normal)
+                self.signupButton.setTitle("SIGN UP".localizedString(), for: .normal) 
+                    self.userIdTextfield.placeholder = "Enter Email ID".localizedString()
+                    self.pinTextfield.placeholder = "Enter Password".localizedString()
+                    self.userIdTextfield.placeHolderText = "Enter Email ID".localizedString()
+                    self.pinTextfield.placeHolderText = "Enter Password".localizedString()
+               
+                
+                   //  self.dismiss(animated: true, completion: nil)
+                   }))
+                self.present(alert, animated: true, completion: nil)
+                alert.view.tintColor = .rxGreen
+        
+    }
+}
+
+extension  LoginViewController: UITableViewDelegate, UITableViewDataSource {
+
+func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+}
+func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return languageArray.count
+}
+
+func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+        cell.textLabel?.text = languageArray[indexPath.row]
+        cell.selectionStyle = .none
+        cell.accessoryView?.backgroundColor = .clear
+        cell.backgroundColor = .rxAlert
+        cell.contentView.backgroundColor = .rxAlert
+        
+        if defaultSortOption == .English && indexPath.row == 0 {
+            cell.accessoryType = .checkmark
+        } else if defaultSortOption == .Spanish && indexPath.row == 1  {
+            cell.accessoryType = .checkmark
+
+        } else {
+            cell.accessoryView = .none
+        }
+        return cell
+}
+ func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+           if indexPath.row == 0 {
+                          self.defaultSortOption = .English
+                     //  USERDEFAULTS.setValue("English", forKey: "AppLanguage")
+               NotificationCenter.default.post(name: NSNotification.Name(rawValue: "language_Changed"), object: nil)
+            
+               
+                      }
+                      if indexPath.row == 1 {
+                          self.defaultSortOption = .Spanish
+                      //  USERDEFAULTS.setValue("Spanish", forKey: "AppLanguage")
+                       NotificationCenter.default.post(name: NSNotification.Name(rawValue: "language_Changed"), object: nil)
+                       
+                      }
+                       
+                      tableView.reloadData()
+       }
 }
 
 extension UIViewController {

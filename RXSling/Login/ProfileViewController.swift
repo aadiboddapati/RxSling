@@ -94,7 +94,9 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
     @IBOutlet weak var maleBtn: UIButton!
     @IBOutlet weak var femaleBtn: UIButton!
     @IBOutlet weak var removePhoto: UIButton!
-    
+    @IBOutlet weak var genderButton: UIButton!
+    @IBOutlet weak var maleLabel: UILabel!
+    @IBOutlet weak var famaleLabel: UILabel!
     
     var backButton : UIBarButtonItem!
     var selectedGender: Int!
@@ -109,7 +111,7 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
         self.femaleBtn.isUserInteractionEnabled = false
         scrollView.contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height-150)
         
-        self.navigationItem.title = "PROFILE SETTINGS"
+        self.navigationItem.title = "PROFILE SETTINGS".localizedString()
         self.navigationController?.navigationBar.isHidden = false
         self.imagePicker = ImagePicker(presentationController: self, delegate: self)
         
@@ -118,7 +120,7 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
         viewFN.backgroundColor = UIColor.clear
         viewFN.tintColor = GREENCOLOUR
         let button1 = UIButton(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
-        button1.setTitle("EDIT", for: .normal)
+        button1.setTitle("EDIT".localizedString(), for: .normal)
         button1.setTitleColor(GREENCOLOUR, for: .normal)
         button1.titleLabel?.font = UIFont.systemFont(ofSize: 13)
         button1.addTarget(self, action: #selector(self.editTapped), for: UIControl.Event.touchUpInside)
@@ -162,18 +164,23 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
         
         maleBtn.setImage(#imageLiteral(resourceName: "new_round_radio_button").withRenderingMode(.alwaysTemplate), for: .normal)
         femaleBtn.setImage(#imageLiteral(resourceName: "new_round_radio_button_unchecked").withRenderingMode(.alwaysTemplate), for: .normal)
-        
-        self.fNameBtn.setTitle("First Name", for: .normal)
-        self.firstNameTextField.placeHolderText = "Enter First Name"
-        self.lNameBtn.setTitle("Last Name", for: .normal)
-        self.lastNameTextField.placeHolderText = "Enter Last Name"
-        self.mobileBtn.setTitle("Mobile Number", for: .normal)
+        maleBtn.setTitle("Male".localizedString(), for: .normal)
+        femaleBtn.setTitle("Female".localizedString(), for: .normal)
+        self.fNameBtn.setTitle("First Name".localizedString(), for: .normal)
+        self.firstNameTextField.placeHolderText = "Enter First Name".localizedString()
+        self.lNameBtn.setTitle("Last Name".localizedString(), for: .normal)
+        self.lastNameTextField.placeHolderText = "Enter Last Name".localizedString()
+        self.mobileBtn.setTitle("Mobile Number".localizedString(), for: .normal)
         //self.mobileNumberTextField.placeHolderText = LanguageManager.sharedInstance.LocalizedLanguage(key: "")
-        self.emailIDBtn.setTitle("Email ID", for: .normal)
+        self.emailIDBtn.setTitle("Email ID".localizedString(), for: .normal)
         //self.emailIDTextField.placeHolderText = LanguageManager.sharedInstance.LocalizedLanguage(key: "")
-        self.resetPswdBtn.setTitle("RESET PASSWORD", for: .normal)
-        self.cancelButton.setTitle("CANCEL", for: .normal)
-        self.updateButton.setTitle("SAVE", for: .normal)
+        self.resetPswdBtn.setTitle("RESET PASSWORD".localizedString(), for: .normal)
+        self.cancelButton.setTitle("CANCEL".localizedString(), for: .normal)
+        self.updateButton.setTitle("SAVE".localizedString(), for: .normal)
+        self.removePhoto.setTitle("Remove Photo".localizedString(), for: .normal)
+        genderButton.setTitle("Gender".localizedString(), for: .normal)
+                  maleLabel.text = "Male".localizedString()
+                  famaleLabel.text = "Female".localizedString()
         self.navigationController?.navigationBar.isHidden = false
     }
     @objc func backButtonTapped(){
@@ -334,7 +341,7 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
                 }
                 
                 if(data.statusCode == "106"){
-                    Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
+                    Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
                         self!.tokenExpiredLogout()
                     }
                 }else if(data.statusCode == "100"){
@@ -459,7 +466,7 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
                     }
                 }else if(responseData.statusCode == "106"){
                     
-                    Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+                    Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
                         
                         self.tokenExpiredLogout()
                     }
@@ -533,7 +540,7 @@ class ProfileViewController: UIViewController,UITextFieldDelegate {
                         }
                     }else if(responseData.statusCode == "106"){
                         
-                        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+                        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
                             
                             self.tokenExpiredLogout()
                         }
@@ -589,7 +596,7 @@ extension ProfileViewController: ImagePickerDelegate {
             
             if(data.statusCode == "106"){
                 
-                Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
+                Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
                     
                     self!.tokenExpiredLogout()
                 }

@@ -19,7 +19,7 @@ class HelpViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.navigationBar.isHidden = false
-        self.navigationItem.title = "HELP"
+        self.navigationItem.title = "HELP".localizedString()
         self.navigationController?.navigationBar.tintColor = GREENCOLOUR
         self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
         self.navigationItem.backBarButtonItem?.tintColor = GREENCOLOUR
@@ -34,7 +34,7 @@ class HelpViewController: UIViewController, UITableViewDelegate, UITableViewData
         viewFN.backgroundColor = UIColor.clear
         viewFN.tintColor = GREENCOLOUR
         let button1 = UIButton(frame: CGRect(x: 0, y: 8, width: 70, height: 20))
-        button1.setTitle("PROCEED", for: .normal)
+        button1.setTitle("PROCEED".localizedString(), for: .normal)
         button1.setTitleColor(GREENCOLOUR, for: .normal)
         button1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 13)
         button1.addTarget(self, action: #selector(self.proceedButtonTapped), for: UIControl.Event.touchUpInside)
@@ -53,7 +53,7 @@ class HelpViewController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.navigationController?.navigationBar.isHidden = false
-        self.navigationItem.title = "HELP"
+        self.navigationItem.title = "HELP".localizedString()
 
     }
     override func viewDidAppear(_ animated: Bool) {

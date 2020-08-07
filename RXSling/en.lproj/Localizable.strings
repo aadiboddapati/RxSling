@@ -1,0 +1,74 @@
+/* 
+  Localizable.strings
+  RXSling
+
+  Created by Vivek on 8/3/20.
+  Copyright © 2020 Divakara Y N. All rights reserved.
+*/
+"CANCEL" = "CANCEL";
+"SEND OTP" = "SEND OTP";
+"VALIDATE" = "VALIDATE";
+//"LOGIN" = "LOGIN";
+"FORGOT PASSWORD" = "FORGOT PASSWORD";
+"SIGN UP" = "SIGN UP";
+"Enter Email ID" = "Enter Email ID";
+"Enter Password" = "Enter Password";
+"enter a valid email ID." = "enter a valid email ID.";
+"Enter valid mobile number." = "Enter valid mobile number.";
+"Please select customer mobile number to share" = "Please select customer mobile number to share";
+"Do you want to add welcome message?" = "Do you want to add welcome message?";
+"Created by:" = "Created by:";
+"Add welcome message" = "Add welcome message";
+"REPORTS" = "REPORTS";
+"RXSling" = "RXSling";
+"YES" = "YES";
+"NO" = "NO";
+"Name" = "Name";
+"Mobile" = "Mobile";
+"Cencel" = "Cencel";
+"HOME" = "HOME";
+"HELP" = "HELP";
+"SHARE" = "SHARE";
+"FAQ's" = "FAQ's";
+"PROFILE SETTINGS" = "PROFILE SETTINGS";
+"TERMS AND CONDITIONS" = "TERMS AND CONDITIONS";
+"EDIT" = "EDIT";
+"Play" = "Play";
+"Share" = "Share";
+"Preview" = "Preview";
+"Resend" = "Resend";
+"Proceed" = "Proceed";
+"Delete Link" = "Delete Link";
+"Call" = "Call";
+"By Contact names" = "By Contact names";
+"By Contact numbers" = "By Contact numbers";
+"Select the display type" = "Select the display type";
+"REPORT DETAILS" = "REPORT DETAILS";
+"Please check your internet connection" = "Please check your internet connection";
+"Your session has expired please login to continue." = "Your session has expired please login to continue.";
+"Allow Contacts acess in Settings" = "Allow Contacts acess in Settings";
+"As per current account plan, you have exceeded the forwarding limit for this content, Please upgrade your account plan." = "As per current account plan, you have exceeded the forwarding limit for this content, Please upgrade your account plan.";
+"Link Expired.You cannot preview this Show & Tell Content." = "Link Expired.You cannot preview this Show & Tell Content.";
+"Link Expired.You cannot resend this Show & Tell Content." = "Link Expired.You cannot resend this Show & Tell Content.";
+"No team reports found" = "No team reports found";
+"No cluster reports found" = "No cluster reports found";
+"Your internet connection is poor,Unable/Takes very long time to reach server.Please connect to good internet and try again." = "Your internet connection is poor,Unable/Takes very long time to reach server.Please connect to good internet and try again.";
+"Select the display type" = "Select the display type";
+"Loading contacts. Please wait." = "Loading contacts. Please wait.";
+"Logging in. Please wait." = "Logging in. Please wait.";
+"Loading Show & Tell. Please wait." = "Loading Show & Tell. Please wait.";
+"Are you sure you want to logout of the app?" = "Are you sure you want to logout of the app?";
+"Logging out. Please wait." = "Logging out. Please wait.";
+"Validating. Please wait." = "Validating. Please wait.";
+"Processing. Please wait." = "Processing. Please wait.";
+"Are you sure you want to remove this customer?" = "Are you sure you want to remove this customer?";
+"Fetching report details. Please wait." = "Fetching report details. Please wait.";
+"Please enter a valid pre-registered mobile number." = "Please enter a valid pre-registered mobile number.";
+"Do you want to cancel the registration process?" = "Do you want to cancel the registration process?";
+"Please check your internet connection." = "Please check your internet connection.";
+"Validating mobile number. Please wait..." = "Validating mobile number. Please wait...";
+"Mobile no already exists." = "Mobile no already exists.";
+"This mobile number is already registered." = "This mobile number is already registered.";
+"PLEASE ENTER YOUR REGISTERED EMAIL ID. WE WILL SEND THE OTP TO YOUR ASSOCIATED MOBILE NUMBER." = "PLEASE ENTER YOUR REGISTERED EMAIL ID. WE WILL SEND THE OTP TO YOUR ASSOCIATED MOBILE NUMBER.";
+
+//NSLocalizedString("REPORTS", comment: "")

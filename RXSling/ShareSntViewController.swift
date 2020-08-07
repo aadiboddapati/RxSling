@@ -16,6 +16,11 @@ class ShareSntViewController: UIViewController {
     
     //MARK: - IBOutlets and properties
     
+    @IBOutlet weak var contentDashBoardLabel: UILabel!
+    @IBOutlet weak var addCustomerLabel: UILabel!
+    @IBOutlet weak var selectMobileNumberLabel: UILabel!
+    @IBOutlet weak var addWelcomeMSGLabel:UILabel!
+    
     @IBOutlet weak var scroller: UIScrollView!
     @IBOutlet weak var scollerContentView:UIView!
     @IBOutlet weak var totalStack: UIStackView!
@@ -119,7 +124,7 @@ class ShareSntViewController: UIViewController {
 
         }
         
-        self.title = "SHARE"
+        self.title = "SHARE".localizedString()
         welcomeMessage.delegate = self
         welcomeMessage.text = ""
         
@@ -139,7 +144,26 @@ class ShareSntViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        self.title = "SHARE".localizedString()
+        contentDashBoardLabel.text = "Content Shared Dashboard".localizedString()
+        addCustomerLabel.text = "Add Customer".localizedString()
+        selectMobileNumberLabel.text = "Please select customer mobile number to share".localizedString()
+        selectPhoneNumLabel.text = "Selected Customer Info".localizedString()
+        totallbl.text = "Total".localizedString()
+        sharedbl.text = "Shared".localizedString()
+        avilablelbl.text = "Available".localizedString()
+        selectPhoneNumButton.setTitle("Select Phone Number".localizedString(), for: .normal)
+        NameLabel.text   = "Name".localizedString()
+        MobileLabel.text = "Mobile".localizedString()
+        doYouWantToAddWelcomeMessageStaticLabel.text = "Do you want to add welcome message?".localizedString()
+        previewButton.setTitle("Preview".localizedString(), for: .normal)
+        proceedButton.setTitle("Proceed".localizedString(), for: .normal)
+        shareButton.setTitle("Share".localizedString(), for: .normal)
+        addWelcomeMSGLabel.text = "Add welcome message".localizedString()
+        welcomeMessageStaticLabel.text = "Welcome message".localizedString()
+        staticNotAddedLabel.text = "Not added".localizedString()
+        yesButton.setTitle("YES".localizedString(), for: .normal)
+        noButton.setTitle("NO".localizedString(), for: .normal)
         super.viewWillAppear(animated)
         
     }
@@ -213,7 +237,8 @@ class ShareSntViewController: UIViewController {
         sntImage.load(url: URL(string: snt.thumbnailURL)!)
         sntTitleLabel.text = snt.title
         sntDescriptionLabel.text = snt.desc
-        sntCreatedbyLabel.text = String("Created by: \(snt.createdBy)")
+       // let crtByString = "Created by:"
+        sntCreatedbyLabel.text = String("Created by:".localizedString() + " \(snt.createdBy)")
         
         //Card Three
         yesButton.setImage(#imageLiteral(resourceName: "new_round_radio_button_unchecked").withRenderingMode(.alwaysTemplate), for: .normal)
@@ -255,12 +280,12 @@ class ShareSntViewController: UIViewController {
                 contactsAuthorization(for: contactStore) { (athorisedBool) in
                     if(athorisedBool){
                         DispatchQueue.main.async {
-                            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
+                            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts.localizedString())
                             self.perform(#selector(self.getContactsFromPhoneBook), with: nil, afterDelay: 1.0)
                         }
                     }else{
                         print("NOT Athorised")
-                        Utility.showAlertWithHandler(message: Constants.Alert.openSettings, alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
+                        Utility.showAlertWithHandler(message: Constants.Alert.openSettings.localizedString(), alertButtons: 1, buttonTitle: "Ok", inView: self) { (yesTapped) in
                             if(yesTapped){
                                 UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                             }
@@ -327,24 +352,24 @@ class ShareSntViewController: UIViewController {
                     
                     DispatchQueue.main.async {
                         
-                        showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating)
+                        showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating.localizedString())
                     }
                     self.perform(#selector(callApiToValidateDoctorInfo), with: nil, afterDelay: 2.0)
                 }
                 else{
-                    self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.internetNotFound, actionTitles: ["Ok"], actions:[{action1 in
+                    self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.internetNotFound.localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                         }, nil])
                 }
             }
         }else{
-            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.restrictShareingSnt, actionTitles: ["Ok"], actions:[{action1 in
+            self.popupAlert(title: Constants.Alert.title, message: Constants.Alert.restrictShareingSnt.localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                 }, nil])
         }
     }
     
     @IBAction func cancelDoctorInfoPressed(_ sender: UIButton){
         
-        Utility.showAlertWithHandler(message: Constants.Loader.removeCustomer, alertButtons:2, buttonTitle:"Yes", inView: self) { (tapValue) in
+        Utility.showAlertWithHandler(message: Constants.Loader.removeCustomer.localizedString(), alertButtons:2, buttonTitle:"Yes".localizedString(), inView: self) { (tapValue) in
             if(tapValue){
                 
                 print("Cancel tapped")
@@ -814,17 +839,17 @@ extension ShareSntViewController{
         //getConsentflag != 0 && !isAuthorised)
         if(doctor.consentflag != 0 && !doctor.isAuthorised){
             
-            Utility.showAlertWith(message:"You don’t have consent to send to this Recipient." , inView: self)
+            Utility.showAlertWith(message:"You don’t have consent to send to this Recipient.".localizedString() , inView: self)
         }
             //else if (!isOrgLevelAuthorised)
         else if (!doctor.isOrgLevelAuthorised){
-            Utility.showAlertWith(message:"You cannot send this content to this Recipient today as per restriction limit, Try later." , inView: self)
+            Utility.showAlertWith(message:"You cannot send this content to this Recipient today as per restriction limit, Try later.".localizedString() , inView: self)
             
         }
             //else if (!isRepLevelAuthorised())
         else if(!doctor.isRepLevelAuthorised){
             
-            Utility.showAlertWith(message:"You have recently sent a content to this Recipient, So as per restriction limit you can’t send today, Try later." , inView: self)
+            Utility.showAlertWith(message:"You have recently sent a content to this Recipient, So as per restriction limit you can’t send today, Try later.".localizedString() , inView: self)
             
         }
             // else if (isSentToDoctor())
@@ -840,8 +865,11 @@ extension ShareSntViewController{
             
             print(dateFormatterPrint.string(from: lastSent))
             let lastSentStr = dateFormatterPrint.string(from: lastSent)
-            
-            let message = "You have sent same content to this Recipient on \(lastSentStr), Are you sure you want to send again?"
+            let message: String!
+              if ("\(USERDEFAULTS.value(forKey: "AppLanguage")!)" == "Spanish") {
+                  message = "You have sent same content to this Recipient on \(lastSentStr), Are you sure you want to send again?" } else {
+                message = "Ha enviado el mismo contenido a este Destinatario el \(lastSentStr), está seguro de que desea enviar nuevamente?"
+            }
             
             let alert = UIAlertController(title: Constants.Alert.title, message: message, preferredStyle: UIAlertController.Style.alert)
             alert.addAction(UIAlertAction (title: "No", style: UIAlertAction.Style.default, handler:{ (action) in
@@ -851,7 +879,7 @@ extension ShareSntViewController{
                 // self.showHideCard4(true)
                 
             }))
-            alert.addAction(UIAlertAction (title: "Yes", style: UIAlertAction.Style.default, handler: { (action) in
+            alert.addAction(UIAlertAction (title: "Yes".localizedString(), style: UIAlertAction.Style.default, handler: { (action) in
                 
                 //Enable step 2
                 self.enableStep2ToAddWelcomeMessage(doctor.isOrgLevelAuthorised)
@@ -885,7 +913,7 @@ extension ShareSntViewController{
         }
         
         if (!isOrgLevelAuthorised){
-            Utility.showAlertWith(message:"You cannot send this content to this Recipient today as per restriction limit, Try later." , inView: self)
+            Utility.showAlertWith(message:"You cannot send this content to this Recipient today as per restriction limit, Try later.".localizedString() , inView: self)
             
         }else{
             
@@ -940,7 +968,7 @@ extension ShareSntViewController{
         let userProfilePic = ("\(USERDEFAULTS.value(forKey: "USER_PROFILE_PIC") ?? "")")
         let displayIButton = ("\(USERDEFAULTS.value(forKey: "USER_DISPLAY_IB_BUTTON")!)")
         let orgId = "\(USERDEFAULTS.value(forKey: "orgId") ?? "")"
-        
+
         
         var doctorAccountId: String = ""
         var isDoctorAvailable: Bool = false
@@ -1004,7 +1032,7 @@ extension ShareSntViewController{
                          "approvalNumber": snt.approvalNo,
                          "isDoctorAvailable": isDoctorAvailable,
                          "lang": snt.selectedLanguage.languageCode,
-                         "orgId": orgId ]
+                        "orgId": orgId ]
                     }
                 }
             }
@@ -1019,7 +1047,7 @@ extension ShareSntViewController{
                 
             }else{
                 
-                Utility.showAlertWith(message: "Please enter welcome message", inView: self)
+                Utility.showAlertWith(message: "Please enter welcome message".localizedString(), inView: self)
                 
                 return
                 
@@ -1089,7 +1117,7 @@ extension ShareSntViewController{
         
         DispatchQueue.main.async {
             
-            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.processing)
+            showActivityIndicator(View: self.navigationController!.view, Constants.Loader.processing.localizedString())
             
         }
         self.perform(#selector(shortenUrlApiCall), with: parameters, afterDelay: 2.0)
@@ -1115,7 +1143,7 @@ extension ShareSntViewController{
             DispatchQueue.main.async {
                 hideActivityIndicator(View: self.view)
             }
-            self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action1 in
+            self.popupAlert(title: "RXSling", message: "Please check your internet connection".localizedString(), actionTitles: ["Ok"], actions:[{action1 in
                 }, nil])
             
             return
@@ -1239,7 +1267,7 @@ extension ShareSntViewController{
     //MARK: - Token expired login
     @objc func tokenExpiredLogin(){
         
-        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired, alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
             
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
             self.navigationController?.pushViewController(vc, animated: false)

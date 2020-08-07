@@ -184,6 +184,17 @@
                                 <color key="textColor" red="0.54901960780000003" green="0.60784313729999995" blue="0.51372549020000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2v-bd-bu1">
+                                <rect key="frame" x="335" y="0.0" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="EJ0-fh-XY5"/>
+                                    <constraint firstAttribute="width" constant="25" id="Xsv-Rr-4SL"/>
+                                </constraints>
+                                <state key="normal" title="Button" image="settings_icon"/>
+                                <connections>
+                                    <action selector="settingsButtonTapped:" destination="vNj-tf-ciU" eventType="touchUpInside" id="t5k-eh-uQi"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -199,6 +210,7 @@
                             <constraint firstItem="TAD-w6-oTH" firstAttribute="height" secondItem="NjY-Sk-w5c" secondAttribute="height" id="SSt-f8-Cix"/>
                             <constraint firstItem="RsZ-Rn-AEd" firstAttribute="centerX" secondItem="z7j-lp-myv" secondAttribute="centerX" id="W0Z-Yh-tNe"/>
                             <constraint firstItem="TAD-w6-oTH" firstAttribute="leading" secondItem="NjY-Sk-w5c" secondAttribute="trailing" constant="8" id="Xq4-O3-5kj"/>
+                            <constraint firstItem="L2v-bd-bu1" firstAttribute="top" secondItem="z7j-lp-myv" secondAttribute="top" id="c7O-0g-QsT"/>
                             <constraint firstItem="aAm-AL-4eN" firstAttribute="top" secondItem="CMa-Us-O4A" secondAttribute="bottom" constant="80" id="hgY-D3-7oN"/>
                             <constraint firstItem="z7j-lp-myv" firstAttribute="trailing" secondItem="TAD-w6-oTH" secondAttribute="trailing" constant="20" id="mZ0-UE-dXq"/>
                             <constraint firstAttribute="bottom" secondItem="lNZ-fR-L4u" secondAttribute="bottom" id="msP-ip-dfi"/>
@@ -206,6 +218,7 @@
                             <constraint firstItem="z7j-lp-myv" firstAttribute="trailing" secondItem="Tpi-yA-XGQ" secondAttribute="trailing" constant="20" id="phV-Tt-bmJ"/>
                             <constraint firstItem="lNZ-fR-L4u" firstAttribute="top" secondItem="dZj-g5-DtB" secondAttribute="top" id="qAH-yb-Myt"/>
                             <constraint firstItem="z7j-lp-myv" firstAttribute="trailing" secondItem="CMa-Us-O4A" secondAttribute="trailing" constant="20" id="qKk-6v-5JZ"/>
+                            <constraint firstItem="z7j-lp-myv" firstAttribute="trailing" secondItem="L2v-bd-bu1" secondAttribute="trailing" constant="15" id="qMk-31-mfP"/>
                             <constraint firstItem="CMa-Us-O4A" firstAttribute="leading" secondItem="z7j-lp-myv" secondAttribute="leading" constant="20" id="qXc-Jn-hMk"/>
                             <constraint firstItem="j0l-4b-r2Q" firstAttribute="centerY" secondItem="Tpi-yA-XGQ" secondAttribute="centerY" id="qbb-p7-Q8M"/>
                             <constraint firstItem="Tpi-yA-XGQ" firstAttribute="leading" secondItem="z7j-lp-myv" secondAttribute="leading" constant="20" id="rvu-cu-qxe"/>
@@ -219,8 +232,12 @@
                     </view>
                     <connections>
                         <outlet property="eyeBtn" destination="j0l-4b-r2Q" id="H0k-it-GWb"/>
+                        <outlet property="forgotButton" destination="NjY-Sk-w5c" id="zJP-BF-3ag"/>
+                        <outlet property="loginButton" destination="aAm-AL-4eN" id="aOf-fC-Atu"/>
                         <outlet property="pinTextfield" destination="Tpi-yA-XGQ" id="S5B-qQ-BAX"/>
+                        <outlet property="signupButton" destination="TAD-w6-oTH" id="X2p-mQ-blP"/>
                         <outlet property="slingImage" destination="tpu-WR-5mb" id="HAP-kF-tRx"/>
+                        <outlet property="staticHomeLabel" destination="RsZ-Rn-AEd" id="ZAv-89-iGf"/>
                         <outlet property="userIdTextfield" destination="CMa-Us-O4A" id="CyT-F6-hFB"/>
                     </connections>
                 </viewController>
@@ -239,7 +256,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bg_2_320X480" translatesAutoresizingMaskIntoConstraints="NO" id="ptD-TU-goq">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FORGOT PASSWORD" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jpE-4l-2LO">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FORGOT PASSWORD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jpE-4l-2LO">
                                 <rect key="frame" x="113" y="0.0" width="149" height="15"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="15" id="ZwQ-Fl-YVM"/>
@@ -335,6 +352,7 @@
                     <connections>
                         <outlet property="cancelBtn" destination="84y-gZ-K4x" id="xaY-h8-lV9"/>
                         <outlet property="descriptionText" destination="xYI-cw-glQ" id="x3e-Fz-5ox"/>
+                        <outlet property="forgotPassNavLabel" destination="jpE-4l-2LO" id="zQw-r2-kAI"/>
                         <outlet property="mailIDTextField" destination="S5O-tG-yCd" id="LhO-mF-k7G"/>
                         <outlet property="proceedBtn" destination="hwU-me-A3x" id="GqW-9l-Eb4"/>
                         <outlet property="slingImage" destination="64c-c2-eVp" id="BXI-Wr-ohl"/>
@@ -1430,6 +1448,8 @@
                     <connections>
                         <outlet property="MobileLabel" destination="rdS-BF-MM8" id="qbL-U9-9Nl"/>
                         <outlet property="NameLabel" destination="BgT-CK-0Q8" id="Hjd-GF-A1r"/>
+                        <outlet property="addCustomerLabel" destination="bNS-Pm-eZd" id="8eB-J5-JKC"/>
+                        <outlet property="addWelcomeMSGLabel" destination="pfg-Wo-TTO" id="i28-Rh-A2N"/>
                         <outlet property="anotherPreviewButton" destination="dlA-UB-kHs" id="5Ot-mE-JrR"/>
                         <outlet property="anotherProceedButton" destination="6fW-f9-b98" id="zzP-YE-jrj"/>
                         <outlet property="anotherShareButton" destination="Jhi-nJ-crR" id="aB1-dg-noS"/>
@@ -1440,6 +1460,7 @@
                         <outlet property="cardFour" destination="4ag-un-wfO" id="dSH-NI-Qgh"/>
                         <outlet property="cardFourHeightConstraint" destination="eQi-1a-Fiu" id="5QW-75-7AP"/>
                         <outlet property="cardThreeHeightContraint" destination="xGW-fw-jTs" id="YrG-on-Ifn"/>
+                        <outlet property="contentDashBoardLabel" destination="IQV-45-90a" id="9ZB-2H-Kxh"/>
                         <outlet property="doYouWantToAddWelcomeMessageStaticLabel" destination="eER-nf-q8T" id="i7I-vA-EG3"/>
                         <outlet property="doctorInfoView" destination="gQU-6I-sMR" id="E68-7I-3I2"/>
                         <outlet property="doctorMobileLabel" destination="o7f-HL-1Q4" id="bAx-Lp-2Ks"/>
@@ -1452,6 +1473,7 @@
                         <outlet property="scollerContentView" destination="qrl-PU-4F9" id="ico-md-JOi"/>
                         <outlet property="scroller" destination="DBl-j8-2ha" id="DYg-aO-iJu"/>
                         <outlet property="scrollerContentViewHeightConstraint" destination="Ja3-Py-mIf" id="RR7-hw-uEj"/>
+                        <outlet property="selectMobileNumberLabel" destination="4lY-CK-0Ac" id="hAN-wt-1tV"/>
                         <outlet property="selectPhoneNumButton" destination="4LU-6q-uo6" id="ubs-Ww-NXJ"/>
                         <outlet property="selectPhoneNumLabel" destination="Qmh-ER-7IK" id="Uee-eK-gWM"/>
                         <outlet property="selectPhoneNumberHeightConstraint" destination="AtD-so-SPc" id="Xu4-Pk-guL"/>
@@ -2008,27 +2030,34 @@
                         <viewLayoutGuide key="safeArea" id="52n-5T-hSK"/>
                     </view>
                     <connections>
+                        <outlet property="contentReportDashBoardLabel" destination="bRe-nQ-Lbb" id="uIJ-Qc-8gL"/>
                         <outlet property="createdBylbl" destination="BmG-EY-bDL" id="4ib-v9-KbD"/>
                         <outlet property="createdBywhite" destination="nlb-1k-WAA" id="D4H-LA-eOM"/>
+                        <outlet property="customerLabel" destination="0nt-B2-iZG" id="vyz-9a-utc"/>
                         <outlet property="infoBtn" destination="CUw-SE-d1J" id="1IN-jN-1g1"/>
-                        <outlet property="lblAvailable" destination="Hii-ts-ODX" id="ehw-Ud-BGr"/>
                         <outlet property="lblAvailablesub" destination="bSF-xC-3fW" id="kfg-oZ-Ros"/>
-                        <outlet property="lblShared" destination="qhb-ro-YZH" id="pkp-nv-FIO"/>
                         <outlet property="lblSuccessRate" destination="WRt-nq-tcM" id="EFk-wJ-5aO"/>
                         <outlet property="lblTotalsub" destination="LfR-F1-GqE" id="oXs-nq-XgB"/>
                         <outlet property="lblsharedSub" destination="RKh-43-apn" id="t5n-8b-lWS"/>
                         <outlet property="listView" destination="5E4-fy-rPe" id="Uiw-Sd-oWy"/>
+                        <outlet property="moreLabel" destination="OHj-H8-JrR" id="Zvt-dG-N8S"/>
                         <outlet property="noReplbl" destination="Shi-gn-Do4" id="aP2-k7-csD"/>
                         <outlet property="noreportlblConstrain" destination="cUp-1C-Tyu" id="srC-ix-gk2"/>
-                        <outlet property="reportListView" destination="0hr-GR-fmB" id="m9q-q7-67X"/>
+                        <outlet property="notViewedLabel" destination="Hii-ts-ODX" id="mo3-KL-Rlz"/>
+                        <outlet property="reportListLabel" destination="Neq-wY-GXJ" id="Q2v-Ye-gNY"/>
                         <outlet property="reportListViewHeightConstrain" destination="ERs-YQ-bP2" id="j9C-68-Qd0"/>
                         <outlet property="reportSearchBar" destination="X7Y-KX-fmc" id="BsK-GS-JtW"/>
                         <outlet property="reportTbl" destination="XuC-sU-8ca" id="VVD-U6-i69"/>
                         <outlet property="scroller" destination="9bu-15-l0g" id="x1v-7s-pN0"/>
                         <outlet property="searchBtn" destination="eHN-fL-FQ6" id="O59-DN-j5R"/>
                         <outlet property="searchView" destination="Bai-74-GKe" id="aTN-wl-VFn"/>
+                        <outlet property="sentLabel" destination="AAh-sY-tnc" id="dzY-yW-QpQ"/>
+                        <outlet property="sentTimeLabel" destination="lIA-J2-OeJ" id="ajo-eQ-OhR"/>
+                        <outlet property="statusLabel" destination="4f0-tE-Za9" id="vJ2-Tr-T3L"/>
+                        <outlet property="successLabel" destination="YbC-el-iR2" id="0fw-0L-xfd"/>
                         <outlet property="tableViewTopConstrain" destination="fmm-Sb-rkm" id="eNT-SI-bTL"/>
                         <outlet property="tableViewbottomConstrain" destination="Sb5-3Z-XeB" id="BHy-Qy-ssj"/>
+                        <outlet property="viewedLabel" destination="qhb-ro-YZH" id="JSm-r9-Kia"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ksE-VL-dsD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -2562,15 +2591,30 @@
                     <connections>
                         <outlet property="cNamelbl" destination="EWb-zU-wRU" id="xJS-Bs-Z2F"/>
                         <outlet property="cNumberlbl" destination="CF8-Jb-riF" id="Gii-cS-oG5"/>
+                        <outlet property="callButton" destination="Pjl-0v-tUr" id="BYq-iZ-8GU"/>
+                        <outlet property="callToActionLabel" destination="82v-0a-g1N" id="CHN-2g-bRN"/>
+                        <outlet property="contactStatusLabel" destination="mbB-c0-y3O" id="oCp-b2-ga3"/>
+                        <outlet property="contentDescLabel" destination="f8q-gP-yPg" id="LSU-0P-Nq5"/>
                         <outlet property="contentDesclbl" destination="2jx-4B-5Lv" id="emr-f1-2NK"/>
+                        <outlet property="contentInfoLabel" destination="1wf-ic-z1Q" id="rmw-nV-Lv3"/>
                         <outlet property="contentStatuslbl" destination="XET-pQ-F1w" id="XmK-iT-Kft"/>
+                        <outlet property="contentTitleLabel" destination="q1z-zo-xmS" id="m3V-UI-AYe"/>
                         <outlet property="contentTitlelbl" destination="YDQ-P0-IrO" id="0Df-mG-cJt"/>
+                        <outlet property="customerNameLabel" destination="bzR-dO-TX6" id="bf9-JF-y8E"/>
+                        <outlet property="customerNoLabel" destination="GLf-NN-tts" id="8jk-Ej-bmt"/>
                         <outlet property="deleteButton" destination="To6-DX-j3f" id="eXp-RB-Yzi"/>
                         <outlet property="expDatelbl" destination="wiz-N5-UfC" id="L3H-JJ-ARA"/>
+                        <outlet property="expiryDateLabel" destination="oi3-Ov-Rfn" id="G7f-tb-DX1"/>
                         <outlet property="iButton" destination="dwt-CF-J2w" id="oMQ-CN-G0f"/>
+                        <outlet property="previewButton" destination="fZM-pd-ZyC" id="umv-mO-MAg"/>
+                        <outlet property="reportDetialLabel" destination="YQd-kK-jZ6" id="0We-bJ-fjh"/>
+                        <outlet property="resendButton" destination="hhE-L7-aVE" id="5WY-Rp-fz7"/>
                         <outlet property="scroller" destination="WU7-bP-Eac" id="1sI-4n-F33"/>
+                        <outlet property="sentTimeLabel" destination="ArB-LA-dgH" id="b5L-8H-hHA"/>
                         <outlet property="sentTimelbl" destination="bva-SI-C5t" id="cDX-tY-TiF"/>
+                        <outlet property="viewedStatusLabel" destination="Fse-jZ-eS7" id="mvQ-x5-baY"/>
                         <outlet property="viewedStatuslbl" destination="bx9-8o-ZoU" id="tci-v9-ISd"/>
+                        <outlet property="viewedTimeLabel" destination="gZ4-QT-T71" id="T5g-XY-E7d"/>
                         <outlet property="viewedTimelbl" destination="DmO-p0-TLn" id="zBi-Ek-7uu"/>
                     </connections>
                 </viewController>
@@ -3308,19 +3352,33 @@
                     <size key="freeformSize" width="375" height="900"/>
                     <connections>
                         <outlet property="SuccessLbl" destination="xsG-4O-ooZ" id="uyk-fD-fF9"/>
+                        <outlet property="callBtn" destination="Hmf-D6-Mse" id="zvu-qz-P2n"/>
                         <outlet property="chartView" destination="S93-t6-lRJ" id="SFy-Bt-24R"/>
                         <outlet property="contentDescriptionLbl" destination="5kO-Ks-MCO" id="1eK-XV-fnQ"/>
                         <outlet property="contentTitleLbl" destination="ZKA-dI-aap" id="VyI-A2-WGX"/>
+                        <outlet property="copyReportBtn" destination="ggc-Mo-3iw" id="U87-Zk-v7F"/>
+                        <outlet property="emailBtn" destination="HNm-C2-fne" id="Npp-Hk-WkD"/>
                         <outlet property="noChartDataLbl" destination="uWw-mt-26w" id="TRz-Xj-8Ai"/>
                         <outlet property="repEmailLbl" destination="0aH-1N-yvG" id="95e-bc-odt"/>
                         <outlet property="repMobileLbl" destination="50H-ZM-94M" id="7M3-GC-ex8"/>
                         <outlet property="repNameLbl" destination="eh8-Kp-mL0" id="6cS-rN-z5E"/>
                         <outlet property="sentCountLbl" destination="xap-K7-dEi" id="xUJ-NY-orc"/>
+                        <outlet property="staticCallToActionLabel" destination="kXy-sh-HcE" id="LCb-xu-Pf9"/>
+                        <outlet property="staticContentDescLabel" destination="Hct-9s-LUg" id="Cf3-cj-vj3"/>
+                        <outlet property="staticContentInfoLabel" destination="qj1-rI-Aay" id="R2C-nl-2Nb"/>
+                        <outlet property="staticContentTitleLabel" destination="Dbx-s0-O91" id="LKw-BJ-i1x"/>
+                        <outlet property="staticNotViewedLabel" destination="Z9a-Gc-F79" id="uas-9i-TUJ"/>
+                        <outlet property="staticPerformanceViewLabel" destination="5UO-0A-hBv" id="alD-9V-d8w"/>
                         <outlet property="staticRepEmailLabel" destination="bhN-gi-X56" id="MJG-Vc-wtp"/>
                         <outlet property="staticRepHeadingLabel" destination="SUf-zS-Phe" id="cV0-sc-mIT"/>
                         <outlet property="staticRepMobileLabel" destination="naI-DU-H2a" id="R8U-Dr-qOL"/>
                         <outlet property="staticRepNameLabel" destination="vS2-AO-iOB" id="iwU-2x-Gj3"/>
+                        <outlet property="staticSentCountLabel" destination="fbp-Wy-9ma" id="48L-Hl-6Uo"/>
+                        <outlet property="staticSuccessPercLabel" destination="Ihd-JP-q26" id="ciw-Qq-Cq3"/>
+                        <outlet property="staticViewedCountLabel" destination="zF0-Fe-bSv" id="Rdz-6z-WYw"/>
+                        <outlet property="staticViewedLabel" destination="Xws-GS-gv8" id="eSQ-6O-1GZ"/>
                         <outlet property="viewedCountLbl" destination="iiy-yi-fOV" id="lxf-2k-lbB"/>
+                        <outlet property="whatsAppBtn" destination="h39-DM-gYs" id="TGQ-Y7-bFT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ILG-RW-Xxn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -3579,7 +3637,13 @@
                     </view>
                     <size key="freeformSize" width="375" height="667"/>
                     <connections>
+                        <outlet property="StaticCallToActionLabel" destination="N6G-kL-1i5" id="n4w-eM-T3M"/>
+                        <outlet property="StaticPerformaceTrendLabel" destination="gAw-5B-RNI" id="cAR-z2-D5I"/>
+                        <outlet property="callBTN" destination="N7k-q0-bxI" id="yaF-xe-X0b"/>
                         <outlet property="chartView" destination="JmD-eo-BlA" id="nEG-SX-Xza"/>
+                        <outlet property="copyReportBTN" destination="he6-Er-9oa" id="ozY-Au-bQp"/>
+                        <outlet property="emailBTN" destination="Bht-FN-I7n" id="qur-aU-Ktp"/>
+                        <outlet property="whatsAppBTN" destination="A8e-bh-CaU" id="jAj-2E-HkH"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lSK-l9-ulL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -3834,6 +3898,7 @@
                         <outlet property="searchButton" destination="1eY-yB-yN4" id="dYy-sa-6Wk"/>
                         <outlet property="searchViewheightConstraint" destination="WHl-Ph-QD8" id="bce-Jm-vZe"/>
                         <outlet property="sentTimeLabel" destination="IfA-lo-9Tx" id="zQC-iZ-dU4"/>
+                        <outlet property="staticCustomerDetailsLabel" destination="nf6-wg-l4F" id="HOS-P8-juT"/>
                         <outlet property="statusLabel" destination="bEl-4K-Uj5" id="lQv-DT-lmZ"/>
                     </connections>
                 </viewController>
@@ -3985,6 +4050,7 @@
                     <connections>
                         <outlet property="backgroundCardView" destination="dRR-Us-T4V" id="0hK-lV-ShC"/>
                         <outlet property="cancelButton" destination="YNV-ih-tee" id="f23-vq-gYG"/>
+                        <outlet property="optionLabel" destination="70e-Hb-x1d" id="q0h-aY-CYf"/>
                         <outlet property="optionsTable" destination="gyw-C3-c2S" id="giO-Yp-bMt"/>
                     </connections>
                 </viewController>
@@ -4201,6 +4267,7 @@
                     <connections>
                         <outlet property="cancelBtn" destination="Mll-Fy-9QL" id="WhJ-pl-yyq"/>
                         <outlet property="eyeBUtton" destination="cEJ-Ra-eFO" id="UI4-t4-RR3"/>
+                        <outlet property="otpReceivedLabel" destination="oEJ-yV-tG0" id="DPe-dw-eNX"/>
                         <outlet property="otpTextField" destination="yZ7-kK-t8l" id="omE-yV-aaj"/>
                         <outlet property="resendOTPBtn" destination="uz7-Rq-gIL" id="cRS-KX-KmP"/>
                         <outlet property="slingImage" destination="JBV-9b-5Qo" id="y6r-d7-M1F"/>
@@ -4888,9 +4955,9 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Logout" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3gR-Rd-95K">
-                                                    <rect key="frame" x="61" y="19" width="76" height="22"/>
+                                                    <rect key="frame" x="61" y="19" width="122" height="22"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="76" id="YpL-20-Xpl"/>
+                                                        <constraint firstAttribute="width" constant="122" id="YpL-20-Xpl"/>
                                                         <constraint firstAttribute="height" constant="22" id="qfe-Oy-kar"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="15"/>
@@ -4924,6 +4991,50 @@
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="60" id="d30-Lb-wD4">
+                                        <rect key="frame" x="0.0" y="527" width="375" height="60"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="d30-Lb-wD4" id="yzF-1G-s8I">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="60"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Language" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KI8-UU-dv1">
+                                                    <rect key="frame" x="61" y="19" width="198" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="198" id="PhV-XZ-EY5"/>
+                                                        <constraint firstAttribute="height" constant="22" id="dSH-Sb-dJy"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="language" translatesAutoresizingMaskIntoConstraints="NO" id="Hnb-2i-7Sh">
+                                                    <rect key="frame" x="15" y="17.5" width="25" height="25"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="25" id="Se0-nZ-Y4A"/>
+                                                        <constraint firstAttribute="width" constant="25" id="Y28-T7-XF6"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Next-tab" translatesAutoresizingMaskIntoConstraints="NO" id="uQM-kZ-oL1">
+                                                    <rect key="frame" x="341" y="19" width="18" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="18" id="4sG-Q3-vWg"/>
+                                                        <constraint firstAttribute="height" constant="22" id="q3g-YV-4X8"/>
+                                                    </constraints>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="uQM-kZ-oL1" firstAttribute="centerY" secondItem="yzF-1G-s8I" secondAttribute="centerY" id="Drx-EG-SES"/>
+                                                <constraint firstItem="uQM-kZ-oL1" firstAttribute="trailing" secondItem="yzF-1G-s8I" secondAttribute="trailingMargin" id="EV6-cF-s6w"/>
+                                                <constraint firstItem="KI8-UU-dv1" firstAttribute="leading" secondItem="Hnb-2i-7Sh" secondAttribute="trailing" constant="21" id="ZLH-kE-lyT"/>
+                                                <constraint firstItem="KI8-UU-dv1" firstAttribute="centerY" secondItem="Hnb-2i-7Sh" secondAttribute="centerY" id="cj0-jK-phD"/>
+                                                <constraint firstItem="Hnb-2i-7Sh" firstAttribute="centerY" secondItem="yzF-1G-s8I" secondAttribute="centerY" id="de9-aQ-Xon"/>
+                                                <constraint firstItem="Hnb-2i-7Sh" firstAttribute="leading" secondItem="yzF-1G-s8I" secondAttribute="leadingMargin" constant="-1" id="q3d-MC-fgE"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -4937,13 +5048,20 @@
                     </navigationItem>
                     <connections>
                         <outlet property="emailLabel" destination="IdY-uf-Ceu" id="a7D-l7-Ike"/>
+                        <outlet property="faqLabel" destination="Mv9-h5-3dG" id="J3a-qH-3Kl"/>
                         <outlet property="firstNameLabel" destination="JbS-SO-Ndc" id="pRo-dg-ScM"/>
+                        <outlet property="helpLabel" destination="BFb-mZ-UAg" id="w8G-CJ-Wlg"/>
+                        <outlet property="languageLabel" destination="KI8-UU-dv1" id="CFv-tI-iXx"/>
+                        <outlet property="logOutLabel" destination="3gR-Rd-95K" id="cFJ-Rx-qlC"/>
+                        <outlet property="menuTblView" destination="G7N-F6-H9c" id="PQY-yy-sfC"/>
                         <outlet property="profilePicture" destination="Id2-vL-Sym" id="X1m-Xc-BIw"/>
+                        <outlet property="profileSettingLabel" destination="4Af-HU-Qb6" id="QVg-El-MKP"/>
+                        <outlet property="termsAndConditionLabel" destination="cla-1L-pbZ" id="lsC-rg-ncz"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gbg-Fo-gNX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2918" y="-58"/>
+            <point key="canvasLocation" x="2917.5999999999999" y="-58.020989505247378"/>
         </scene>
         <!--My Side Menu Navigation Controller-->
         <scene sceneID="ezZ-ki-XTl">
@@ -5477,11 +5595,14 @@
                         <outlet property="emailIDBtn" destination="EpN-h4-hdk" id="djO-Fn-f0z"/>
                         <outlet property="emailIDTextField" destination="KE5-uW-gxh" id="izt-sQ-Qr8"/>
                         <outlet property="fNameBtn" destination="oDV-Rk-bET" id="jkF-lN-tOP"/>
+                        <outlet property="famaleLabel" destination="tKQ-NU-kNe" id="8Nz-cU-M1V"/>
                         <outlet property="femaleBtn" destination="r4m-q3-L38" id="1y7-mx-sYg"/>
                         <outlet property="firstNameTextField" destination="1CL-Ic-WDm" id="lCU-8n-uuZ"/>
+                        <outlet property="genderButton" destination="zuY-ne-fIA" id="hH8-YW-dhF"/>
                         <outlet property="lNameBtn" destination="1eu-P4-g5f" id="vbD-Nj-NNM"/>
                         <outlet property="lastNameTextField" destination="cCD-FS-jM2" id="uQH-OQ-M91"/>
                         <outlet property="maleBtn" destination="fRk-5O-OEj" id="iMA-FR-Qbt"/>
+                        <outlet property="maleLabel" destination="Ctl-Pf-lDW" id="BW6-Hz-laV"/>
                         <outlet property="mobileBtn" destination="eZk-UA-RQH" id="Shi-iU-Gp3"/>
                         <outlet property="mobileNumberTextField" destination="vdO-4I-TvU" id="oYR-54-eHl"/>
                         <outlet property="plusButton" destination="Gl5-iL-f2M" id="XZF-0O-8Fb"/>
@@ -5817,6 +5938,8 @@
                     <connections>
                         <outlet property="cancelBtn" destination="RpP-rW-F9A" id="yuh-Cv-T0Y"/>
                         <outlet property="phoneNumberTextField" destination="6bt-RO-ZUF" id="Hzi-S3-wgd"/>
+                        <outlet property="preRegisterNumberLabel" destination="7qN-kr-ek3" id="kNx-Qt-Lg9"/>
+                        <outlet property="signUpLabel" destination="OvG-sK-rAM" id="41g-M4-UEv"/>
                         <outlet property="slingImage" destination="B0e-0s-EPd" id="KKn-BT-viC"/>
                         <outlet property="validateBtn" destination="G7y-66-3Mc" id="j7r-T9-6ii"/>
                     </connections>
@@ -6216,6 +6339,7 @@
         <image name="help_icon_selected" width="58" height="58"/>
         <image name="ibutton" width="64" height="64"/>
         <image name="image001" width="750" height="1334"/>
+        <image name="language" width="42" height="42"/>
         <image name="logo_with_tagline" width="800" height="324"/>
         <image name="moresmll" width="26" height="26"/>
         <image name="new_round_radio_button" width="30" height="30"/>
@@ -6223,6 +6347,7 @@
         <image name="pencil" catalog="system" width="128" height="113"/>
         <image name="reports_icon" width="60" height="60"/>
         <image name="searchw" width="96" height="96"/>
+        <image name="settings_icon" width="78" height="78"/>
         <image name="snt_default_image" width="350" height="350"/>
         <image name="status" width="64" height="64"/>
         <image name="user_image" width="210" height="210"/>

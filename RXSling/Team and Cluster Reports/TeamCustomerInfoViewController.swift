@@ -19,7 +19,7 @@ class TeamCustomerInfoViewController: UIViewController {
     @IBOutlet weak var contentViewHeightConstraint:NSLayoutConstraint!
     @IBOutlet weak var searchViewheightConstraint:NSLayoutConstraint!
     @IBOutlet weak var customerSearchBar:UISearchBar!
-    
+    @IBOutlet weak var staticCustomerDetailsLabel:UILabel!
     var reportList: [Report]?
     var originalReportList:[Report]?
     var teamData: TeamData!
@@ -68,6 +68,11 @@ class TeamCustomerInfoViewController: UIViewController {
             searchButton.isHidden = true
             showNoRecordsFound()
         }
+        
+        staticCustomerDetailsLabel.text = "Customer Details".localizedString()
+        customerLbl.text = "Customer".localizedString()
+        sentTimeLabel.text = "Sent Time".localizedString()
+        statusLabel.text = "Status".localizedString()
     }
     func configureSearchBar()  {
         
@@ -182,7 +187,7 @@ extension TeamCustomerInfoViewController:UITableViewDelegate, UITableViewDataSou
         label.textColor = .white
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.text = "No records found"
+        label.text = "No records found".localizedString()
         customerInfoTblView.backgroundView = label
         
     }

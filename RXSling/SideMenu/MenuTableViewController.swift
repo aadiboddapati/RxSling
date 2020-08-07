@@ -10,12 +10,98 @@ import UIKit
 import SideMenu
 import MessageUI
 
+protocol langProto {
+    func languageChanged()
+}
 
-class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate{
+enum LanguageType {
+    case English
+    case Spanish
+     
+}
+
+class languageTableView: UITableViewController {
+    
+    var titlesArray = ["English","Spanish"]
+    
+    var defaultSortOption: LanguageType = .English
+    var delegt: langProto?
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        
+        return titlesArray.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+             
+                 let cell = UITableViewCell(style: .default, reuseIdentifier: "cell")
+                 cell.textLabel?.text = titlesArray[indexPath.row]
+                 cell.selectionStyle = .none
+                 cell.accessoryView?.backgroundColor = .clear
+                 cell.backgroundColor = .rxAlert
+                 cell.contentView.backgroundColor = .rxAlert
+        
+        if ("\(USERDEFAULTS.value(forKey: "AppLanguage")!)" == "English") {
+          defaultSortOption = .English }
+        else if   ("\(USERDEFAULTS.value(forKey: "AppLanguage")!)" == "Spanish") {
+          defaultSortOption = .Spanish
+        }
+                 
+                 if defaultSortOption == .English && indexPath.row == 0 {
+                     cell.accessoryType = .checkmark
+                 } else if defaultSortOption == .Spanish && indexPath.row == 1  {
+                     cell.accessoryType = .checkmark
+
+                 } else {
+                     cell.accessoryView = .none
+                 }
+               
+                 return cell
+           
+       }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+                       self.defaultSortOption = .English
+                    USERDEFAULTS.setValue("English", forKey: "AppLanguage")
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "language_Changed"), object: nil)
+            // delegt?.languageChanged()
+                   }
+                   if indexPath.row == 1 {
+                       self.defaultSortOption = .Spanish
+                     USERDEFAULTS.setValue("Spanish", forKey: "AppLanguage")
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "language_Changed"), object: nil)
+              //      delegt?.languageChanged()
+                   }
+                    
+                   tableView.reloadData()
+    }
+}
+
+class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate, langProto{
+    func languageChanged() {
+        print(" ----language changed called ----")
+    }
+    
     
     @IBOutlet weak var emailLabel: UILabel!
     @IBOutlet weak var firstNameLabel: UILabel!
     @IBOutlet weak var profilePicture: UIImageView!
+    @IBOutlet weak var logOutLabel: UILabel!
+    @IBOutlet weak var helpLabel: UILabel!
+    @IBOutlet weak var faqLabel: UILabel!
+    @IBOutlet weak var termsAndConditionLabel: UILabel!
+    @IBOutlet weak var profileSettingLabel:UILabel!
+    @IBOutlet weak var languageLabel: UILabel!
+    @IBOutlet weak var menuTblView: UITableView!
+    
+    
     var attributedString = NSMutableAttributedString()
     var isLinked:Bool?
     
@@ -41,6 +127,12 @@ class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate
         super.viewWillAppear(animated)
         updateProfileDetails()
         
+        self.logOutLabel.text = "LogOut".localizedString()
+        self.profileSettingLabel.text = "Profile Settings".localizedString()
+        self.faqLabel.text = "FAQs".localizedString()
+        self.termsAndConditionLabel.text = "Terms & Conditions".localizedString()
+        self.helpLabel.text = "Help".localizedString()
+        self.languageLabel.text = "Languages".localizedString()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -103,7 +195,7 @@ class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 6
+        return 7
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath.row)
@@ -111,14 +203,15 @@ class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate
 //            self.popupAlert(title: "RXSling", message: "coming soon...", actionTitles: ["Ok"], actions:[{action in},nil])
 //        }
         if(indexPath.row == 5){
-            self.popupAlert(title: Constants.Alert.title, message: Constants.Loader.sureToLogout, actionTitles: ["NO","YES"], actions:[{cancel in},{ok in
+            self.popupAlert(title: Constants.Alert.title, message: Constants.Loader.sureToLogout.localizedString(), actionTitles: ["NO","YES".localizedString()], actions:[{cancel in},{ok in
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logout_Tapped"), object: nil)
                 self.dismiss(animated: true, completion: nil)
                 },nil])
-        }else{
-            
+        }else if (indexPath.row == 6) {
+             presentPopUp()
         }
     }
+    
     override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         
         let footer = UIView()
@@ -135,7 +228,35 @@ class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate
         print("tap working")
         
     }
+    func presentPopUp()  {
+             
+           let alert = UIAlertController(title: Constants.Alert.languageType.localizedString(), message: "", preferredStyle: UIAlertController.Style.alert)
+           let tableviewController = languageTableView()
+           tableviewController.preferredContentSize = CGSize(width: 252, height: 88)
+           tableviewController.tableView.backgroundColor = .rxAlert
+           tableviewController.delegt = self
 
+           alert.setValue(tableviewController, forKey: "contentViewController")
+             
+        alert.addAction(UIAlertAction (title: "CANCEL".localizedString(), style: UIAlertAction.Style.default, handler: { (action) in
+                 self.view.endEditing(true)
+             }))
+        
+        alert.addAction(UIAlertAction (title: "APPLY".localizedString(), style: UIAlertAction.Style.default, handler:{ (action) in
+                self.logOutLabel.text = "LogOut".localizedString()
+                self.profileSettingLabel.text = "Profile Settings".localizedString()
+                self.faqLabel.text = "FAQs".localizedString()
+                self.termsAndConditionLabel.text = "Terms & Conditions".localizedString()
+                self.helpLabel.text = "Help".localizedString()
+                self.languageLabel.text = "Languages".localizedString()
+                self.dismiss(animated: true, completion: nil)
+    
+                
+             }))
+             self.present(alert, animated: true, completion: nil)
+             alert.view.tintColor = .rxGreen
+             
+         }
     
     
     func loadFooterView(){

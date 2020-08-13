@@ -82,6 +82,9 @@ class languageTableView: UITableViewController {
                     
                    tableView.reloadData()
     }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }
 
 class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate, langProto{
@@ -232,8 +235,8 @@ class MenuTableViewController: UITableViewController,UIGestureRecognizerDelegate
              
            let alert = UIAlertController(title: Constants.Alert.languageType.localizedString(), message: "", preferredStyle: UIAlertController.Style.alert)
            let tableviewController = languageTableView()
-           tableviewController.preferredContentSize = CGSize(width: 252, height: 88)
-           tableviewController.tableView.backgroundColor = .rxAlert
+           tableviewController.preferredContentSize = CGSize(width: 272, height: 100)
+        tableviewController.tableView.isScrollEnabled = false
            tableviewController.delegt = self
 
            alert.setValue(tableviewController, forKey: "contentViewController")

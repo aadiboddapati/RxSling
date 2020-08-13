@@ -109,7 +109,7 @@ class DashboardTableCell: UITableViewCell {
         
         sntPlayBtn.setTitle("Play".localizedString(), for: .normal)
         sntShareBtn.setTitle("Share".localizedString() , for: .normal)
-        reportButton.isHidden = false
+       // reportButton.isHidden = false
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

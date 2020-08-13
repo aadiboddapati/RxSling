@@ -256,8 +256,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                       tableviewController.tableView.delegate = self
                       tableviewController.tableView.dataSource = self
                       
-                       tableviewController.preferredContentSize = CGSize(width: 252, height: 80)
-                       tableviewController.tableView.backgroundColor = .rxAlert
+                       tableviewController.preferredContentSize = CGSize(width: 272, height: 100)
+                       tableviewController.tableView.isScrollEnabled = false
                        alert.setValue(tableviewController, forKey: "contentViewController")
                         
                alert.addAction(UIAlertAction (title: "CANCEL".localizedString(), style: UIAlertAction.Style.default, handler: { (action) in
@@ -334,6 +334,9 @@ func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> U
                        
                       tableView.reloadData()
        }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }
 
 extension UIViewController {

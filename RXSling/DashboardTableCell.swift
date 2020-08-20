@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 protocol DashboardCellDelegate {
     
@@ -94,22 +95,34 @@ class DashboardTableCell: UITableViewCell {
     func setSntDetailsToCell(_ sntData: SNTData){
         
         snt = sntData
-        sntImage.image = #imageLiteral(resourceName: "snt_default_image")
-        sntImage.load(url: URL(string: snt.thumbnailURL)!)
+        
+        sntImage.sd_setImage(with: URL(string: snt.thumbnailURL)!, placeholderImage: #imageLiteral(resourceName: "snt_default_image"), options: .continueInBackground) { (image, error, cacheType, url) in
+            
+            if let _ = error {
+                DispatchQueue.main.async {
+                    self.sntImage.image = #imageLiteral(resourceName: "snt_error_image")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.sntImage.image = image
+                }
+            }
+        }
+        
         sntTitle.text = snt.title
         sntDescription.text = snt.desc
         sntImageTopBlurViewLabel.text = Utility.timeAgoSinceDate(snt.createdDate, currentDate: Date(), numericDates: true)
-         let selfReport = UserDefaults.standard.bool(forKey: "USER_SELFREPORT")
-     
+        let selfReport = UserDefaults.standard.bool(forKey: "USER_SELFREPORT")
+        
         if (snt.showReport == true && selfReport == true){
-         reportButton.isHidden = false
-         } else {
-             reportButton.isHidden = true
+            reportButton.isHidden = false
+        } else {
+            reportButton.isHidden = true
         }
         
         sntPlayBtn.setTitle("Play".localizedString(), for: .normal)
         sntShareBtn.setTitle("Share".localizedString() , for: .normal)
-       // reportButton.isHidden = false
+        // reportButton.isHidden = false
     }
     
     override func setSelected(_ selected: Bool, animated: Bool) {

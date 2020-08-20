@@ -124,6 +124,9 @@ PODS:
     - PhoneNumberKit/PhoneNumberKitCore
   - PromisesObjC (1.2.8)
   - Protobuf (3.11.4)
+  - SDWebImage (5.8.4):
+    - SDWebImage/Core (= 5.8.4)
+  - SDWebImage/Core (5.8.4)
   - SideMenu (6.4.8)
   - Toast-Swift (5.0.1)
 
@@ -140,6 +143,7 @@ DEPENDENCIES:
   - KMPlaceholderTextView
   - NKVPhonePicker
   - PhoneNumberKit
+  - SDWebImage (~> 5.8)
   - SideMenu
   - Toast-Swift (~> 5.0)
 
@@ -172,6 +176,7 @@ SPEC REPOS:
     - PhoneNumberKit
     - PromisesObjC
     - Protobuf
+    - SDWebImage
     - SideMenu
     - Toast-Swift
 
@@ -203,9 +208,10 @@ SPEC CHECKSUMS:
   PhoneNumberKit: df411d46177d1492da84e10b6c093846dd861452
   PromisesObjC: c119f3cd559f50b7ae681fa59dc1acd19173b7e6
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
+  SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
   SideMenu: 4a891be552d30bb6fa87ad404d62e485f8450c34
   Toast-Swift: 9b6a70f28b3bf0b96c40d46c0c4b9d6639846711
 
-PODFILE CHECKSUM: bbcb59ec2c8f1c3c788c78eb93f27a8b4c8d35e8
+PODFILE CHECKSUM: b5c485fd23e54089b81a78847f31122cfa78f457
 
 COCOAPODS: 1.8.4

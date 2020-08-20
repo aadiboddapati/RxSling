@@ -16,6 +16,7 @@ def unique_pods
   pod 'KMPlaceholderTextView'
   pod 'Charts', '~> 3.5'
   pod 'Toast-Swift', '~> 5.0'
+  pod 'SDWebImage', '~> 5.8'
 
 
 end

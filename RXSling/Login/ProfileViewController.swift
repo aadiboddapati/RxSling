@@ -57,6 +57,7 @@ struct ProfileUserInfo: Codable {
     let selfReport: Bool
     let clusterReport:Bool
     let teamReport:Bool
+    let totalShareCount:Int
     
     enum CodingKeys: String, CodingKey {
         case emailID = "emailId"
@@ -68,6 +69,7 @@ struct ProfileUserInfo: Codable {
         case selfReport = "selfReport"
         case clusterReport = "clusterReport"
         case teamReport = "teamReport"
+        case totalShareCount = "totalShareCount"
     }
 }
 

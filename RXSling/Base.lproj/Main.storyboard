@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="E6H-xF-Zun">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="E6H-xF-Zun">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -373,7 +373,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Bg_3_320X480" translatesAutoresizingMaskIntoConstraints="NO" id="8Sk-E8-CAT">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </imageView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="91m-TP-5oO">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="onDrag" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="91m-TP-5oO">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <prototypes>
@@ -563,9 +563,62 @@
                     </navigationItem>
                     <connections>
                         <outlet property="dashboardTbl" destination="91m-TP-5oO" id="mf0-Gd-Kwz"/>
+                        <outlet property="refreshContentLbl" destination="VHd-K2-JEX" id="z79-pe-3EY"/>
+                        <outlet property="refreshView" destination="bpe-3V-8ZH" id="wEL-bZ-oVX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="799-Ff-VYr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="bpe-3V-8ZH">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pja-tQ-j5m">
+                            <rect key="frame" x="0.0" y="278.5" width="375" height="110"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No content to dispaly. Please pull down from top or click on below refresh button to refresh the content." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VHd-K2-JEX">
+                                    <rect key="frame" x="16" y="8" width="343" height="54"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" pointerInteraction="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sXq-C1-YG8" customClass="ovalButton" customModule="RXSling" customModuleProvider="target">
+                                    <rect key="frame" x="32" y="78" width="311" height="30"/>
+                                    <color key="backgroundColor" red="0.33725490200000002" green="0.5568627451" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                    <state key="normal" title="Refresh">
+                                        <color key="titleColor" cocoaTouchSystemColor="darkTextColor"/>
+                                    </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="number" keyPath="cCornerRadius">
+                                            <real key="value" value="17.5"/>
+                                        </userDefinedRuntimeAttribute>
+                                    </userDefinedRuntimeAttributes>
+                                    <connections>
+                                        <action selector="refreshButtonAction:" destination="5qA-uL-jDZ" eventType="touchUpInside" id="gYz-fm-d7Y"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="sXq-C1-YG8" secondAttribute="trailing" constant="32" id="8Fo-tQ-hdF"/>
+                                <constraint firstItem="VHd-K2-JEX" firstAttribute="top" secondItem="pja-tQ-j5m" secondAttribute="top" constant="8" id="Ieg-zW-UTD"/>
+                                <constraint firstItem="sXq-C1-YG8" firstAttribute="top" secondItem="VHd-K2-JEX" secondAttribute="bottom" constant="16" id="Sdz-a8-ifO"/>
+                                <constraint firstAttribute="bottom" secondItem="sXq-C1-YG8" secondAttribute="bottom" constant="2" id="U3z-Ma-l9b"/>
+                                <constraint firstItem="sXq-C1-YG8" firstAttribute="leading" secondItem="pja-tQ-j5m" secondAttribute="leading" constant="32" id="nPj-vG-H8T"/>
+                                <constraint firstAttribute="trailing" secondItem="VHd-K2-JEX" secondAttribute="trailing" constant="16" id="p0I-5x-RGq"/>
+                                <constraint firstItem="VHd-K2-JEX" firstAttribute="leading" secondItem="pja-tQ-j5m" secondAttribute="leading" constant="16" id="pxk-qO-fQs"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="pja-tQ-j5m" firstAttribute="leading" secondItem="bpe-3V-8ZH" secondAttribute="leading" id="M94-qH-7at"/>
+                        <constraint firstItem="pja-tQ-j5m" firstAttribute="centerX" secondItem="bpe-3V-8ZH" secondAttribute="centerX" id="dzr-rX-O24"/>
+                        <constraint firstItem="pja-tQ-j5m" firstAttribute="centerY" secondItem="bpe-3V-8ZH" secondAttribute="centerY" id="fvm-ao-7Hr"/>
+                        <constraint firstAttribute="trailing" secondItem="pja-tQ-j5m" secondAttribute="trailing" id="il9-Oa-KCD"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="Mc4-kX-Gih"/>
+                </view>
             </objects>
             <point key="canvasLocation" x="4420" y="854"/>
         </scene>
@@ -2626,7 +2679,7 @@
         <scene sceneID="tA1-je-Ihl">
             <objects>
                 <viewController storyboardIdentifier="StackViewController" id="7ms-Zy-q6v" customClass="StackViewController" customModule="RXSling_STAGE" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="sTv-H4-HCF">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="sTv-H4-HCF">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -2645,7 +2698,7 @@
                                     <constraint firstAttribute="height" constant="56" id="vdm-Yt-wCi"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vBI-4o-EvY">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vBI-4o-EvY">
                                 <rect key="frame" x="151.5" y="312.5" width="72" height="42"/>
                                 <color key="backgroundColor" red="0.3921568627" green="0.5568627451" blue="0.27450980390000002" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="25"/>

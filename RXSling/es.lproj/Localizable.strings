@@ -220,3 +220,7 @@ Enlace caducado. No puede obtener una vista previa de este contenido Show & Tell
 "Password cannot be less than 8 characters." = "La contraseña no puede tener menos de 8 caracteres";
 
 //NSLocalizedString("REPORTS", comment: "")
+
+// Share content restriction
+"Block_Gender_Message" = "You cannot share this content as it is published for different Gender profile.";
+"Ok" = "Ok";

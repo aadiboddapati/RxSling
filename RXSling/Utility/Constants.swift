@@ -37,6 +37,7 @@ struct Constants {
         static let clusterReport = base + "Managerlevelreport"
         static let userInfo       = base + "GetUserInfo"
         static let contactList = base + "RetrieveContactList"
+        static let sharecount = base + "SntRepShareCount"
         static let logout = "Logout"
         
     }

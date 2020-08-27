@@ -495,102 +495,112 @@ class ReportDetailViewController: UIViewController {
     }
     
     func changeDetailUI( reportDetail:ReportDetail)
+    {
+        //            if (detailContactDict.count > 0)
+        //            { // search reportDetail.mobileNumber in dict
+        //
+        
+        let number = reportDetail.mobileNumber
+        //  let index = number?.index(number!.endIndex, offsetBy:-10)
+        // let transformedNumber = String((number?[index!...])!)
+        // let customerNumber = number!.suffix(10)
+        if (detailContactDict.keys.contains(number!))
         {
-//            if (detailContactDict.count > 0)
-//            { // search reportDetail.mobileNumber in dict
-//
-                
-                  let number = reportDetail.mobileNumber
-              //  let index = number?.index(number!.endIndex, offsetBy:-10)
-               // let transformedNumber = String((number?[index!...])!)
-            // let customerNumber = number!.suffix(10)
-                if (detailContactDict.keys.contains(number!))
-                {
-                    if (self.detailContactDict[number!] == "") {
-                           cNamelbl.text = "NA"
-                    } else {
-                     cNamelbl.text = self.detailContactDict[number!]
-                    iButton.isHidden = true
-                    }
-                    print("Avaialbel")
-                } else {
-              
-              /*
-                for value in self.detailContactDict.keys {
-                               
-                      let dicnumber = value.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-                    if (dicnumber.contains(transformedNumber)) {
-                                 cNamelbl.text = self.detailContactDict[value]
-                                //   if let key = detailContactDict.someKey(forValue: value) {
-                                 print("------\(self.detailContactDict[value])------")
-                        if (self.detailContactDict[value] == "")
-                        {
-                             cNamelbl.text = "NA"
-                        }
-                                    iButton.isHidden = true
-                                }
-                                   } */
-          
+            if (self.detailContactDict[number!] == "") {
                 cNamelbl.text = "NA"
-                iButton.isHidden = false
+            } else {
+                cNamelbl.text = self.detailContactDict[number!]
+                iButton.isHidden = true
             }
-             doctorMobileNo = reportDetail.mobileNumber
-             cNumberlbl.text = reportDetail.mobileNumber
-    
-             //3 sent time
-                 if let senttime = reportDetail.sentTimeStamp {
-                      let date = Date(timeIntervalSince1970: (Double( senttime ?? 5) / 1000.0))
+            print("Avaialbel")
+        } else {
+            
+            /*
+             for value in self.detailContactDict.keys {
+             
+             let dicnumber = value.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+             if (dicnumber.contains(transformedNumber)) {
+             cNamelbl.text = self.detailContactDict[value]
+             //   if let key = detailContactDict.someKey(forValue: value) {
+             print("------\(self.detailContactDict[value])------")
+             if (self.detailContactDict[value] == "")
+             {
+             cNamelbl.text = "NA"
+             }
+             iButton.isHidden = true
+             }
+             } */
+            
+            cNamelbl.text = "NA"
+            iButton.isHidden = false
+        }
+        doctorMobileNo = reportDetail.mobileNumber
+        cNumberlbl.text = reportDetail.mobileNumber
+        
+        //3 sent time
+        if let senttime = reportDetail.sentTimeStamp {
+            let date = Date(timeIntervalSince1970: (Double( senttime ?? 5) / 1000.0))
             //            let dateFormatterGet = DateFormatter()
             //                       dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                                 //   let dateAsString = "6:35 PM"
-                                   let dateFormatterPrint = DateFormatter()
-                            dateFormatterPrint.locale = Locale(identifier: "en_US_POSIX")
-                            dateFormatterPrint.timeZone = TimeZone(abbreviation: "GMT")
-                                   dateFormatterPrint.dateFormat = "dd-MMM-yy HH:mm a"
-                                   
-                           //        print(dateFormatterPrint.string(from: lastSent))
-                                   let lastSentStr = dateFormatterPrint.string(from: date)
-                        
-                        
-                        
-                        self.sentTimelbl.text = String("\(lastSentStr)") }
-                    else {
-                        self.sentTimelbl.text = "NA"
-                    }
+            //   let dateAsString = "6:35 PM"
+            let dateFormatterPrint = DateFormatter()
+            dateFormatterPrint.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatterPrint.timeZone = TimeZone(abbreviation: "GMT")
+            dateFormatterPrint.dateFormat = "dd-MMM-yy HH:mm a"
             
-            //4 viewed status
-                       if (reportDetail.viewStatus == true){
-                        
-                        viewedTimelbl.text = "Viewed"}
-                              else {
-                      
-                        viewedTimelbl.text = "Not Viewed"
-                              }
-            //5 - Viewed Time
-                  let date = Date(timeIntervalSince1970: (Double( reportDetail.viewTimeStamp ?? 5) / 1000.0))
-                  print("date - \(date)")
-                  let formatter = DateFormatter()
-                  formatter.dateFormat = "dd-MMM-yy HH:mm a"
-                 viewedStatuslbl.text = formatter.string(from: date)
-                 
-                  //6 - content Status (expiry)
-                        if (reportDetail.expiryStatus == true){
-                            expiredBool = true
-                          contentStatuslbl.text = "EXPIRED"
-                          contentStatuslbl.textColor = UIColor.red
-                        } else {
-                              expiredBool = false
-                              contentStatuslbl.text = "ACTIVE"
-                          contentStatuslbl.textColor = UIColor.white
-                      }
-            //7 - expiry Date
-            if (reportDetail.expiryDate) != 0 {
+            //        print(dateFormatterPrint.string(from: lastSent))
+            let lastSentStr = dateFormatterPrint.string(from: date)
             
-                let dateexp = Date(timeIntervalSince1970: (Double( reportDetail.expiryDate ?? 5) / 1000.0))
-                let string1 = formatter.string(from: dateexp)
+            
+            
+            self.sentTimelbl.text = String("\(lastSentStr)") }
+        else {
+            self.sentTimelbl.text = "NA"
+        }
+        
+        //4 viewed status
+        if (reportDetail.viewStatus == true){
+            
+            viewedTimelbl.text = "Viewed"}
+        else {
+            
+            viewedTimelbl.text = "Not Viewed"
+        }
+        //5 - Viewed Time
+        let formatter = DateFormatter()
+
+        if let timestamp = reportDetail.viewTimeStamp{
+            if timestamp == 0 {
+                viewedStatuslbl.text = "NA"
+            } else {
+                let date = Date(timeIntervalSince1970: (Double(timestamp) / 1000.0))
+                print("date - \(date)")
+                formatter.dateFormat = "dd-MMM-yy HH:mm a"
+                viewedStatuslbl.text = formatter.string(from: date)
+            }
+        } else {
+            viewedStatuslbl.text = "NA"
+        }
+        
+        
+        //6 - content Status (expiry)
+        if (reportDetail.expiryStatus == true){
+            expiredBool = true
+            contentStatuslbl.text = "EXPIRED"
+            contentStatuslbl.textColor = UIColor.red
+        } else {
+            expiredBool = false
+            contentStatuslbl.text = "ACTIVE"
+            contentStatuslbl.textColor = UIColor.white
+        }
+        //7 - expiry Date
+        if (reportDetail.expiryDate) != 0 {
+            
+            let dateexp = Date(timeIntervalSince1970: (Double( reportDetail.expiryDate ?? 5) / 1000.0))
+            let string1 = formatter.string(from: dateexp)
             
             var string2 = ""
-                 print("date - \(date)")
+            
             if #available(iOS 13.0, *) {
                 let formatter = RelativeDateTimeFormatter()
                 formatter.localizedString(from: DateComponents(day: -1)) // "1 day ago"
@@ -603,8 +613,8 @@ class ReportDetailViewController: UIViewController {
                 
             } else {
                 let calendar = Calendar.current
-                 let date = Date(timeIntervalSince1970: (Double( reportDetail.expiryDate ?? 5) / 1000.0))
-                 print("date - \(date)")
+                let date = Date(timeIntervalSince1970: (Double( reportDetail.expiryDate ?? 5) / 1000.0))
+                print("date - \(date)")
                 let startOfNow = calendar.startOfDay(for: Date())
                 let startOfTimeStamp = calendar.startOfDay(for: date)
                 let components = calendar.dateComponents([.day], from: startOfNow, to: startOfTimeStamp)
@@ -614,18 +624,18 @@ class ReportDetailViewController: UIViewController {
                     formatter.dateStyle = .short
                     formatter.timeStyle = .none
                     formatter.doesRelativeDateFormatting = true
-                   string2 = formatter.string(from: date)
+                    string2 = formatter.string(from: date)
                 } else if day > 1 {
                     string2 = "In \(day) days"
                 } else {
-                   string2 = "\(-day) days ago"
+                    string2 = "\(-day) days ago"
                 }
             }
-                expDatelbl.text = string1 + "(" + string2 + ")"
-            }
-            else {
-                   expDatelbl.text = "NA"
-            }
+            expDatelbl.text = string1 + "(" + string2 + ")"
+        }
+        else {
+            expDatelbl.text = "NA"
+        }
     }
 
 }

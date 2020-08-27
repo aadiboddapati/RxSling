@@ -36,27 +36,27 @@ class VersionMannager {
     
     func fetchS3Data()  {
         //let prod = "https://rxslingmobile.s3.ap-south-1.amazonaws.com/SlingApp/Prod/update_ios.json"
-         let  staging = "https://rxslingmobile.s3.ap-south-1.amazonaws.com/SlingApp/Staging/update_ios.json"
+        let  staging = "https://rxslingmobile.s3.ap-south-1.amazonaws.com/SlingApp/Staging/update_ios.json"
         let url = URL(string: staging)
         let task = URLSession.shared.dataTask(with: url!, completionHandler: { (data, response, error) in
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     let responseData = try! JSONDecoder().decode(VersionMannagedObject.self, from: data!)
-                      self.versionMannagedObj = responseData
+                    self.versionMannagedObj = responseData
                     //  NotificationCenter.default.post(name: NSNotification.Name(rawValue: "VersionObjectDownloaded"), object: nil)
-                      self.checkForVersionUpdate()
+                    self.checkForVersionUpdate()
                 }
             }
             
         })
-
+        
         task.resume()
     }
     
     func checkForVersionUpdate() {
-      //  validateVersionUpdate()
-
+        //  validateVersionUpdate()
+        
         if versionMannagedObj.isVersionCheckEnabled  {
             if let savedDate = USERDEFAULTS.value(forKey: "VersionCheckingDate") as? Date {
                 let day = compareTwoDates(today: Date(), olderDate: savedDate)
@@ -73,7 +73,7 @@ class VersionMannager {
         }
     }
     
-   private  func validateVersionUpdate()  {
+    private  func validateVersionUpdate()  {
         if !versionMannagedObj.isForAllVersionLock {
             if versionMannagedObj.isForRollback {
                 self.handleRollBack()
@@ -193,19 +193,19 @@ class VersionMannager {
         let alertContrl = UIAlertController(title: "", message: message, preferredStyle: .alert)
         
         let action1 = UIAlertAction(title: buttonTitles.first, style: .default) { (action) in
-                if action.title == "Update" {
-                    DispatchQueue.main.async {
-                        self.fetchTopMostViewComntroller()?.logout()
-                        self.openAppstore()
-                    }
+            if action.title == "Update" {
+                DispatchQueue.main.async {
+                    self.fetchTopMostViewComntroller()?.logout()
+                    self.openAppstore()
                 }
+            }
         }
         let action2 = UIAlertAction(title: buttonTitles.last, style: .default) { (action) in
-                if action.title == "Update" {
-                    DispatchQueue.main.async {
-                        self.fetchTopMostViewComntroller()?.logout()
-                        self.openAppstore()
-                    }
+            if action.title == "Update" {
+                DispatchQueue.main.async {
+                    self.fetchTopMostViewComntroller()?.logout()
+                    self.openAppstore()
+                }
             }
         }
         
@@ -216,8 +216,12 @@ class VersionMannager {
             alertContrl.addAction(action1)
         }
         
-        fetchTopMostViewComntroller()?.present(alertContrl, animated: true, completion: nil)
-        alertContrl.view.tintColor = .rxGreen
+        DispatchQueue.main.async {
+            self.fetchTopMostViewComntroller()?.present(alertContrl, animated: true, completion: nil)
+            alertContrl.view.tintColor = .rxGreen
+        }
+        
+        
     }
     
     

@@ -14,9 +14,12 @@ import Contacts
 import ContactsUI
 import PhoneNumberKit
 
+
 class ViewController: UIViewController {
     
     @IBOutlet weak var dashboardTbl:UITableView!
+    @IBOutlet weak var refreshView: UIView!
+    @IBOutlet weak var refreshContentLbl:UILabel!
     
     var refreshControl = UIRefreshControl()
     
@@ -32,6 +35,9 @@ class ViewController: UIViewController {
         }
     }
     
+    var originalDashboardArray:[SNTData]!
+        
+    
     //MARK: - View Controller life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +51,7 @@ class ViewController: UIViewController {
     
         setupNavigationBar()
         dashboardTbl.estimatedRowHeight = 310
-        dashboardTbl.isHidden = true
+//        dashboardTbl.isHidden = true
         dashboardTbl.backgroundColor = .clear
         
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -267,7 +273,7 @@ class ViewController: UIViewController {
     
     func getCountryPhonceCode (_ country : String) -> String
     {
-        var countryDictionary  = ["AF":"93",
+        let countryDictionary  = ["AF":"93",
                                   "AL":"355",
                                   "DZ":"213",
                                   "AS":"1",
@@ -546,7 +552,50 @@ class ViewController: UIViewController {
         image = image?.withRenderingMode(UIImage.RenderingMode.alwaysOriginal)
         self.navigationItem.rightBarButtonItem = UIBarButtonItem.menuButton(self, action: #selector(settingsPressed), image: image!)
         
+    // /*
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchBar.showsCancelButton = false
+
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.delegate = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.searchBar.tintColor = .white
+        searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = true
+        self.definesPresentationContext = true
+
+        
+        configureSearchBar(reportSearchBar: searchController.searchBar)
+  // */
+        
     }
+    
+    func configureSearchBar(reportSearchBar: UISearchBar)  {
+        
+        let searchTextField:UITextField = (reportSearchBar.value(forKey: "searchField") as? UITextField)!
+        
+        let imageV = searchTextField.leftView as! UIImageView
+        imageV.image = imageV.image?.withRenderingMode(UIImage.RenderingMode.alwaysTemplate)
+        imageV.tintColor = UIColor.white
+        searchTextField.tintColor = UIColor.white
+        
+        searchTextField.backgroundColor = UIColor(red:28/255, green: 45/255, blue: 29/255, alpha: 1.0)
+        searchTextField.leftViewMode = UITextField.ViewMode.always
+        searchTextField.layer.borderColor = UIColor.rxGreen.cgColor
+        searchTextField.layer.borderWidth = 1
+        searchTextField.layer.cornerRadius = 10
+        searchTextField.layer.masksToBounds = true
+        searchTextField.textColor = UIColor.white
+        
+        
+        reportSearchBar.returnKeyType = .default
+    }
+
+    
     
     //MARK: - NavBar button Actions
     @objc func menuPressed(_ sender: UIBarButtonItem){
@@ -563,6 +612,66 @@ class ViewController: UIViewController {
     
 }
 
+//MARK: - Searchbar Methods
+extension ViewController: UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
+        
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        if self.originalDashboardArray.count == 0 {
+            return
+        }
+        
+        if searchText == "" {
+            self.dashboardArray = originalDashboardArray
+            removeTableBackgroundView()
+            return
+        }
+        
+        let filteredData = self.originalDashboardArray.filter({ (sntData) -> Bool in
+            return sntData.title.lowercased().contains(searchText.lowercased()) || sntData.desc.lowercased().contains(searchText.lowercased())
+        })
+        
+        removeTableBackgroundView()
+        self.dashboardArray = filteredData
+        
+        if filteredData.count == 0 {
+            showNoRecordsFound()
+        } else {
+            removeTableBackgroundView()
+        }
+        
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        ///searchBar.text = ""
+        searchBar.resignFirstResponder()
+        
+       // removeTableBackgroundView()
+       // self.dashboardArray = originalDashboardArray
+        // dashboardTbl.reloadData() since added property observer on dashboardArray
+
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
+    
+    func showNoRecordsFound() {
+        let label = UILabel()
+        label.backgroundColor = .clear
+        label.textColor = .white
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.text = "No search results found"
+        dashboardTbl.backgroundView = label
+        
+    }
+    
+    func removeTableBackgroundView() {
+        dashboardTbl.backgroundView = nil
+    }
+}
 
 //MARK: - Tableview Methods
 extension ViewController:UITableViewDelegate, UITableViewDataSource, DashboardCellDelegate{
@@ -614,6 +723,18 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource, DashboardCe
     
     func didTapShare(snt: SNTData) {
         
+        // check user is eligible to share the content
+        if let loginData = UserDefaults.standard.object(forKey: "LOGIN_DATA") as? Data {
+            if let response = try? JSONDecoder().decode(ProfileDataModel.self, from: loginData) {
+               if response.data?.userInfo.gender != snt.targetGender &&  snt.targetGender != 2 {
+                    
+                self.popupAlert(title: "RXSling", message: "Block_Gender_Message".localizedString(), actionTitles: ["Ok".localizedString()], actions:[{action1 in }, nil])
+                return
+                }
+            }
+        }
+        
+        
         if snt.instructionMsg != nil && snt.instructionMsg != ""{
             self.popupAlert(title: "Instruction".localizedString(), message: snt.instructionMsg, actionTitles: ["Cancel".localizedString(),"Proceed".localizedString()], actions: [{action1 in},{action2 in
                 self.openSharePage(snt: snt)
@@ -623,14 +744,70 @@ extension ViewController:UITableViewDelegate, UITableViewDataSource, DashboardCe
         }
     }
     
-    func openSharePage(snt:SNTData){
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.sharesntvc) as! ShareSntViewController
-        vc.snt = snt
-        self.navigationController?.pushViewController(vc, animated: true)
+    func openSharePage(snt:SNTData) {
+        
+        let networkConnection = try! Reachability.init()?.isConnectedToNetwork
+        if (!networkConnection!)
+        {
+            hideActivityIndicator(View: self.view)
+            self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok".localizedString()], actions:[{action1 in
+                }, nil])
+        } else {
+            DispatchQueue.main.async {
+                showActivityIndicator(View: self.view, Constants.Loader.loadingShowNtell.localizedString())
+            }
+            
+            //Token as header
+            let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
+            //Params
+            let sntId = URL(string: snt.sntURL)!.lastPathComponent
+            let repEmail = USERDEFAULTS.value(forKey: "USER_EMAIL") as! String
+            
+            let params = ["repEmailId":repEmail ,"sntId":sntId]
+            
+            let _ = HTTPRequest.sharedInstance.request(url: Constants.Api.sharecount, method: "POST", params: params, header: header) { [weak self] (response, error) in
+                
+                DispatchQueue.main.async {
+                    hideActivityIndicator(View: self?.view ?? UIView())
+                }
+                
+                let jsonData = try! JSONSerialization.data(withJSONObject: response!, options: [])
+                let model = try! JSONDecoder().decode(ShareCountModel.self, from: jsonData)
+                
+                if error == nil {
+                    if(model.statusCode == "106") {
+                        DispatchQueue.main.async {
+                            Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
+                                self?.tokenExpiredLogout()
+                            }
+                        }
+                    } else if (model.statusCode == "100") {
+                        DispatchQueue.main.async {
+                            let vc = self?.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.sharesntvc) as! ShareSntViewController
+                            vc.snt = snt
+                            vc.shareCountModel = model
+                            self?.navigationController?.pushViewController(vc, animated: true)
+                        }
+                    } else {
+                        DispatchQueue.main.async {
+                            Utility.showAlertWithHandler(message: model.message ?? "Something went wrong", alertButtons: 1, buttonTitle:"Ok", inView: self!) { (tapVal) in
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+                
     }
     @objc func refresh(_ sender: AnyObject) {
         // Code to refresh table view
         loadSntApiCall()
+    }
+    
+    @IBAction func refreshButtonAction(_ sender: UIButton) {
+        // Code to refresh table view
+               loadSntApiCall()
     }
 }
 
@@ -645,16 +822,17 @@ extension ViewController{
             hideActivityIndicator(View: self.view)
             self.popupAlert(title: "RXSling", message: "Please check your internet connection", actionTitles: ["Ok"], actions:[{action1 in
                 }, nil])
-        }else{
+        } else {
             //Api
             let api = Constants.Api.dashboard
             //Token as header
             let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
             //Network call
             NetworkManager.shared.callApiWithAlamofire(api, params: [:], header: header, modelType:SNTModel.self) {[weak self] (data, err)  in
-                
                 if let err = err {
                     print("Failed to fetch data:", err)
+                    self?.dashboardTbl.backgroundView = self?.refreshView
+                    self?.refreshControl.endRefreshing()
                     return
                 }
                 if(data.statusCode == "106"){
@@ -663,8 +841,11 @@ extension ViewController{
                     }
                 }else{
                     if let data = data.data{
+                        self?.refreshControl.endRefreshing()
+                        self?.removeTableBackgroundView()
                         self?.dashboardArray = data
-                        self?.dashboardTbl.isHidden = false
+                        self?.originalDashboardArray = data
+                        
                     }
                     
                 }
@@ -757,4 +938,16 @@ extension Data {
         let hexString = map { String(format: "%02.2hhx", $0) }.joined()
         return hexString
     }
+}
+
+
+// MARK:- Share count model
+struct ShareCountModel: Codable {
+    let data: ShareCountData?
+    let message: String?
+    let statusCode: String
+}
+
+struct ShareCountData: Codable {
+    let shareCount: Int?
 }

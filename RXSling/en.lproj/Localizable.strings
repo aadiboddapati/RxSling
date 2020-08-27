@@ -72,3 +72,7 @@
 "PLEASE ENTER YOUR REGISTERED EMAIL ID. WE WILL SEND THE OTP TO YOUR ASSOCIATED MOBILE NUMBER." = "PLEASE ENTER YOUR REGISTERED EMAIL ID. WE WILL SEND THE OTP TO YOUR ASSOCIATED MOBILE NUMBER.";
 
 //NSLocalizedString("REPORTS", comment: "")
+
+// Share content restriction
+"Block_Gender_Message" = "You cannot share this content as it is published for different Gender profile.";
+"Ok" = "Ok";

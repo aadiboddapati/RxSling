@@ -77,6 +77,8 @@ struct SNTData: Codable{
     let selectedLanguage: SelectedLanguage
     let sntType: Int
     let sntURL: String
+    let sntVersion:String?
+    let targetGender:Int
     let thumbnailURL: String
     let title: String
     let totalShareCount: Int

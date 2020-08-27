@@ -95,6 +95,8 @@ class ShareSntViewController: UIViewController {
     
     
     var snt: SNTData?
+    var shareCountModel: ShareCountModel?
+    var availableShareCount:Int = 0
     var isDocInfoValidated: Bool = false
     var isDocInfoShown: Bool = false
     var doctor: Doctor?
@@ -215,18 +217,25 @@ class ShareSntViewController: UIViewController {
     //MARK: - Show snt details on UI
     func displaySntDataOnUI(){
         
+        
         guard let snt = snt else {return}
         
         //Card One
-        totalLabel.text = String("    \(snt.totalShareCount)")
-        sharedLabel.text = String(snt.usedShareCount) //+1
-        if(snt.availableShareCount <= 0){
-            
-            self.availableLabel.text = "0"
-            
-        }else{
-            
-            self.availableLabel.text = String(snt.availableShareCount)
+        if let loginData = UserDefaults.standard.object(forKey: "LOGIN_DATA") as? Data {
+            if let response = try? JSONDecoder().decode(ProfileDataModel.self, from: loginData) {
+                
+                let totalShareCount = response.data?.userInfo.totalShareCount ?? 0
+                availableShareCount = totalShareCount - (shareCountModel?.data?.shareCount ?? 0)
+                
+                totalLabel.text = String("    \(totalShareCount)")
+                sharedLabel.text = String(shareCountModel?.data?.shareCount ?? 0)
+                
+                if(availableShareCount <= 0){
+                    self.availableLabel.text = "0"
+                }else{
+                    self.availableLabel.text = String(availableShareCount)
+                }
+            }
         }
         
         //Card Two
@@ -271,6 +280,12 @@ class ShareSntViewController: UIViewController {
     
     //MARK: - Button methods
     @IBAction func selectPhoneNumberPressed(_ sender: UIButton) {
+        
+        if availableShareCount <= 0 {
+            let msg = "As per current account plan, you have exceeded the forwarding limit for this content, Please upgrade your account plan.".localizedString()
+            self.popupAlert(title: Constants.Alert.title, message: msg, actionTitles: ["Ok"], actions:[{action in},nil])
+            return
+        }
         
         if (self.snt?.canSendSnt())!{
             noButtonPressed(noButton)

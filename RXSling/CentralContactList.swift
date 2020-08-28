@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import UIKit
 
 struct CentralContactList: Codable {
        let statusCode: String?
@@ -25,7 +25,7 @@ struct ContactList: Codable {
      let createdDate:String?
      let crmId:String?
      let dateOfRecordEntry:String?
-     let deleteFlag:String?
+     let deleteFlag:Bool?
      let dob:String?
      let emailId:String?
      let externalId1:String?
@@ -46,7 +46,7 @@ struct ContactList: Codable {
      let pgDegree:String?
      let phoneNumberForSms:String?
      let postPgDegree:String?
-     let privatePractice:String?
+     let privatePractice:Bool?
      let profession:String?
      let professionalRegistrationNumber:String?
      let professionalRegistrationState:String?

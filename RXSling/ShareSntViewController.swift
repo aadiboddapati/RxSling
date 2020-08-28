@@ -268,12 +268,10 @@ class ShareSntViewController: UIViewController {
     
     func presentContactsListVC()  {
         
-        showBarButtonItem()
-        let nav = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.conntactslistnav) as! UINavigationController
-        let vc = nav.viewControllers.first as! CentralContactListTVC
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.centralcontactlistvc) as! CentarlContactsListVC
         vc.centralContactList = self.centralContactList
         vc.centralContactDelegate = self
-        self.present(nav, animated: true, completion: nil)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -291,6 +289,7 @@ class ShareSntViewController: UIViewController {
             noButtonPressed(noButton)
             if(!isDocInfoShown){
                 // check for availability to share
+                 /*
                 let contactStore = CNContactStore()
                 contactsAuthorization(for: contactStore) { (athorisedBool) in
                     if(athorisedBool){
@@ -307,8 +306,8 @@ class ShareSntViewController: UIViewController {
                         }
                     }
                 }
-                
-                /*
+                */
+               
                 let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
                 let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
                 
@@ -356,8 +355,7 @@ class ShareSntViewController: UIViewController {
                         }
                     }
                 }
-                */
-                
+               
             }else{
                 
                 //Call validate api

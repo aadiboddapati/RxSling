@@ -26,8 +26,6 @@
 		0777CD6024BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */; };
 		0777CD6124BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */; };
 		07AFFF8E24C81AD5009433F3 /* CentralContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AFFF8D24C81AD5009433F3 /* CentralContactList.swift */; };
-		07AFFF9024C83D47009433F3 /* CentralContactListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AFFF8F24C83D47009433F3 /* CentralContactListTVC.swift */; };
-		07AFFF9124C83D47009433F3 /* CentralContactListTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AFFF8F24C83D47009433F3 /* CentralContactListTVC.swift */; };
 		07AFFF9224C83D53009433F3 /* CentralContactList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07AFFF8D24C81AD5009433F3 /* CentralContactList.swift */; };
 		07B392A424CABB6000CAFFDF /* VersionMannager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B392A324CABB6000CAFFDF /* VersionMannager.swift */; };
 		07B392A524CABB6000CAFFDF /* VersionMannager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07B392A324CABB6000CAFFDF /* VersionMannager.swift */; };
@@ -35,6 +33,8 @@
 		07C9C43F24B327E6006AAF21 /* TeamRepDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */; };
 		07E32C3124B360E100A3A07A /* TeamReportCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E32C3024B360E100A3A07A /* TeamReportCell.swift */; };
 		07E32C3324B4423100A3A07A /* TeamReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E32C3224B4423000A3A07A /* TeamReportModel.swift */; };
+		0892BD2D24F8EEBA00139DFD /* CentarlContactsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */; };
+		0892BD2E24F8F5B700139DFD /* CentarlContactsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */; };
 		34E82F58074E99DF0A8164A0 /* Pods_RXSling_Stage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ABF0FFA1ADA1DE205A918E3 /* Pods_RXSling_Stage.framework */; };
 		7D3E7C3F4086798983C31FA2 /* Pods_RXSling_Live.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CAF797E7B1CE8CE6ECEE4A /* Pods_RXSling_Live.framework */; };
 		AE090BE0245DF5BC007D3C79 /* RXSling copy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE090BDF245DF5BC007D3C79 /* RXSling copy-Info.plist */; };
@@ -175,12 +175,12 @@
 		0777CD5C24B87F4600F64865 /* SegmentedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentedViewController.swift; sourceTree = "<group>"; };
 		0777CD5F24BC653C00F64865 /* TeamCustomerInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamCustomerInfoCell.swift; sourceTree = "<group>"; };
 		07AFFF8D24C81AD5009433F3 /* CentralContactList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralContactList.swift; sourceTree = "<group>"; };
-		07AFFF8F24C83D47009433F3 /* CentralContactListTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentralContactListTVC.swift; sourceTree = "<group>"; };
 		07B392A324CABB6000CAFFDF /* VersionMannager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionMannager.swift; sourceTree = "<group>"; };
 		07C9C43C24B327CE006AAF21 /* TeamReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportViewController.swift; sourceTree = "<group>"; };
 		07C9C43E24B327E6006AAF21 /* TeamRepDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamRepDetailViewController.swift; sourceTree = "<group>"; };
 		07E32C3024B360E100A3A07A /* TeamReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportCell.swift; sourceTree = "<group>"; };
 		07E32C3224B4423000A3A07A /* TeamReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportModel.swift; sourceTree = "<group>"; };
+		0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentarlContactsListVC.swift; sourceTree = "<group>"; };
 		157454F22648B15A7B98FA42 /* Pods-RXSling Live.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXSling Live.release.xcconfig"; path = "Target Support Files/Pods-RXSling Live/Pods-RXSling Live.release.xcconfig"; sourceTree = "<group>"; };
 		17FDE8740B08620ABE7351DD /* Pods-RXSling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXSling.release.xcconfig"; path = "Target Support Files/Pods-RXSling/Pods-RXSling.release.xcconfig"; sourceTree = "<group>"; };
 		1ABF0FFA1ADA1DE205A918E3 /* Pods_RXSling_Stage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RXSling_Stage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -395,7 +395,7 @@
 				FD1F053A24569C3D00CE3B47 /* PlaySntViewController.swift */,
 				FD1F053F24569C4F00CE3B47 /* ShareSntViewController.swift */,
 				07AFFF8D24C81AD5009433F3 /* CentralContactList.swift */,
-				07AFFF8F24C83D47009433F3 /* CentralContactListTVC.swift */,
+				0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */,
 				FD1C461A2452E1470008554B /* SNTModel.swift */,
 				AEBA3140242885F3004BCADC /* ViewController.swift */,
 				E2FB3C3F249FE3C5000A7CAC /* StackViewController.swift */,
@@ -841,11 +841,11 @@
 				AE5B819F2428B205002AED2B /* LoginViewController.swift in Sources */,
 				AE527FF82450665D00264931 /* FAQTitleTableViewCell.swift in Sources */,
 				AE3E31C824348B0800013400 /* ProfilePic.swift in Sources */,
+				0892BD2D24F8EEBA00139DFD /* CentarlContactsListVC.swift in Sources */,
 				AE55F411243CDDCA005BA703 /* ImagePicker.swift in Sources */,
 				FDF74BD9245AD5AA0045EE5D /* ShareViewController.swift in Sources */,
 				07C9C43F24B327E6006AAF21 /* TeamRepDetailViewController.swift in Sources */,
 				0777CD5724B87BE200F64865 /* TeamTrendViewController.swift in Sources */,
-				07AFFF9024C83D47009433F3 /* CentralContactListTVC.swift in Sources */,
 				E2684FC02489868C007C7C7B /* ReportTableCell.swift in Sources */,
 				FD1C461B2452E1470008554B /* SNTModel.swift in Sources */,
 				FDF019CC2457FCFA00B7AC9D /* ContactsManager.swift in Sources */,
@@ -949,7 +949,6 @@
 				FD4DCE5724544EEB004EC8A7 /* ValidatePhoneNumberVC.swift in Sources */,
 				FD4DCE5824544EEB004EC8A7 /* FAQDataTableViewCell.swift in Sources */,
 				0777CD5B24B87C0500F64865 /* TeamCustomerInfoViewController.swift in Sources */,
-				07AFFF9124C83D47009433F3 /* CentralContactListTVC.swift in Sources */,
 				FDD8702E2456CCD7002FBE14 /* DesignableView.swift in Sources */,
 				FD4DCE5924544EEB004EC8A7 /* ContextLabel.swift in Sources */,
 				FD4DCE5A24544EEB004EC8A7 /* AutoLayout+Extension.swift in Sources */,
@@ -966,6 +965,7 @@
 				0777CD5224B5CCC400F64865 /* TeamReportViewController.swift in Sources */,
 				FD4DCE5F24544EEB004EC8A7 /* ForgotPinViewController.swift in Sources */,
 				FD4DCE6024544EEB004EC8A7 /* SplashScreenViewController.swift in Sources */,
+				0892BD2E24F8F5B700139DFD /* CentarlContactsListVC.swift in Sources */,
 				AE54BB8B246AC072009AAF24 /* HelpViewController.swift in Sources */,
 				FD4DCE6124544EEB004EC8A7 /* MenuTableViewController.swift in Sources */,
 				FD4DCE6224544EEB004EC8A7 /* HTTPRequest.swift in Sources */,

@@ -61,7 +61,7 @@ struct Constants {
         static let teamtrendvc          = "TeamTrendViewController"
         static let teamcustomerinfovc = "TeamCustomerInfoViewController"
         static let centralcontactlist            = "SortViewViewController"
-        static let conntactslistnav     = "ConntactsListNav"
+        static let centralcontactlistvc     = "CentarlContactsListVC"
     }
     
   

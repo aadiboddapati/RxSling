@@ -539,14 +539,14 @@ class ReportDetailViewController: UIViewController {
         
         //3 sent time
         if let senttime = reportDetail.sentTimeStamp {
-            let date = Date(timeIntervalSince1970: (Double( senttime ?? 5) / 1000.0))
+            let date = Date(timeIntervalSince1970: (Double( senttime) / 1000.0))
             //            let dateFormatterGet = DateFormatter()
             //                       dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
             //   let dateAsString = "6:35 PM"
             let dateFormatterPrint = DateFormatter()
             dateFormatterPrint.locale = Locale(identifier: "en_US_POSIX")
-            dateFormatterPrint.timeZone = TimeZone(abbreviation: "GMT")
-            dateFormatterPrint.dateFormat = "dd-MMM-yy HH:mm a"
+            dateFormatterPrint.timeZone = .current
+            dateFormatterPrint.dateFormat = "dd-MMM-yy hh:mm a"
             
             //        print(dateFormatterPrint.string(from: lastSent))
             let lastSentStr = dateFormatterPrint.string(from: date)
@@ -568,14 +568,16 @@ class ReportDetailViewController: UIViewController {
         }
         //5 - Viewed Time
         let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
 
         if let timestamp = reportDetail.viewTimeStamp{
             if timestamp == 0 {
                 viewedStatuslbl.text = "NA"
             } else {
                 let date = Date(timeIntervalSince1970: (Double(timestamp) / 1000.0))
-                print("date - \(date)")
-                formatter.dateFormat = "dd-MMM-yy HH:mm a"
+                formatter.timeZone = .current
+                formatter.dateFormat = "dd-MMM-yy hh:mm a"
+
                 viewedStatuslbl.text = formatter.string(from: date)
             }
         } else {

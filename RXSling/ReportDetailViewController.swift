@@ -461,80 +461,118 @@ class ReportDetailViewController: UIViewController {
     }
     
     @IBAction func iButtonPressed(_ sender: UIButton){
-    
-    if (detailContactDict.count > 0)
-               { // search reportDetail.mobileNumber in dict
-                let number = doctorMobileNo
-                          //  let index = number?.index(number!.endIndex, offsetBy:-10)
-                         //   let transformedNumber = String((number?[index!...])!)
-              //  let customerNumber = number!.suffix(10)
-                if (detailContactDict.keys.contains(number!))
-                {
-                    if (self.detailContactDict[number!] == "") {
-                           cNamelbl.text = "NA"
-                    } else {
-                     cNamelbl.text = self.detailContactDict[number!]
-                    iButton.isHidden = true
-                    }
-                    print("Avaialbel")
-                } else {
-                    DispatchQueue.main.async {
-                        
-                        guard let toastString = self.doctorMobileNo else {return}
-                        let toastMessage = "There is no contact available for this Number".localizedString()
-                        let showToastMessage = toastMessage + "'\(toastString)' "
-                        showToast(message: showToastMessage, view: self.view)
-                                            }
-                }
-               } else {
-                   cNamelbl.text = "NA"
-                    fetchContactsFromPhoneBook()
         
-               }
-    
+        if (detailContactDict.count > 0)
+        { // search reportDetail.mobileNumber in dict
+            let number = doctorMobileNo
+            //  let index = number?.index(number!.endIndex, offsetBy:-10)
+            //   let transformedNumber = String((number?[index!...])!)
+            //  let customerNumber = number!.suffix(10)
+            if (detailContactDict.keys.contains(number!))
+            {
+                if (self.detailContactDict[number!] == "") {
+                    cNamelbl.text = "NA"
+                } else {
+                    cNamelbl.text = self.detailContactDict[number!]
+                    iButton.isHidden = true
+                }
+                print("Avaialbel")
+            } else {
+                DispatchQueue.main.async {
+                    
+                    guard let toastString = self.doctorMobileNo else {return}
+                    let toastMessage = "There is no contact available for this Number".localizedString()
+                    let showToastMessage = toastMessage + "'\(toastString)' "
+                    showToast(message: showToastMessage, view: self.view)
+                }
+            }
+        } else {
+            cNamelbl.text = "NA"
+            fetchContactsFromPhoneBook()
+            
+        }
+        
     }
     
+    func getHours(from date: Date) -> Int {
+        return Calendar.current.dateComponents([.hour], from: date, to: Date()).hour ?? 0
+    }
+
     func changeDetailUI( reportDetail:ReportDetail)
     {
-        //            if (detailContactDict.count > 0)
-        //            { // search reportDetail.mobileNumber in dict
-        //
+        //1 doctor name
         
-        let number = reportDetail.mobileNumber
-        //  let index = number?.index(number!.endIndex, offsetBy:-10)
-        // let transformedNumber = String((number?[index!...])!)
-        // let customerNumber = number!.suffix(10)
-        if (detailContactDict.keys.contains(number!))
-        {
-            if (self.detailContactDict[number!] == "") {
-                cNamelbl.text = "NA"
+        // handle central contacts
+        let doctorId = reportDetail.mobileNumber ?? ""
+        
+        let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+        let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
+        
+        if let boolValue = profileModel.data?.settings?.isCentralizedContact, boolValue == true {
+            
+            if let contactsRefreshtime = USERDEFAULTS.value(forKey: "ContactsRefreshTime") as? Date {
+                let definedHours = profileModel.data?.settings?.isContactListRefreshHrs ?? 0
+                let savedHours = getHours(from: contactsRefreshtime)
+                if savedHours >= definedHours {
+                    DispatchQueue.main.async {
+                        showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
+                    }
+                   self.callApiToFetchContactsList( doctorId: doctorId)
+                } else {
+                    // show offline data
+                    let jsonData = USERDEFAULTS.value(forKey: "ContactsListData") as! Data
+                    let responseData = try! JSONDecoder().decode(CentralContactList.self, from: jsonData)
+                    
+                    if (responseData.data?.map({ $0.accountId ?? "" }).contains(doctorId))! {
+                        let identicalDoctorIdData =  responseData.data?.filter({ doctorId == $0.accountId ?? ""
+                        })
+                       cNamelbl.text = ( identicalDoctorIdData?.first?.firstName ?? "" ) + " " + ( identicalDoctorIdData?.first?.lastName ?? "" )
+                        iButton.isHidden = true
+                    } else {
+                        // handle old functional flow
+                        let number = reportDetail.mobileNumber
+                        if (detailContactDict.keys.contains(number!))
+                        {
+                            if (self.detailContactDict[number!] == "") {
+                                cNamelbl.text = "NA"
+                            } else {
+                                cNamelbl.text = self.detailContactDict[number!]
+                                iButton.isHidden = true
+                            }
+                        } else {
+                            cNamelbl.text = "NA"
+                            iButton.isHidden = false
+                        }
+                    }
+                    
+                }
             } else {
-                cNamelbl.text = self.detailContactDict[number!]
-                iButton.isHidden = true
+                DispatchQueue.main.async {
+                    showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating)
+                }
+               self.callApiToFetchContactsList( doctorId: doctorId)
             }
-            print("Avaialbel")
         } else {
-            
-            /*
-             for value in self.detailContactDict.keys {
-             
-             let dicnumber = value.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
-             if (dicnumber.contains(transformedNumber)) {
-             cNamelbl.text = self.detailContactDict[value]
-             //   if let key = detailContactDict.someKey(forValue: value) {
-             print("------\(self.detailContactDict[value])------")
-             if (self.detailContactDict[value] == "")
-             {
-             cNamelbl.text = "NA"
-             }
-             iButton.isHidden = true
-             }
-             } */
-            
-            cNamelbl.text = "NA"
-            iButton.isHidden = false
+            // handle old functional flow
+            let number = reportDetail.mobileNumber
+            if (detailContactDict.keys.contains(number!))
+            {
+                if (self.detailContactDict[number!] == "") {
+                    cNamelbl.text = "NA"
+                } else {
+                    cNamelbl.text = self.detailContactDict[number!]
+                    iButton.isHidden = true
+                }
+            } else {
+                cNamelbl.text = "NA"
+                iButton.isHidden = false
+            }
         }
+        
+        
         doctorMobileNo = reportDetail.mobileNumber
+        
+        //2 doctor number or id
         cNumberlbl.text = reportDetail.mobileNumber
         
         //3 sent time
@@ -569,7 +607,7 @@ class ReportDetailViewController: UIViewController {
         //5 - Viewed Time
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: "en_US_POSIX")
-
+        
         if let timestamp = reportDetail.viewTimeStamp{
             if timestamp == 0 {
                 viewedStatuslbl.text = "NA"
@@ -577,7 +615,7 @@ class ReportDetailViewController: UIViewController {
                 let date = Date(timeIntervalSince1970: (Double(timestamp) / 1000.0))
                 formatter.timeZone = .current
                 formatter.dateFormat = "dd-MMM-yy hh:mm a"
-
+                
                 viewedStatuslbl.text = formatter.string(from: date)
             }
         } else {
@@ -639,5 +677,94 @@ class ReportDetailViewController: UIViewController {
             expDatelbl.text = "NA"
         }
     }
+    
+    
+    func callApiToFetchContactsList( doctorId:String)  {
+        //Api
+        let api = Constants.Api.contactList
+        
+        //Token as header
+        let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
+        
+        //Parameters
+        let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+        let parameters:  [String : Any] =
+            ["repEmailId": userEmail, "tagInclude": [],"tagExclude": []]
+        
+        
+        _ = HTTPRequest.sharedInstance.newRequest(url: api, method: "POST", params: parameters, header: header) { (response, error) in
+            
+            if error != nil
+            {
+                DispatchQueue.main.async {
+                    hideActivityIndicator(View: self.view)
+                    self.popupAlert(title: Constants.Alert.title, message: error?.description, actionTitles: ["Ok"], actions:[{action in},nil])
+                }
+            }
+            else{
+                
+                let jsonData = try! JSONSerialization.data(withJSONObject: response!, options: [])
+                let responseData = try! JSONDecoder().decode(CentralContactList.self, from: jsonData)
+                
+                if(responseData.statusCode == "100") {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                        USERDEFAULTS.set(Date(), forKey: "ContactsRefreshTime")
+                        USERDEFAULTS.set(jsonData, forKey: "ContactsListData")
+                        
+                        if (responseData.data?.map({ $0.accountId ?? "" }).contains(doctorId))! {
+                            
+                            let identicalDoctorIdData =  responseData.data?.filter({ doctorId == $0.accountId ?? ""
+                            })
+                            let fullName = ( identicalDoctorIdData?.first?.firstName ?? "" ) + " " + ( identicalDoctorIdData?.first?.lastName ?? "" )
+                            
+                            DispatchQueue.main.async {
+                                self.cNamelbl.text = fullName
+                                self.iButton.isHidden = true
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                // handle old functional flow
+                                let number = self.reportDetail?.mobileNumber
+                                if (self.detailContactDict.keys.contains(number!))
+                                {
+                                    if (self.detailContactDict[number!] == "") {
+                                        self.cNamelbl.text = "NA"
+                                    } else {
+                                        self.cNamelbl.text = self.detailContactDict[number!]
+                                        self.iButton.isHidden = true
+                                    }
+                                } else {
+                                    self.cNamelbl.text = "NA"
+                                    self.iButton.isHidden = false
+                                }
+                            }
+                        }
+                        
+                        
+                    }
+                }else {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                        if(responseData.statusCode == "106"){
+                            self.perform(#selector(self.tokenExpiredLogin), with: nil, afterDelay: 1.0)
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
 
+    //MARK: - Token expired login
+    @objc func tokenExpiredLogin(){
+        
+        Utility.showAlertWithHandler(message: Constants.Alert.tokenExpired.localizedString(), alertButtons: 1, buttonTitle:"Ok", inView: self) { (tapVal) in
+            
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginVC") as! LoginViewController
+            self.navigationController?.pushViewController(vc, animated: false)
+            
+        }
+        
+    }
 }

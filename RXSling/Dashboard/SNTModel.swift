@@ -24,6 +24,8 @@ struct Report: Codable{
     let CreatedDate: Int?
     var CustomerName: String?
     var displayByNumber: Bool?
+    var isCentralContact:Bool?
+    var centralContatName:String?
    
 }
 

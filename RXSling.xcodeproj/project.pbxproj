@@ -35,6 +35,8 @@
 		07E32C3324B4423100A3A07A /* TeamReportModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E32C3224B4423000A3A07A /* TeamReportModel.swift */; };
 		0892BD2D24F8EEBA00139DFD /* CentarlContactsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */; };
 		0892BD2E24F8F5B700139DFD /* CentarlContactsListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */; };
+		08B14C1C25012E7B00DB5385 /* DoctorDetailInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B14C1B25012E7B00DB5385 /* DoctorDetailInfoVC.swift */; };
+		08B14C1D250136B800DB5385 /* DoctorDetailInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08B14C1B25012E7B00DB5385 /* DoctorDetailInfoVC.swift */; };
 		34E82F58074E99DF0A8164A0 /* Pods_RXSling_Stage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1ABF0FFA1ADA1DE205A918E3 /* Pods_RXSling_Stage.framework */; };
 		7D3E7C3F4086798983C31FA2 /* Pods_RXSling_Live.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 92CAF797E7B1CE8CE6ECEE4A /* Pods_RXSling_Live.framework */; };
 		AE090BE0245DF5BC007D3C79 /* RXSling copy-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AE090BDF245DF5BC007D3C79 /* RXSling copy-Info.plist */; };
@@ -181,6 +183,7 @@
 		07E32C3024B360E100A3A07A /* TeamReportCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportCell.swift; sourceTree = "<group>"; };
 		07E32C3224B4423000A3A07A /* TeamReportModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamReportModel.swift; sourceTree = "<group>"; };
 		0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CentarlContactsListVC.swift; sourceTree = "<group>"; };
+		08B14C1B25012E7B00DB5385 /* DoctorDetailInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDetailInfoVC.swift; sourceTree = "<group>"; };
 		157454F22648B15A7B98FA42 /* Pods-RXSling Live.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXSling Live.release.xcconfig"; path = "Target Support Files/Pods-RXSling Live/Pods-RXSling Live.release.xcconfig"; sourceTree = "<group>"; };
 		17FDE8740B08620ABE7351DD /* Pods-RXSling.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RXSling.release.xcconfig"; path = "Target Support Files/Pods-RXSling/Pods-RXSling.release.xcconfig"; sourceTree = "<group>"; };
 		1ABF0FFA1ADA1DE205A918E3 /* Pods_RXSling_Stage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RXSling_Stage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -396,6 +399,7 @@
 				FD1F053F24569C4F00CE3B47 /* ShareSntViewController.swift */,
 				07AFFF8D24C81AD5009433F3 /* CentralContactList.swift */,
 				0892BD2C24F8EEBA00139DFD /* CentarlContactsListVC.swift */,
+				08B14C1B25012E7B00DB5385 /* DoctorDetailInfoVC.swift */,
 				FD1C461A2452E1470008554B /* SNTModel.swift */,
 				AEBA3140242885F3004BCADC /* ViewController.swift */,
 				E2FB3C3F249FE3C5000A7CAC /* StackViewController.swift */,
@@ -833,6 +837,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B14C1C25012E7B00DB5385 /* DoctorDetailInfoVC.swift in Sources */,
 				AE5B81A42428BC0F002AED2B /* Global.swift in Sources */,
 				AEF702452446F86200A87810 /* MySideMenuNavigationController.swift in Sources */,
 				0777CD6024BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */,
@@ -926,6 +931,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				08B14C1D250136B800DB5385 /* DoctorDetailInfoVC.swift in Sources */,
 				FD4DCE4D24544EEB004EC8A7 /* Global.swift in Sources */,
 				FD4DCE4E24544EEB004EC8A7 /* MySideMenuNavigationController.swift in Sources */,
 				0777CD6124BC653D00F64865 /* TeamCustomerInfoCell.swift in Sources */,

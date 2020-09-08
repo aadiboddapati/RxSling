@@ -99,6 +99,8 @@ class ShareSntViewController: UIViewController {
     var availableShareCount:Int = 0
     var isDocInfoValidated: Bool = false
     var isDocInfoShown: Bool = false
+    var selectedCentralContact:ContactList!
+    var isCentralContact: Bool = false
     var doctor: Doctor?
     var shortenUrlData: ShortenData?
     
@@ -271,6 +273,7 @@ class ShareSntViewController: UIViewController {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: Constants.StoryboadId.centralcontactlistvc) as! CentarlContactsListVC
         vc.centralContactList = self.centralContactList
         vc.centralContactDelegate = self
+        vc.sntId =  URL(string: self.snt!.sntURL)!.lastPathComponent 
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -623,6 +626,7 @@ extension ShareSntViewController: CNContactPickerDelegate,CenntralContactListPro
             print(phoneNumberCustomDefaultRegion)
             // print(phoneNumberKit.format(phoneNumber, toType: .e164))
             
+            isCentralContact = false
             isDocInfoShown = true
             showDoctorInfoCard(isDocInfoShown)
             doctorNameLabel.text = userName
@@ -642,7 +646,16 @@ extension ShareSntViewController: CNContactPickerDelegate,CenntralContactListPro
     }
     
     func didSelectCentralContact(contact: ContactList) {
-        print(contact)
+        // user name
+        selectedCentralContact = contact
+        let userName = (contact.firstName ?? "") + " " + ( contact.lastName ?? "" )
+        isCentralContact = true
+        isDocInfoShown = true
+        showDoctorInfoCard(isDocInfoShown)
+        doctorNameLabel.text = userName
+        
+        doctorMobileLabel.text =  "**********"
+
     }
     
     
@@ -795,8 +808,15 @@ extension ShareSntViewController{
         guard let snt = snt else {return}
         let sntId = URL(string: snt.sntURL)!.lastPathComponent
         let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+        
+        var phoneNumber = ""
+        if isCentralContact {
+            phoneNumber = selectedCentralContact?.phoneNumberForSms ?? ""
+        } else {
+            phoneNumber = doctorMobileLabel.text!
+        }
         let parameters:[String : String] =
-            ["doctorMobNo": doctorMobileLabel.text!,
+            ["doctorMobNo": phoneNumber,
              "repEmail": userEmail,
              "sntId": sntId]
         //-----------
@@ -987,17 +1007,27 @@ extension ShareSntViewController{
         var isDoctorAvailable: Bool = false
         
         if let doc = doctor{
-            doctorAccountId = doc.doctorAccountId
+            if isCentralContact {
+                doctorAccountId = selectedCentralContact?.accountId ?? ""
+            } else {
+                doctorAccountId = doc.doctorAccountId
+            }
             isDoctorAvailable = doc.isDoctorAvailable
         }
         //var settingsObj: Settings
         if let loginData = UserDefaults.standard.object(forKey: "LOGIN_DATA") as? Data {
             if let response = try? JSONDecoder().decode(ProfileDataModel.self, from: loginData) {
                 if(response.statusCode == "100"){
+                    var phoneNumber = ""
+                    if isCentralContact {
+                        phoneNumber = selectedCentralContact?.accountId ?? ""
+                    } else {
+                        phoneNumber = doctorMobileLabel.text!
+                    }
                     guard let data = response.data else {return}
                     if data.settings != nil{
                         parameters = ["sntURL": snt.sntURL,
-                        "doctorMobNo": doctorMobileLabel.text!,
+                        "doctorMobNo": phoneNumber,
                         "repMobNo": userMobile,
                         "repEmail": userEmail,
                         "createdBy": snt.createdBy,
@@ -1032,7 +1062,7 @@ extension ShareSntViewController{
                     }else{
                         parameters =
                         ["sntURL": snt.sntURL,
-                         "doctorMobNo": doctorMobileLabel.text!,
+                         "doctorMobNo": phoneNumber,
                          "repMobNo": userMobile,
                          "repEmail": userEmail,
                          "createdBy": snt.createdBy,

@@ -408,38 +408,37 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         }
     }
     
-    func fetchContactFromDict(contact:[CNContact] )
-    {
-        for value in contact {
-            for phoneNumber in value.phoneNumbers {
-                var dictString: String!
-                let number = phoneNumber.value as! CNPhoneNumber
-                let phoneNumberStr:String = number.value(forKey: "digits") as! String
-                let countrycode:String = (number.value(forKey:"countryCode") as? String)!
-                let phoneNumberKit = PhoneNumberKit()
-                do {
-                    //let phoneNumber = try phoneNumberKit.parse(primaryPhoneNumberStr)
-                    let phoneNumberCustomDefaultRegion = try phoneNumberKit.parse(phoneNumberStr, withRegion: countrycode.uppercased(), ignoreType: true)
+    func fetchContactFromDict(contact:[CNContact] ) {
+    for value in contact {
+        for phoneNumber in value.phoneNumbers {
+            var dictString: String!
+            let number = phoneNumber.value as! CNPhoneNumber
+            let phoneNumberStr:String = number.value(forKey: "digits") as! String
+            let countrycode:String = (number.value(forKey:"countryCode") as? String)!
+            let phoneNumberKit = PhoneNumberKit()
+            do {
+                //let phoneNumber = try phoneNumberKit.parse(primaryPhoneNumberStr)
+                let phoneNumberCustomDefaultRegion = try phoneNumberKit.parse(phoneNumberStr, withRegion: countrycode.uppercased(), ignoreType: true)
+                
+                if(phoneNumberCustomDefaultRegion.numberString.contains("+")){
+                    //   print(phoneNumberCustomDefaultRegion.numberString)
                     
-                    if(phoneNumberCustomDefaultRegion.numberString.contains("+")){
-                        //   print(phoneNumberCustomDefaultRegion.numberString)
-                        
-                    }else{
-                        dictString = "+" + String(phoneNumberCustomDefaultRegion.countryCode) + phoneNumberCustomDefaultRegion.numberString
-                    }
-                }   catch {
-                    print("Generic parser error")
+                }else{
+                    dictString = "+" + String(phoneNumberCustomDefaultRegion.countryCode) + phoneNumberCustomDefaultRegion.numberString
                 }
-                
-                
-                if dictString != nil {
-                    self.contactDict.updateValue(value.givenName,forKey:dictString)
-                }
+            }   catch {
+                print("Generic parser error")
+            }
+            
+            
+            if dictString != nil {
+                self.contactDict.updateValue(value.givenName,forKey:dictString)
             }
         }
-        print("dict count =====\(contactDict.count) ======")
-        
     }
+    print("dict count =====\(contactDict.count) ======")
+    
+}
     
     //MARK: - Contacts import authorization
     func contactsAuthorization(for store: CNContactStore, completionHandler: @escaping ((_ isAuthorized: Bool) -> Void)) {
@@ -667,10 +666,10 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         
         if let data = response.data{
             
-            let sortArray = data.sorted(by: { $0.CreatedDate!   > $1.CreatedDate! }  )
+            let sortArray = data.sorted(by: { $0.CreatedDate! > $1.CreatedDate! }  )
             for value in sortArray {
-                //  guard let Cview = value.ContentViewed else { return}
-                if( value.ContentViewed != nil){
+                //  guard let Cview = value.ContentViewed else { return }
+                if( value.ContentViewed != nil) {
                     self.viewedInt = self.viewedInt + 1
                 }
             }
@@ -731,6 +730,7 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
 
         }
     }
+    
     @IBAction func cancelButtonTapped(_ sender: Any) {
         self.tableViewTopConstrain.constant = 0
         
@@ -740,8 +740,150 @@ class ReportViewController: UIViewController,UIGestureRecognizerDelegate {
         view.endEditing(true)
     }
     
+    func getHours(from date: Date) -> Int {
+        return Calendar.current.dateComponents([.hour], from: date, to: Date()).hour ?? 0
+    }
+    
     @IBAction func numberButtonTapped(_ sender: UIButton)
     {
+        
+        // handle central contacts
+        let doctorId = self.dashboardArray[sender.tag].DoctorMobNo ?? ""
+        
+        let data =  USERDEFAULTS.value(forKey: "LOGIN_DATA") as! Data
+        let profileModel = try! JSONDecoder().decode(ProfileDataModel.self, from: data)
+        
+        if let boolValue = profileModel.data?.settings?.isCentralizedContact, boolValue == true {
+            
+            if let contactsRefreshtime = USERDEFAULTS.value(forKey: "ContactsRefreshTime") as? Date {
+                let definedHours = profileModel.data?.settings?.isContactListRefreshHrs ?? 0
+                let savedHours = getHours(from: contactsRefreshtime)
+                if savedHours >= definedHours {
+                    DispatchQueue.main.async {
+                        showActivityIndicator(View: self.navigationController!.view, Constants.Loader.loadingContacts)
+                    }
+                    self.callApiToFetchContactsList(sender: sender, doctorId: doctorId)
+                } else {
+                    // show offline data
+                    let jsonData = USERDEFAULTS.value(forKey: "ContactsListData") as! Data
+                    let responseData = try! JSONDecoder().decode(CentralContactList.self, from: jsonData)
+                    
+                    if (responseData.data?.map({ $0.accountId ?? "" }).contains(doctorId))! {
+                        
+                        
+                        // toggle the boolean state
+                        if let boolValue = self.dashboardArray[sender.tag].displayByNumber {
+                            if self.tablebyNumber == false {
+                                if let _ = self.dashboardArray[sender.tag].isCentralContact {
+                                    self.dashboardArray[sender.tag].displayByNumber = !boolValue
+                                } else {
+                                    self.dashboardArray[sender.tag].displayByNumber = boolValue
+                                }
+                            } else {
+                                self.dashboardArray[sender.tag].displayByNumber = !boolValue
+                            }
+                        } else {
+                            self.dashboardArray[sender.tag].displayByNumber = false
+                        }
+                        
+                        
+                        
+                        let identicalDoctorIdData =  responseData.data?.filter({ doctorId == $0.accountId ?? ""
+                        })
+                        self.dashboardArray[sender.tag].isCentralContact = true
+                        self.dashboardArray[sender.tag].centralContatName = ( identicalDoctorIdData?.first?.firstName ?? "" ) + " " + ( identicalDoctorIdData?.first?.lastName ?? "" )
+
+                        self.reportTbl.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
+                    } else {
+                       // self.callApiToFetchContactsList(sender: sender, doctorId: doctorId)
+                        self.handleNonCentralContactsList(sender:sender)
+
+                    }
+                    
+                }
+            } else {
+                DispatchQueue.main.async {
+                    showActivityIndicator(View: self.navigationController!.view, Constants.Loader.validating)
+                }
+                self.callApiToFetchContactsList(sender: sender, doctorId: doctorId)
+            }
+        } else {
+            self.handleNonCentralContactsList(sender:sender)
+        }
+
+    }
+    
+    func callApiToFetchContactsList(sender:UIButton, doctorId:String)  {
+        //Api
+        let api = Constants.Api.contactList
+        
+        //Token as header
+        let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
+        
+        //Parameters
+        let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+        let parameters:  [String : Any] =
+            ["repEmailId": userEmail, "tagInclude": [],"tagExclude": []]
+        
+        
+        _ = HTTPRequest.sharedInstance.newRequest(url: api, method: "POST", params: parameters, header: header) { (response, error) in
+            
+            if error != nil
+            {
+                DispatchQueue.main.async {
+                    hideActivityIndicator(View: self.view)
+                    self.popupAlert(title: Constants.Alert.title, message: error?.description, actionTitles: ["Ok"], actions:[{action in},nil])
+                }
+            }
+            else{
+                
+                let jsonData = try! JSONSerialization.data(withJSONObject: response!, options: [])
+                let responseData = try! JSONDecoder().decode(CentralContactList.self, from: jsonData)
+                
+                if(responseData.statusCode == "100") {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                        USERDEFAULTS.set(Date(), forKey: "ContactsRefreshTime")
+                        USERDEFAULTS.set(jsonData, forKey: "ContactsListData")
+                        
+                        if (responseData.data?.map({ $0.accountId ?? "" }).contains(doctorId))! {
+                            
+                            let identicalDoctorIdData =  responseData.data?.filter({ doctorId == $0.accountId ?? ""
+                            })
+                            self.dashboardArray[sender.tag].isCentralContact = true
+                            self.dashboardArray[sender.tag].centralContatName = ( identicalDoctorIdData?.first?.firstName ?? "" ) + " " + ( identicalDoctorIdData?.first?.lastName ?? "" )
+                            
+                            // toggle the boolean state
+                            if let boolValue = self.dashboardArray[sender.tag].displayByNumber {
+                                self.dashboardArray[sender.tag].displayByNumber = !boolValue
+                            } else {
+                                self.dashboardArray[sender.tag].displayByNumber = false
+                            }
+                            // reload table
+                            DispatchQueue.main.async {
+                                self.reportTbl.reloadRows(at: [IndexPath(row: sender.tag, section: 0)], with: .none)
+                            }
+                        } else {
+                            self.handleNonCentralContactsList(sender:sender)
+                        }
+                        
+                        
+                    }
+                }else {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                        if(responseData.statusCode == "106"){
+                            self.perform(#selector(self.tokenExpiredLogin), with: nil, afterDelay: 1.0)
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func handleNonCentralContactsList(sender:UIButton)  {
+        
         //real one
         // var indexPath: IndexPath!
         isToggleClicked = true
@@ -802,6 +944,7 @@ extension ReportViewController:UITableViewDelegate, UITableViewDataSource, Repor
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReportTableCell", for: indexPath) as! ReportTableCell
         cell.selectionStyle = .none
         tableView.separatorStyle = .none
+        cell.customerNumberBtn.tag = indexPath.row
         
         let snt = dashboardArray[indexPath.row]
         mobileNumberArray.append(snt.DoctorMobNo!)

@@ -8,9 +8,18 @@
 
 import UIKit
 
-struct Section {
-    let letter : String
-    let contacts : [ContactList]
+struct DoctorListModel: Codable {
+       let statusCode: String?
+       let data: [DoctorList]?
+       let message: String?
+}
+
+struct DoctorList: Codable {
+   // {"CreatedDate":1592480337012,"DoctorMobNo":"+91 6363 938 338","doctorAccountID":null,"viewTimeStamp":0}
+    let CreatedDate:Double?
+    let viewTimeStamp:Double?
+    let DoctorMobNo: String?
+    let doctorAccountID: String?
 }
 
 protocol CenntralContactListProtocol:NSObjectProtocol {
@@ -23,7 +32,11 @@ class ContactsTableCell: UITableViewCell {
     @IBOutlet weak var titlelabel:UILabel!
     @IBOutlet weak var subTitleLabel:UILabel!
     @IBOutlet weak var locationLabel:UILabel!
-    
+    @IBOutlet weak var transperentNameActionButton:UIButton!
+    @IBOutlet weak var checkMarkImageview:UIImageView!
+    @IBOutlet weak var sentOnLbl:UILabel!
+    @IBOutlet weak var viewedOnLbl:UILabel!
+    @IBOutlet weak var stackViewHeightConstraint:NSLayoutConstraint!
     var cellBgColor:UIColor?
     
     override func awakeFromNib() {
@@ -35,20 +48,30 @@ class ContactsTableCell: UITableViewCell {
 
 class CentarlContactsListVC: UIViewController {
     weak var centralContactDelegate:CenntralContactListProtocol?
-    var sections = [Section]()
+    var contacts = [ContactList]()
+    var originalContacts = [ContactList]()
+    
+    var doctorIDWithDoctors = [String: [DoctorList]]()
+
+    
     var centralContactList: CentralContactList?
     let sectionTitles = ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"]
     var colorsArray: [UIColor] = [.systemRed, .systemGreen, .systemBlue, .systemPink, .systemOrange, .systemPurple, .rxYellow]
     @IBOutlet weak var contactsTableView: UITableView!
     var searchController: UISearchController!
     
+    var sntId:String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "CENTRAL CONTACTS BOOK"
         self.view.backgroundColor = UIColor(patternImage: UIImage(named: "Bg_4_1024x1366.png")!)
-        self.contactsTableView.sectionIndexColor = .white
         
+        // side alphabets color
+        self.contactsTableView.sectionIndexColor = .white
+        self.contactsTableView.tableFooterView = UIView()
+
         searchController = UISearchController(searchResultsController: nil)
         searchController.searchBar.showsCancelButton = false
         searchController.searchResultsUpdater = self
@@ -67,17 +90,21 @@ class CentarlContactsListVC: UIViewController {
         
         if let data = centralContactList?.data {
             for char in sectionTitles {
-                var contacts = [ContactList]()
                 for contact in data {
                     if let name = contact.firstName {
-                        if char == name.prefix(1) {
+                        if char.lowercased() == name.prefix(1).lowercased() {
                             contacts.append(contact)
                         }
                     }
                 }
-                sections.append(Section(letter: char, contacts: contacts))
             }
         }
+        
+        // Duplicating the obj for search functionality
+        originalContacts = contacts
+        
+        // Get doctors list
+        getDoctorLsit()
         
     }
     
@@ -108,86 +135,240 @@ class CentarlContactsListVC: UIViewController {
 }
 
 
+///MARK: API call
+extension CentarlContactsListVC {
+    
+    func getDoctorLsit()  {
+        
+        DispatchQueue.main.async {
+            showActivityIndicator(View: self.view, Constants.Loader.processing.localizedString())
+        }
+        
+        let api = Constants.Api.getdoctorlist
+        let header = "\(USERDEFAULTS.value(forKey: "TOKEN")!)"
+        let userEmail = ("\(USERDEFAULTS.value(forKey: "USER_EMAIL")!)")
+        let parameters:  [String : Any] =
+            ["repEmailId": userEmail, "sntId": self.sntId ?? ""]
+        
+        _ = HTTPRequest.sharedInstance.newRequest(url: api, method: "POST", params: parameters, header: header, completion: { (response, error) in
+            DispatchQueue.main.async {
+                hideActivityIndicator(View: self.view)
+                
+            }
+            
+            if error != nil  {
+                DispatchQueue.main.async {
+                    hideActivityIndicator(View: self.view)
+                    self.popupAlert(title: Constants.Alert.title, message: error?.localizedDescription ?? "", actionTitles: ["Ok"], actions:[{action in},nil])
+                }
+                return
+            }
+            
+            let jsonData = try! JSONSerialization.data(withJSONObject: response!, options: [])
+            let responseData = try! JSONDecoder().decode(DoctorListModel.self, from: jsonData)
+            if responseData.statusCode == "100" {
+                if let data = responseData.data, data.count > 0 {
+                    self.processDoctors(data: data)
+                } else {
+                    DispatchQueue.main.async {
+                        hideActivityIndicator(View: self.view)
+                        self.popupAlert(title: Constants.Alert.title, message: "No data", actionTitles: ["Ok"], actions:[{action in},nil])
+                    }
+                }
+            } else {
+                DispatchQueue.main.async {
+                    hideActivityIndicator(View: self.view)
+                    self.popupAlert(title: Constants.Alert.title, message: responseData.message ?? "", actionTitles: ["Ok"], actions:[{action in},nil])
+                }
+            }
+        })
+        
+    }
+    
+    func processDoctors(data: [DoctorList])  {
+        
+        // Group Doctors with groupid
+        for doctor in data {
+            if let doctorId = doctor.doctorAccountID {
+                if  !doctorIDWithDoctors.keys.contains(doctorId)  {
+                    doctorIDWithDoctors[doctorId] =  [doctor] // assigning first time
+                } else {
+                    doctorIDWithDoctors[doctorId]?.append(doctor)
+                }
+            }
+        }
+        
+        // sort doctors based on date
+        for (_, value) in doctorIDWithDoctors.enumerated() {
+            
+            let sortedArray = value.value.sorted { //(item1, item2) -> Bool in
+                let (_, dateString1) = convertTimestampToDate(timestamp: $0.CreatedDate ?? 0)
+                let (_, dateString2) = convertTimestampToDate(timestamp: $1.CreatedDate ?? 0)
+                return dateString1.toDate()! > dateString2.toDate()!
+            }
+            doctorIDWithDoctors[value.key] = sortedArray
+        }
+        
+        DispatchQueue.main.async {
+            self.contactsTableView.reloadData()
+        }
+    }
+    
+    func convertTimestampToDate(timestamp:Double) -> (Date, String)  {
+        
+        let date = Date(timeIntervalSince1970: (Double( timestamp) / 1000.0))
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+        dateFormatter.timeZone = .current
+        dateFormatter.dateFormat = "hh:mm a, dd-MMM-yy"
+        let dateString = dateFormatter.string(from: date)
+        return (date , dateString)
+    }
+    
+    @objc func nameButonAction(_ sender: UIButton) {
+        print(sender.tag)
+        
+        let accountId = contacts[sender.tag].accountId ?? ""
+        let doctorName = contacts[sender.tag].firstName ?? ""
+
+        if doctorIDWithDoctors.keys.contains(accountId) {
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "DoctorDetailInfoVC") as! DoctorDetailInfoVC
+            vc.modalPresentationStyle = .overFullScreen
+            //vc.modalPresentationStyle = .formSheet
+            vc.doctorsList = doctorIDWithDoctors[accountId]
+            vc.doctorName = doctorName + "'s details"
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            showToast(message: "No sent details available", view: self.view)
+        }
+        
+    }
+    
+}
+
 extension CentarlContactsListVC: UITableViewDataSource,UITableViewDelegate {
     
     // MARK: - Table view data source
     func numberOfSections(in tableView: UITableView) -> Int {
-        return sections.count
+        return 1
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sections[section].contacts.count
+        return contacts.count
     }
     
     func sectionIndexTitles(for tableView: UITableView) -> [String]? {
-        return sections.map{$0.letter}
+        return sectionTitles //sections.map{$0.letter}
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ContactsTableCell", for: indexPath) as! ContactsTableCell
         cell.selectionStyle = .none
-        
+        cell.transperentNameActionButton.tag =  indexPath.row
+        cell.transperentNameActionButton.addTarget(self, action: #selector(nameButonAction(_:)), for: .touchUpInside)
         if let color = cell.cellBgColor {
            cell.nameInitialslabel.backgroundColor = color
         } else {
-             let randomIndex = Int(arc4random_uniform(UInt32(colorsArray.count)))
+            let randomIndex = Int(arc4random_uniform(UInt32(colorsArray.count)))
             let randomColor = colorsArray[randomIndex]
             cell.cellBgColor = randomColor
             cell.nameInitialslabel.backgroundColor = randomColor
-            
         }
         
-        let name = "\(sections[indexPath.section].contacts[indexPath.row].firstName?.first ?? " ")" + "\(sections[indexPath.section].contacts[indexPath.row].lastName?.first ?? " ")"
+        let name = "\(contacts[indexPath.row].firstName?.first ?? " ")" + "\(contacts[indexPath.row].lastName?.first ?? " ")"
         cell.nameInitialslabel.text = name.uppercased()
         
-        cell.titlelabel?.text = (sections[indexPath.section].contacts[indexPath.row].firstName ?? "") + " " + ( sections[indexPath.section].contacts[indexPath.row].lastName ?? "" )
-        cell.subTitleLabel?.text = sections[indexPath.section].contacts[indexPath.row].phoneNumberForSms ?? ""
-        cell.locationLabel?.text = sections[indexPath.section].contacts[indexPath.row].city ?? ""
+        cell.titlelabel?.text = (contacts[indexPath.row].firstName ?? "") + " " + ( contacts[indexPath.row].lastName ?? "" )
+        
+        let designation = contacts[indexPath.row].officialDesignation ?? ""
+        let pgDegree = contacts[indexPath.row].pgDegree ?? ""
+        let speciality = contacts[indexPath.row].specialty ?? ""
+        let finalStr  = String(format: "%@,%@,%@", designation,pgDegree,speciality)
+        cell.subTitleLabel?.text = finalStr
+        
+        cell.locationLabel?.text = contacts[indexPath.row].city ?? ""
+        
+        let accountId = contacts[indexPath.row].accountId ?? ""
+        if doctorIDWithDoctors.keys.contains(accountId) {
+            cell.checkMarkImageview.isHidden = false
+            
+            let (_, sentDate) = convertTimestampToDate(timestamp: doctorIDWithDoctors[accountId]?.first?.CreatedDate ?? 0)
+            cell.sentOnLbl.text = sentDate
+            cell.stackViewHeightConstraint.constant = 18.5
+            
+            if let viewdDate = doctorIDWithDoctors[accountId]?.first?.viewTimeStamp {
+                if viewdDate != 0{
+                    let (_, viewdDate) = convertTimestampToDate(timestamp: viewdDate)
+                    cell.viewedOnLbl.text = viewdDate
+                } else {
+                    cell.viewedOnLbl.text = "Not Viewed"
+                }
+            } else {
+                cell.viewedOnLbl.text = "Not Viewed"
+            }
 
+        } else {
+            cell.checkMarkImageview.isHidden = true
+            cell.sentOnLbl.text = ""
+            cell.stackViewHeightConstraint.constant = 0
+        }
+        
         return cell
     }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        
+        let accountId = contacts[indexPath.row].accountId ?? ""
+        if doctorIDWithDoctors.keys.contains(accountId) {
+            return 110.0
+        } else {
+          return  80
+        }
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let contact = sections[indexPath.section].contacts[indexPath.row]
+        let contact = contacts[indexPath.row]
         centralContactDelegate?.didSelectCentralContact(contact: contact)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sections[section].letter
-    }
-    
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 0 //( sections[section].contacts.count == 0 ) ? 0 : 34
-    }
 }
 
 extension CentarlContactsListVC: UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
-        //        if self.originalDashboardArray.count == 0 {
-        //            return
-        //        }
-        //
-        //        if searchText == "" {
-        //            self.dashboardArray = originalDashboardArray
-        //            removeTableBackgroundView()
-        //            return
-        //        }
-        //
-        //        let filteredData = self.originalDashboardArray.filter({ (sntData) -> Bool in
-        //            return sntData.title.lowercased().contains(searchText.lowercased()) || sntData.desc.lowercased().contains(searchText.lowercased())
-        //        })
+        if self.originalContacts.count == 0 {
+            return
+        }
         
-        //        removeTableBackgroundView()
-        //        self.dashboardArray = filteredData
-        //
-        //        if filteredData.count == 0 {
-        //            showNoRecordsFound()
-        //        } else {
-        //            removeTableBackgroundView()
-        //        }
+        if searchText == "" {
+            self.contacts = originalContacts
+            removeTableBackgroundView()
+            contactsTableView.reloadData()
+            return
+        }
+        
+        let filteredData = self.originalContacts.filter { (contact) -> Bool in
+                   let fullname = (contact.firstName ?? "") + " " + ( contact.lastName ?? "" )
+                   
+                   let designation = contact.officialDesignation ?? ""
+                   let pgDegree = contact.pgDegree ?? ""
+                   let speciality = contact.specialty ?? ""
+                   let finalDesignationStr  = String(format: "%@,%@,%@", designation,pgDegree,speciality)
+                   
+                return (contact.city ?? "").lowercased().contains(searchText.lowercased()) || fullname.lowercased().contains(searchText.lowercased()) || finalDesignationStr.lowercased().contains(searchText.lowercased())
+            }
+                
+         removeTableBackgroundView()
+         self.contacts = filteredData
+         
+        contactsTableView.reloadData()
+        
+        if filteredData.count == 0 {
+            showNoRecordsFound()
+        } else {
+            removeTableBackgroundView()
+        }
         
     }
     
@@ -212,5 +393,17 @@ extension CentarlContactsListVC: UISearchBarDelegate, UISearchControllerDelegate
     
     func removeTableBackgroundView() {
         self.contactsTableView.backgroundView = nil
-    }}
+    }
+    
+}
+
+extension String {
+    func toDate() -> Date? {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = .current
+        formatter.dateFormat = "hh:mm a, dd-MMM-yy"
+        return formatter.date(from: self)
+    }
+}
 

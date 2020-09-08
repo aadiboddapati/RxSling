@@ -38,6 +38,7 @@ struct Constants {
         static let userInfo       = base + "GetUserInfo"
         static let contactList = base + "RetrieveContactList"
         static let sharecount = base + "SntRepShareCount"
+        static let getdoctorlist = base + "GetDoctorList"
         static let logout = "Logout"
         
     }
